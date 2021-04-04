@@ -1,0 +1,25 @@
+<resources>
+
+    <!-- Textos de alicación -->
+    <string name="app_name">MyBooker</string>
+
+    <!-- Textos comunes -->
+    <string name="email" translatable="false">Correo electrónico</string>
+    <string name="already_account">¿Ya tienes cuenta? Inicia sesión</string>
+    <string name="login">Inicia sesión</string>
+    <string name="password">Contraseña</string>
+    <string name="dont_have_account">¿No tienes cuenta? Regístrate</string>
+    <string name="register" translatable="false">Aceptar</string>
+    <string name="register_now_user">Registrarse como usuario</string>
+    <string name="register_now_ent">Registrarse como empresa</string>
+    <string name="name">Nombre</string>
+
+    <!-- Textos para empresas -->
+    <string name="ent_address">Dirección</string>
+    <string name="ent_imgage">Imagen de empresa</string>
+    <string name="ent_category">Categoría</string>
+
+    <!-- Textos para usuarios -->
+    <string name="user_nickname">Alias</string>
+    <string name="user_image">Imagen</string>
+</resources>

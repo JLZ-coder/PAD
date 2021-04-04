@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1037694079601",
+    "project_id": "mybooker-6c774",
+    "storage_bucket": "mybooker-6c774.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1037694079601:android:e8f14a9e1ee6422bba01d0",
+        "android_client_info": {
+          "package_name": "es.ucm.fdi.mybooker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1037694079601-f255hbdtq6uuslus9dq24e1e0h75tcev.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWK_PggHBnL-iA5S6IwUJOsvMXNWd_S7Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1037694079601-f255hbdtq6uuslus9dq24e1e0h75tcev.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

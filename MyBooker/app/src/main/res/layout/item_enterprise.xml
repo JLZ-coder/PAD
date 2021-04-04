@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp">
+
+    <ImageView
+        android:id="@+id/entImg"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="10dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@color/app_color"
+        tools:srcCompat="@color/app_color"
+        android:contentDescription="@string/ent_imgage" />
+    <TextView
+        android:id="@+id/entName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/entImg"
+        tools:text= "@string/name" />
+    <TextView
+        android:id="@+id/entCatego"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:layout_below="@+id/entName"
+        android:layout_toEndOf="@+id/entImg"
+        tools:text = "@string/ent_category"/>
+    <TextView
+        android:id="@+id/entAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="italic"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/entImg"
+        android:layout_below="@+id/entCatego"
+        tools:text = "@string/ent_address"/>
+
+</RelativeLayout>
