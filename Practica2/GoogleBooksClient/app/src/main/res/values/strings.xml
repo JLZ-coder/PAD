@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">GoogleBooksClient</string>
+    <string name="form_title">Book Search</string>
+    <string name="form_input_authors_hint">Book authors</string>
+    <string name="form_input_title_hint">Book title</string>
+    <string name="form_button_search">Search Books</string>
+    <string name="form_radio_all">all</string>
+    <string name="form_radio_books">books</string>
+    <string name="form_radio_magazines">magazines</string>
+</resources>
