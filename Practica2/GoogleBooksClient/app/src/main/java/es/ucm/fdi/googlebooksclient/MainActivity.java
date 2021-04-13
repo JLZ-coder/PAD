@@ -7,15 +7,21 @@ import androidx.loader.content.AsyncTaskLoader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +68,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void searchBooks (View view) {
+
+        hideKeyboardFrom(this, view);
+
         String queryString = input_authors.getText().toString() + " " + input_title.getText().toString();
         if (queryString.equals(" ")) {
             input_authors.setError("Escriba al menos un autor o titulo");
@@ -72,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
             RadioButton r_button= radio.findViewById(radioButtonID);
             String printType = r_button.getText().toString();
 
+            result_title.setVisibility(View.VISIBLE);
+            result_title.setText("Loading...");
+
             Bundle queryBundle = new Bundle();
             queryBundle.putString(BookLoaderCallbacks.EXTRA_QUERY, queryString);
             queryBundle.putString(BookLoaderCallbacks.EXTRA_PRINT_TYPE, printType);
@@ -79,13 +91,41 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static void updateBooksResultList(List<BookInfo> bookInfos) {
+    public void searchBookInfo (View view) {
 
+        TextView v = view.findViewById(R.id.book_info);
+
+        Uri url = Uri.parse(v.getText().toString());
+        Intent intent = new Intent(Intent.ACTION_VIEW, url);
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            Log.d("ImplicitIntents", "Can't handle this intent!");
+        }
+
+    }
+
+    public static void updateBooksResultList(List<BookInfo> bookInfos) {
         result_title.setVisibility(View.VISIBLE);
+        if (mAdapter.getItemCount() == 0) {
+            result_title.setText("No Results Found");
+        }
+        else {
+            result_title.setText("Results");
+        }
+
         recycler.setVisibility(View.VISIBLE);
 
         mAdapter.setBooksData(bookInfos);
         mAdapter.notifyDataSetChanged();
+    }
+
+    public static void hideKeyboardFrom(Context context, View view) {
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     public static Context getAppContext() {

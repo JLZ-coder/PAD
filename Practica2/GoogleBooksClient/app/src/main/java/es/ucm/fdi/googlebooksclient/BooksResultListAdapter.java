@@ -51,6 +51,7 @@ public class BooksResultListAdapter extends RecyclerView.Adapter<BooksResultList
         holder.mtitle.setText(mCurrent.getMtitle());
         holder.mauthor.setText(mCurrent.getMauthors());
         holder.minfo.setText(mCurrent.getMinfoLink().toString());
+
     }
 
     @Override
