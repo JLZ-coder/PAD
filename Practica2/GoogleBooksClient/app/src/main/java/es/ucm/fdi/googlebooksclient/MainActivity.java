@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
         recycler.setLayoutManager(new LinearLayoutManager(this));
 
         /*ArrayList<BookInfo> prueba_list = new ArrayList<BookInfo>();
-        prueba_list.add(new BookInfo("yo", "yo", "https://www.youtube.com/watch?v=a-TRAgxFOkA"));
-        prueba_list.add(new BookInfo("yo", "yo", "https://www.youtube.com/watch?v=a-TRAgxFOkA"));
+        prueba_list.add(new BookInfo("yo", "yo", "https://www.youtube.com/watch?v=dQw4w9WgXcQ"));
+        prueba_list.add(new BookInfo("yo", "yo", "https://www.youtube.com/watch?v=dQw4w9WgXcQ"));
         updateBooksResultList(prueba_list);*/
     }
 
@@ -72,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
         hideKeyboardFrom(this, view);
 
         String queryString = input_authors.getText().toString() + " " + input_title.getText().toString();
-        if (queryString.equals(" ")) {
+        queryString = queryString.trim();
+        if (queryString.equals("")) {
             input_authors.setError("Escriba al menos un autor o titulo");
             input_title.setError("Escriba al menos un autor o titulo");
         }
@@ -95,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
         TextView v = view.findViewById(R.id.book_info);
 
+
         Uri url = Uri.parse(v.getText().toString());
         Intent intent = new Intent(Intent.ACTION_VIEW, url);
 
@@ -108,17 +110,17 @@ public class MainActivity extends AppCompatActivity {
 
     public static void updateBooksResultList(List<BookInfo> bookInfos) {
         result_title.setVisibility(View.VISIBLE);
+        recycler.setVisibility(View.VISIBLE);
+
+        mAdapter.setBooksData(bookInfos);
+        mAdapter.notifyDataSetChanged();
+
         if (mAdapter.getItemCount() == 0) {
             result_title.setText("No Results Found");
         }
         else {
             result_title.setText("Results");
         }
-
-        recycler.setVisibility(View.VISIBLE);
-
-        mAdapter.setBooksData(bookInfos);
-        mAdapter.notifyDataSetChanged();
     }
 
     public static void hideKeyboardFrom(Context context, View view) {

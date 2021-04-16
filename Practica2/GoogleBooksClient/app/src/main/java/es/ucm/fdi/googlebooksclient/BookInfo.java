@@ -67,10 +67,18 @@ public class BookInfo {
                 // Try to get the author and title from the current item,
                 // catch if either field is empty and move on.
                 try {
-                    title = volumeInfo.getString("title");
-                    authors = volumeInfo.getString("authors");
-                    info = volumeInfo.getString("infoLink");
-                    if (authors != null && title != null && info != null) {
+                    if (volumeInfo.has("title"))
+                        title = volumeInfo.getString("title");
+
+                    if (volumeInfo.has("authors"))
+                        authors = volumeInfo.getString("authors");
+                    else
+                        authors = "No authors specified";
+
+                    if (volumeInfo.has("infoLink"))
+                        info = volumeInfo.getString("infoLink");
+
+                    if (title != null && info != null) {
                         lista.add(new BookInfo(title, authors, info));
                     }
                 } catch (Exception e) {
