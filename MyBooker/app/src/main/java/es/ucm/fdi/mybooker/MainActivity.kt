@@ -3,7 +3,6 @@ package es.ucm.fdi.mybooker
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,7 +11,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import es.ucm.fdi.mybooker.adapters.EnterpriseAdapter
-import es.ucm.fdi.mybooker.objects.ItemEnterprise
+import es.ucm.fdi.mybooker.objects.itemEnterprise
 
 
 enum class ProviderType {
@@ -81,17 +80,17 @@ class MainActivity : AppCompatActivity()
     }
 
     // Código para pruebas
-    fun getSuperheros(): MutableList<ItemEnterprise>
+    fun getSuperheros(): MutableList<itemEnterprise>
     {
 
-        var empresas:MutableList<ItemEnterprise> = ArrayList()
-        empresas.add(ItemEnterprise("https://firebasestorage.googleapis.com/v0/b/mybooker-6c774.appspot.com/o/fariolen.jpeg?alt=media&token=97015846-6787-4ecb-9f76-059dd42e97d9", "Empresa 1", "Calle 1", "Peluqueria"))
-        empresas.add(ItemEnterprise("https://firebasestorage.googleapis.com/v0/b/mybooker-6c774.appspot.com/o/fariolen.jpeg?alt=media&token=97015846-6787-4ecb-9f76-059dd42e97d9", "Empresa 2", "Calle 2", "Gym"))
-        empresas.add(ItemEnterprise("https://firebasestorage.googleapis.com/v0/b/mybooker-6c774.appspot.com/o/fariolen.jpeg?alt=media&token=97015846-6787-4ecb-9f76-059dd42e97d9", "Empresa 3", "Calle 3", "Belleza"))
-        empresas.add(ItemEnterprise("https://firebasestorage.googleapis.com/v0/b/mybooker-6c774.appspot.com/o/fariolen.jpeg?alt=media&token=97015846-6787-4ecb-9f76-059dd42e97d9", "Empresa 4", "Calle 4", "IT"))
-        empresas.add(ItemEnterprise("https://firebasestorage.googleapis.com/v0/b/mybooker-6c774.appspot.com/o/fariolen.jpeg?alt=media&token=97015846-6787-4ecb-9f76-059dd42e97d9", "Empresa 5", "Calle 5", "IT"))
-        empresas.add(ItemEnterprise("https://firebasestorage.googleapis.com/v0/b/mybooker-6c774.appspot.com/o/fariolen.jpeg?alt=media&token=97015846-6787-4ecb-9f76-059dd42e97d9", "Empresa 6", "Calle 6", "Padel"))
-        empresas.add(ItemEnterprise("https://firebasestorage.googleapis.com/v0/b/mybooker-6c774.appspot.com/o/fariolen.jpeg?alt=media&token=97015846-6787-4ecb-9f76-059dd42e97d9", "Empresa 7", "Calle 7", "Piscina"))
+        var empresas:MutableList<itemEnterprise> = ArrayList()
+        empresas.add(itemEnterprise("https://firebasestorage.googleapis.com/v0/b/mybooker-6c774.appspot.com/o/fariolen.jpeg?alt=media&token=97015846-6787-4ecb-9f76-059dd42e97d9", "Empresa 1", "Calle 1", "Peluqueria"))
+        empresas.add(itemEnterprise("https://firebasestorage.googleapis.com/v0/b/mybooker-6c774.appspot.com/o/fariolen.jpeg?alt=media&token=97015846-6787-4ecb-9f76-059dd42e97d9", "Empresa 2", "Calle 2", "Gym"))
+        empresas.add(itemEnterprise("https://firebasestorage.googleapis.com/v0/b/mybooker-6c774.appspot.com/o/fariolen.jpeg?alt=media&token=97015846-6787-4ecb-9f76-059dd42e97d9", "Empresa 3", "Calle 3", "Belleza"))
+        empresas.add(itemEnterprise("https://firebasestorage.googleapis.com/v0/b/mybooker-6c774.appspot.com/o/fariolen.jpeg?alt=media&token=97015846-6787-4ecb-9f76-059dd42e97d9", "Empresa 4", "Calle 4", "IT"))
+        empresas.add(itemEnterprise("https://firebasestorage.googleapis.com/v0/b/mybooker-6c774.appspot.com/o/fariolen.jpeg?alt=media&token=97015846-6787-4ecb-9f76-059dd42e97d9", "Empresa 5", "Calle 5", "IT"))
+        empresas.add(itemEnterprise("https://firebasestorage.googleapis.com/v0/b/mybooker-6c774.appspot.com/o/fariolen.jpeg?alt=media&token=97015846-6787-4ecb-9f76-059dd42e97d9", "Empresa 6", "Calle 6", "Padel"))
+        empresas.add(itemEnterprise("https://firebasestorage.googleapis.com/v0/b/mybooker-6c774.appspot.com/o/fariolen.jpeg?alt=media&token=97015846-6787-4ecb-9f76-059dd42e97d9", "Empresa 7", "Calle 7", "Piscina"))
 
         return empresas
     }

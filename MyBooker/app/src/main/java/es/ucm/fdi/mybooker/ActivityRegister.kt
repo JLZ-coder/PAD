@@ -102,7 +102,7 @@ open class ActivityRegister : AppCompatActivity() {
                                 "tipoUsuario" to "empresa"
                             )
                         )
-                        db.collection("enterprise").document(user_uid).set(
+                        db.collection("enterprises").document(user_uid).set(
                             mapOf(
                                 "name" to userName.text.toString(),
                                 "search" to userName.text.toString().toLowerCase()

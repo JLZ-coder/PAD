@@ -1,7 +1,5 @@
 package es.ucm.fdi.mybooker.adapters
 
-import android.accounts.AccountManager.get
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +8,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import es.ucm.fdi.mybooker.R
-import es.ucm.fdi.mybooker.objects.ItemEnterprise
-import io.grpc.okhttp.internal.Platform.get
+import es.ucm.fdi.mybooker.objects.itemEnterprise
 
-class EnterpriseAdapter(val enterprises: List<ItemEnterprise>) : RecyclerView.Adapter<EnterpriseAdapter.EnterpriseHolder>()
+class EnterpriseAdapter(val enterprises: List<itemEnterprise>) : RecyclerView.Adapter<EnterpriseAdapter.EnterpriseHolder>()
 {
 
     // Devolvemos el tamaño de la lista de empresas. Forma simplificada
@@ -39,7 +36,7 @@ class EnterpriseAdapter(val enterprises: List<ItemEnterprise>) : RecyclerView.Ad
         private val entAddress = view.findViewById(R.id.entAddress) as TextView
         private val entImg = view.findViewById(R.id.entImg) as ImageView
 
-        fun render(enterprise: ItemEnterprise) {
+        fun render(enterprise: itemEnterprise) {
 
             Picasso.with(view.context).load(enterprise.enterpriseImg).into(entImg)
             entName.text = enterprise.enterpriseName
