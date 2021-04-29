@@ -1,11 +1,16 @@
 package es.ucm.fdi.mybooker
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import es.ucm.fdi.mybooker.adapters.EnterpriseAdapter
 import es.ucm.fdi.mybooker.objects.ItemEnterprise
 
@@ -16,13 +21,24 @@ enum class ProviderType {
 
 class MainActivity : AppCompatActivity()
 {
+    private var db = FirebaseFirestore.getInstance()
+    private var mAuth = FirebaseAuth.getInstance()
 
+    private lateinit var mRecyclerView : RecyclerView
+    private lateinit var mLogoutbtn : Button
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        mLogoutbtn = findViewById(R.id.logout)
+        mLogoutbtn.setOnClickListener() {
+            mAuth.signOut()
+            val i = Intent(this, ActivityLogin::class.java)
+            startActivity(i)
+        }
 
         analytics();
 
@@ -38,7 +54,6 @@ class MainActivity : AppCompatActivity()
     fun setUpRecyclerView()
     {
         val mAdapter : EnterpriseAdapter = EnterpriseAdapter(getSuperheros())
-        lateinit var mRecyclerView : RecyclerView
 
         mRecyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         mRecyclerView.setHasFixedSize(true)
