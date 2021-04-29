@@ -1,10 +1,13 @@
 package es.ucm.fdi.mybooker
 
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -21,6 +24,7 @@ open class ActivityRegister : AppCompatActivity() {
     private lateinit var userMail: EditText
     private lateinit var userPass: EditText
     private lateinit var userName: EditText
+    private lateinit var labelEmpresas: TextView
     private lateinit var btnRegister: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +36,7 @@ open class ActivityRegister : AppCompatActivity() {
         userMail = findViewById<EditText>(R.id.editTextUserMail)
         userPass = findViewById<EditText>(R.id.editTextPassword)
         userName = findViewById<EditText>(R.id.editTextUserName)
+        labelEmpresas = findViewById<TextView>(R.id.label_empresas)
         btnRegister = findViewById<Button>(R.id.btnRegisterUser)
 
         setUp()
@@ -67,7 +72,7 @@ open class ActivityRegister : AppCompatActivity() {
                             mapOf(
                                 "name" to userName.text.toString(),
                                 "email" to userMail.text.toString(),
-                                "tipoUsario" to "usuario"
+                                "tipoUsuario" to "usuario"
                             )
                         )
                         showUserInfo(it.result?.user?.email ?: "", ProviderType.MAIL, userName.text.toString())
@@ -80,6 +85,7 @@ open class ActivityRegister : AppCompatActivity() {
     }
 
     private fun setUpEmpresa() {
+        labelEmpresas.visibility = View.VISIBLE
         btnRegister.setOnClickListener {
             if (userName.text.isNotEmpty() && userPass.text.isNotEmpty() && userMail.text.isNotEmpty()) {
 
@@ -93,10 +99,16 @@ open class ActivityRegister : AppCompatActivity() {
                             mapOf(
                                 "name" to userName.text.toString(),
                                 "email" to userMail.text.toString(),
-                                "tipoUsario" to "empresa"
+                                "tipoUsuario" to "empresa"
                             )
                         )
-                        showUserInfo(it.result?.user?.email ?: "", ProviderType.MAIL, userName.text.toString())
+                        db.collection("enterprise").document(user_uid).set(
+                            mapOf(
+                                "name" to userName.text.toString(),
+                                "search" to userName.text.toString().toLowerCase()
+                            )
+                        )
+                        showEmpresaInfo(it.result?.user?.email ?: "", ProviderType.MAIL, userName.text.toString())
                     } else {
                         showAlert(it.exception!!);
                     }
@@ -120,6 +132,17 @@ open class ActivityRegister : AppCompatActivity() {
     {
         // TODO: Nos vamos a ir a la info del usuario cndo haga login, o a la empresa que clique, pero eso hay q mirarlo bien
         val homeIntent = Intent(this, MainActivity::class.java).apply {
+            putExtra("email", email)
+            putExtra("name", userName)
+        }
+
+        startActivity(homeIntent);
+    }
+
+    private fun showEmpresaInfo(email: String, provider: ProviderType, userName: String)
+    {
+        // TODO: Nos vamos a ir a la info del usuario cndo haga login, o a la empresa que clique, pero eso hay q mirarlo bien
+        val homeIntent = Intent(this, ActivityEmpresaMain::class.java).apply {
             putExtra("email", email)
             putExtra("name", userName)
         }

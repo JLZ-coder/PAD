@@ -22,4 +22,5 @@
     <!-- Textos para usuarios -->
     <string name="user_nickname">Alias</string>
     <string name="user_image">Imagen</string>
+    <string name="label_empresas">Empresas</string>
 </resources>

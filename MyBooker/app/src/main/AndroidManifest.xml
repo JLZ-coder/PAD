@@ -15,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyBooker">
         <activity android:name=".ActivityRegister" />
+        <activity android:name=".ActivityEmpresaMain" />
         <activity android:name=".ActivityLogin" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
