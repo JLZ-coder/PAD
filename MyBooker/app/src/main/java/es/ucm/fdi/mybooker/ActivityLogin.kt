@@ -151,7 +151,7 @@ class ActivityLogin : AppCompatActivity()
             }
 
         // TODO: Nos vamos a ir a la info del usuario cndo haga login, o a la empresa que clique, pero eso hay q mirarlo bien
-        val homeIntent = Intent(this, ActivityEmpresaMain::class.java).apply {
+        val homeIntent = Intent(this, EmpresaMainActivity::class.java).apply {
             putExtra("userName", name)
             putExtra("email", email)
         }

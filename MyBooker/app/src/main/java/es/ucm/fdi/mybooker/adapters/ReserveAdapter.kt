@@ -15,15 +15,14 @@ class ReserveAdapter(private val dataSet: List<itemReserve>) : RecyclerView.Adap
      * (custom ViewHolder).
      */
     class ViewHolder(view:View) : RecyclerView.ViewHolder(view) {
-        val textView: TextView = view.findViewById(R.id.reserva_row)
-
-        init {
-            // Define click listener for the ViewHolder's View.
-            //textView = view.findViewById(R.id.reserva_row)
-        }
+        val hora: TextView = view.findViewById(R.id.reserva_hora)
+        val nombre: TextView = view.findViewById(R.id.reserva_nombre)
+        val personas: TextView = view.findViewById(R.id.reserva_personas)
 
         fun render(reserva : itemReserve) {
-            textView.text = reserva.enterpriseImg
+            hora.text = reserva.hora
+            nombre.text = reserva.nombre
+            personas.text = reserva.personas.toString()
         }
     }
 

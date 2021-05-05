@@ -1,9 +1,7 @@
 package es.ucm.fdi.mybooker
 
 import android.content.Intent
-import android.opengl.Visibility
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -12,7 +10,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import java.lang.Exception
 
 open class ActivityRegister : AppCompatActivity() {
 
@@ -142,7 +139,7 @@ open class ActivityRegister : AppCompatActivity() {
     private fun showEmpresaInfo(email: String, provider: ProviderType, userName: String)
     {
         // TODO: Nos vamos a ir a la info del usuario cndo haga login, o a la empresa que clique, pero eso hay q mirarlo bien
-        val homeIntent = Intent(this, ActivityEmpresaMain::class.java).apply {
+        val homeIntent = Intent(this, EmpresaMainActivity::class.java).apply {
             putExtra("email", email)
             putExtra("name", userName)
         }
