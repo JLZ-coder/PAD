@@ -8,11 +8,23 @@
     <string name="already_account">¿Ya tienes cuenta? Inicia sesión</string>
     <string name="login">Inicia sesión</string>
     <string name="password">Contraseña</string>
+    <string name="confirmPassword">Repita contraseña</string>
     <string name="dont_have_account">¿No tienes cuenta? Regístrate</string>
     <string name="register" translatable="false">Aceptar</string>
     <string name="register_now_user">Registrarse como usuario</string>
     <string name="register_now_ent">Registrarse como empresa</string>
     <string name="name">Nombre</string>
+    <string name="location">Dirección</string>
+    <string name="codePostal">CP</string>
+
+    <string-array name="categorias">
+        <item>Deportes</item>
+        <item>Restauración</item>
+        <item>Ocio</item>
+        <item>Belleza</item>
+        <item>Asesoría</item>
+        <item>Salud</item>
+    </string-array>
 
     <!-- Textos para empresas -->
     <string name="ent_address">Dirección</string>

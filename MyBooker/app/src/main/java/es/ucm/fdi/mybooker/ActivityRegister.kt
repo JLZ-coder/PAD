@@ -2,10 +2,9 @@ package es.ucm.fdi.mybooker
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -20,9 +19,14 @@ open class ActivityRegister : AppCompatActivity() {
 
     private lateinit var userMail: EditText
     private lateinit var userPass: EditText
+    private lateinit var userConfirmPass: EditText
     private lateinit var userName: EditText
     private lateinit var labelEmpresas: TextView
     private lateinit var btnRegister: Button
+    //Empresa
+    private lateinit var location: EditText
+    private lateinit var cp: EditText
+    private lateinit var spinner: Spinner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,9 +36,19 @@ open class ActivityRegister : AppCompatActivity() {
 
         userMail = findViewById<EditText>(R.id.editTextUserMail)
         userPass = findViewById<EditText>(R.id.editTextPassword)
+        userConfirmPass = findViewById<EditText>(R.id.editTextConfirmPassword)
         userName = findViewById<EditText>(R.id.editTextUserName)
         labelEmpresas = findViewById<TextView>(R.id.label_empresas)
         btnRegister = findViewById<Button>(R.id.btnRegisterUser)
+
+        //Empresa
+        location = findViewById<EditText>(R.id.editTextLocation)
+        cp = findViewById<EditText>(R.id.editTextCodePostal)
+        spinner = findViewById<Spinner>(R.id.categoria)
+        val lista = resources.getStringArray(R.array.categorias)
+        val adaptador = ArrayAdapter(this, android.R.layout.simple_spinner_item, lista)
+        spinner.adapter = adaptador
+
 
         setUp()
     }
@@ -57,7 +71,7 @@ open class ActivityRegister : AppCompatActivity() {
 
     private fun setUpUsuario() {
         btnRegister.setOnClickListener {
-            if (userName.text.isNotEmpty() && userPass.text.isNotEmpty() && userMail.text.isNotEmpty()) {
+            if (userName.text.isNotEmpty() && userPass.text.isNotEmpty() && userConfirmPass.text.isNotEmpty() && userMail.text.isNotEmpty() && userConfirmPass == userPass) {
 
                 mAuth.createUserWithEmailAndPassword(
                     userMail.text.toString(),
@@ -68,8 +82,7 @@ open class ActivityRegister : AppCompatActivity() {
                         db.collection("users").document(user_uid).set(
                             mapOf(
                                 "name" to userName.text.toString(),
-                                "email" to userMail.text.toString(),
-                                "tipoUsuario" to "usuario"
+                                "email" to userMail.text.toString()
                             )
                         )
                         showUserInfo(it.result?.user?.email ?: "", ProviderType.MAIL, userName.text.toString())
@@ -77,14 +90,35 @@ open class ActivityRegister : AppCompatActivity() {
                         showAlert(it.exception!!);
                     }
                 }
+            }else{
+                showErrorsCommon()
             }
+        }
+    }
+
+    private fun showErrorsCommon(){
+        if(TextUtils.isEmpty(userName.text.toString())) {
+            userName.error = "Rellene este campo"
+        }
+        if(TextUtils.isEmpty(userPass.text.toString())){
+            userPass.error = "Rellene este campo"
+        }
+        if(TextUtils.isEmpty(userMail.text.toString())){
+            userMail.error = "Rellene este campo"
+        }
+        if(userConfirmPass.text.toString() != userPass.text.toString()){
+            userConfirmPass.error = "Contraseña no coincide"
         }
     }
 
     private fun setUpEmpresa() {
         labelEmpresas.visibility = View.VISIBLE
+        location.visibility = View.VISIBLE
+        cp.visibility = View.VISIBLE
+        spinner.visibility = View.VISIBLE
         btnRegister.setOnClickListener {
-            if (userName.text.isNotEmpty() && userPass.text.isNotEmpty() && userMail.text.isNotEmpty()) {
+            if (userName.text.isNotEmpty() && userPass.text.isNotEmpty() && userConfirmPass.text.isNotEmpty()
+                && userMail.text.isNotEmpty() && userConfirmPass == userPass) {
 
                 mAuth.createUserWithEmailAndPassword(
                     userMail.text.toString(),
@@ -92,17 +126,14 @@ open class ActivityRegister : AppCompatActivity() {
                 ).addOnCompleteListener{
                     if (it.isSuccessful) {
                         val user_uid = mAuth.currentUser.uid
-                        db.collection("users").document(user_uid).set(
-                            mapOf(
-                                "name" to userName.text.toString(),
-                                "email" to userMail.text.toString(),
-                                "tipoUsuario" to "empresa"
-                            )
-                        )
                         db.collection("enterprises").document(user_uid).set(
                             mapOf(
                                 "name" to userName.text.toString(),
-                                "search" to userName.text.toString().toLowerCase()
+                                "email" to userMail.text.toString(),
+                                "search" to userName.text.toString().toLowerCase(),
+                                "category" to spinner.getSelectedItem().toString() ,
+                                "location" to location.text.toString(),
+                                "cp" to cp.text.toString()
                             )
                         )
                         showEmpresaInfo(it.result?.user?.email ?: "", ProviderType.MAIL, userName.text.toString())
@@ -110,6 +141,8 @@ open class ActivityRegister : AppCompatActivity() {
                         showAlert(it.exception!!);
                     }
                 }
+            }else{
+                showErrorsCommon()
             }
         }
     }

@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity()
         // setUp(email ?: "no user found", provider ?: "empty", name ?: "no name")
     }
 
-    fun setUpRecyclerView()
+    private fun setUpRecyclerView()
     {
         val mAdapter : EnterpriseAdapter = EnterpriseAdapter(getSuperheros())
 
