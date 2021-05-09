@@ -24,6 +24,13 @@ class MainActivity : AppCompatActivity()
     private var mAuth = FirebaseAuth.getInstance()
 
     private lateinit var mRecyclerView : RecyclerView
+    //Botones categorías
+    private lateinit var sportBtn : Button
+    private lateinit var restaurantBtn : Button
+    private lateinit var leisureBtn : Button
+    private lateinit var healthBtn : Button
+    private lateinit var advisoryBtn : Button
+    private lateinit var beautyBtn : Button
     private lateinit var mLogoutbtn : Button
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -32,12 +39,13 @@ class MainActivity : AppCompatActivity()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        /*//Este boton irá en el perfil del usuario
         mLogoutbtn = findViewById(R.id.logout)
         mLogoutbtn.setOnClickListener() {
             mAuth.signOut()
             val i = Intent(this, ActivityLogin::class.java)
             startActivity(i)
-        }
+        }*/
 
         analytics();
 
@@ -46,7 +54,7 @@ class MainActivity : AppCompatActivity()
         val provider = bundle?.getString("provider")
         val name = bundle?.getString("name")
 
-        setUpRecyclerView()
+        //setUpRecyclerView()
         // setUp(email ?: "no user found", provider ?: "empty", name ?: "no name")
     }
 
@@ -54,10 +62,10 @@ class MainActivity : AppCompatActivity()
     {
         val mAdapter : EnterpriseAdapter = EnterpriseAdapter(getSuperheros())
 
-        mRecyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        /*mRecyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = LinearLayoutManager(this)
-        mRecyclerView.adapter = mAdapter
+        mRecyclerView.adapter = mAdapter*/
     }
 
     private fun analytics()
@@ -74,9 +82,9 @@ class MainActivity : AppCompatActivity()
     {
         title = "Inicio"
 
-        val text = email + " " + provider + " " + name
+        /*val text = email + " " + provider + " " + name
         val textRefill = findViewById<TextView>(R.id.textRefill)
-        textRefill.setText(text)
+        textRefill.setText(text)*/
     }
 
     // Código para pruebas

@@ -82,7 +82,8 @@ open class ActivityRegister : AppCompatActivity() {
                         db.collection("users").document(user_uid).set(
                             mapOf(
                                 "name" to userName.text.toString(),
-                                "email" to userMail.text.toString()
+                                "email" to userMail.text.toString(),
+                                "tipoUsuario" to "usuario"
                             )
                         )
                         showUserInfo(it.result?.user?.email ?: "", ProviderType.MAIL, userName.text.toString())
@@ -126,11 +127,17 @@ open class ActivityRegister : AppCompatActivity() {
                 ).addOnCompleteListener{
                     if (it.isSuccessful) {
                         val user_uid = mAuth.currentUser.uid
+                        db.collection("users").document(user_uid).set(
+                            mapOf(
+                                "name" to userName.text.toString(),
+                                "email" to userMail.text.toString(),
+                                "tipoUsuario" to "empresa"
+                            )
+                        )
                         db.collection("enterprises").document(user_uid).set(
                             mapOf(
                                 "name" to userName.text.toString(),
                                 "email" to userMail.text.toString(),
-                                "search" to userName.text.toString().toLowerCase(),
                                 "category" to spinner.getSelectedItem().toString() ,
                                 "location" to location.text.toString(),
                                 "cp" to cp.text.toString()

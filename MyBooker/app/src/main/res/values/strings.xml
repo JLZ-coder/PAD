@@ -17,13 +17,23 @@
     <string name="location">Dirección</string>
     <string name="codePostal">CP</string>
 
+    <!--- Lista de categorias -->
+
+    <string name="sport" > Deportes </string>
+    <string name="restaurant">Restaurante</string>
+    <string name="leisure">Ocio</string>
+    <string name="beauty">Belleza</string>
+    <string name="advisor">Asesoría</string>
+    <string name="health">Salud</string>
+    <!-- Array de categorias -->
+
     <string-array name="categorias">
-        <item>Deportes</item>
-        <item>Restauración</item>
-        <item>Ocio</item>
-        <item>Belleza</item>
-        <item>Asesoría</item>
-        <item>Salud</item>
+        <item>@string/sport</item>
+        <item>@string/restaurant</item>
+        <item>@string/leisure</item>
+        <item>@string/beauty</item>
+        <item>@string/advisor</item>
+        <item>@string/health</item>
     </string-array>
 
     <!-- Textos para empresas -->
