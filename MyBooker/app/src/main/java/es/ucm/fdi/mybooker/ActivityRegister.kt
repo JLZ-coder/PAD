@@ -181,7 +181,7 @@ open class ActivityRegister : AppCompatActivity() {
     private fun showEmpresaInfo(email: String, provider: ProviderType, userName: String)
     {
         // TODO: Nos vamos a ir a la info del usuario cndo haga login, o a la empresa que clique, pero eso hay q mirarlo bien
-        val homeIntent = Intent(this, EmpresaMainActivity::class.java).apply {
+        val homeIntent = Intent(this, EmpresaReservasActivity::class.java).apply {
             putExtra("email", email)
             putExtra("name", userName)
         }
