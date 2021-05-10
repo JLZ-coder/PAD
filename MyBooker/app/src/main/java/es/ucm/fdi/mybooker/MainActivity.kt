@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -33,12 +34,28 @@ class MainActivity : AppCompatActivity()
     private lateinit var beautyBtn : Button
     private lateinit var mLogoutbtn : Button
 
+    //Navigation view
+    private lateinit var mBottonNavigation : BottomNavigationView
+
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        mBottonNavigation = findViewById<BottomNavigationView>(R.id.navigationView)
+
+        val boolBottonNavigation = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+
+            when (item.itemId) {
+                R.id.navigation_home -> return@OnNavigationItemSelectedListener true
+                R.id.navigation_dashboard -> return@OnNavigationItemSelectedListener true
+                R.id.navigation_profile -> return@OnNavigationItemSelectedListener true
+            }
+            false
+        }
+        mBottonNavigation.setOnNavigationItemSelectedListener(boolBottonNavigation)
         /*//Este boton irá en el perfil del usuario
         mLogoutbtn = findViewById(R.id.logout)
         mLogoutbtn.setOnClickListener() {
@@ -46,7 +63,7 @@ class MainActivity : AppCompatActivity()
             val i = Intent(this, ActivityLogin::class.java)
             startActivity(i)
         }*/
-
+        title = "Inicio"
         analytics();
 
         val bundle:Bundle? = intent.extras
@@ -103,3 +120,9 @@ class MainActivity : AppCompatActivity()
         return empresas
     }
 }
+
+private fun BottomNavigationView.setOnNavigationItemSelectedListener(any: Any, any1: Any) {
+
+}
+
+

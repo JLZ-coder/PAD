@@ -20,7 +20,7 @@
     <!--- Lista de categorias -->
 
     <string name="sport" > Deportes </string>
-    <string name="restaurant">Restaurante</string>
+    <string name="restaurant">Restaurantes</string>
     <string name="leisure">Ocio</string>
     <string name="beauty">Belleza</string>
     <string name="advisor">Asesoría</string>
@@ -46,9 +46,11 @@
     <string name="user_image">Imagen</string>
     <string name="label_empresas">Empresas</string>
     <string name="title_activity_empresa_main">MainActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <!--Textos menu-->
+    <string name="title_home">Inicio</string>
+    <string name="title_dashboard">Agenda</string>
+    <string name="tittle_profile">Perfil</string>
+    <string name="title_notifications">Notificaciones</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
