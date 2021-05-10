@@ -69,9 +69,11 @@ open class ActivityRegister : AppCompatActivity() {
         }
     }
 
-    private fun setUpUsuario() {
+    private fun setUpUsuario()
+    {
+
         btnRegister.setOnClickListener {
-            if (userName.text.isNotEmpty() && userPass.text.isNotEmpty() && userConfirmPass.text.isNotEmpty() && userMail.text.isNotEmpty() && userConfirmPass == userPass) {
+            if (userName.text.isNotEmpty() && userPass.text.isNotEmpty() && userConfirmPass.text.isNotEmpty() && userMail.text.isNotEmpty() && userConfirmPass.text.toString() == userPass.text.toString()) {
 
                 mAuth.createUserWithEmailAndPassword(
                     userMail.text.toString(),
