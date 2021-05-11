@@ -1,17 +1,16 @@
 package es.ucm.fdi.mybooker
 
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import es.ucm.fdi.mybooker.adapters.EnterpriseAdapter
+import es.ucm.fdi.mybooker.fragment.HomeFragment
+import es.ucm.fdi.mybooker.fragment.ProfileFragment
 import es.ucm.fdi.mybooker.objects.itemEnterprise
 
 
@@ -25,17 +24,13 @@ class MainActivity : AppCompatActivity()
     private var mAuth = FirebaseAuth.getInstance()
 
     private lateinit var mRecyclerView : RecyclerView
-    //Botones categorías
-    private lateinit var sportBtn : Button
-    private lateinit var restaurantBtn : Button
-    private lateinit var leisureBtn : Button
-    private lateinit var healthBtn : Button
-    private lateinit var advisoryBtn : Button
-    private lateinit var beautyBtn : Button
-    private lateinit var mLogoutbtn : Button
+
 
     //Navigation view
     private lateinit var mBottonNavigation : BottomNavigationView
+
+    //Fragments
+    private lateinit var currentFragment: Fragment
 
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -46,23 +41,35 @@ class MainActivity : AppCompatActivity()
 
         mBottonNavigation = findViewById<BottomNavigationView>(R.id.navigationView)
 
+        //Fragmento inicial
+
+        if (savedInstanceState == null){
+            currentFragment = HomeFragment.newInstance()
+            changeFragment(currentFragment)
+        }
+
+
+
         val boolBottonNavigation = BottomNavigationView.OnNavigationItemSelectedListener { item ->
 
             when (item.itemId) {
-                R.id.navigation_home -> return@OnNavigationItemSelectedListener true
-                R.id.navigation_dashboard -> return@OnNavigationItemSelectedListener true
+                R.id.navigation_home -> {
+                    currentFragment = HomeFragment.newInstance()
+                    changeFragment(currentFragment)
+                    return@OnNavigationItemSelectedListener true}
+                R.id.navigation_dashboard -> {
+                    currentFragment = ProfileFragment.newInstance()
+                    changeFragment(currentFragment)
+                    return@OnNavigationItemSelectedListener true}
                 R.id.navigation_profile -> return@OnNavigationItemSelectedListener true
             }
             false
         }
+
+
         mBottonNavigation.setOnNavigationItemSelectedListener(boolBottonNavigation)
-        /*//Este boton irá en el perfil del usuario
-        mLogoutbtn = findViewById(R.id.logout)
-        mLogoutbtn.setOnClickListener() {
-            mAuth.signOut()
-            val i = Intent(this, ActivityLogin::class.java)
-            startActivity(i)
-        }*/
+
+
         title = "Inicio"
         analytics();
 
@@ -71,10 +78,17 @@ class MainActivity : AppCompatActivity()
         val provider = bundle?.getString("provider")
         val name = bundle?.getString("name")
 
+
         //setUpRecyclerView()
         // setUp(email ?: "no user found", provider ?: "empty", name ?: "no name")
     }
 
+    private fun changeFragment(fragment: Fragment) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.container, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
     private fun setUpRecyclerView()
     {
         val mAdapter : EnterpriseAdapter = EnterpriseAdapter(getSuperheros())
