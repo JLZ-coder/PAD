@@ -40,15 +40,13 @@ class MainActivity : AppCompatActivity()
         setContentView(R.layout.activity_main)
 
         mBottonNavigation = findViewById<BottomNavigationView>(R.id.navigationView)
+        title = "MyBooker"
 
         //Fragmento inicial
-
         if (savedInstanceState == null){
             currentFragment = HomeFragment.newInstance()
             changeFragment(currentFragment)
         }
-
-
 
         val boolBottonNavigation = BottomNavigationView.OnNavigationItemSelectedListener { item ->
 
@@ -74,14 +72,12 @@ class MainActivity : AppCompatActivity()
 
         mBottonNavigation.setOnNavigationItemSelectedListener(boolBottonNavigation)
 
-        title = "Inicio"
         analytics();
 
         val bundle:Bundle? = intent.extras
         val email = bundle?.getString("email")
         val provider = bundle?.getString("provider")
         val name = bundle?.getString("name")
-
 
         //setUpRecyclerView()
         // setUp(email ?: "no user found", provider ?: "empty", name ?: "no name")
@@ -93,15 +89,6 @@ class MainActivity : AppCompatActivity()
         transaction.addToBackStack(null)
         transaction.commit()
     }
-    private fun setUpRecyclerView()
-    {
-        val mAdapter : EnterpriseAdapter = EnterpriseAdapter(getSuperheros())
-
-        /*mRecyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-        mRecyclerView.setHasFixedSize(true)
-        mRecyclerView.layoutManager = LinearLayoutManager(this)
-        mRecyclerView.adapter = mAdapter*/
-    }
 
     private fun analytics()
     {
@@ -111,31 +98,6 @@ class MainActivity : AppCompatActivity()
         val bundle = Bundle()
         bundle.putString("message", "MainActivity opened")
         analytics.logEvent("InitScreen", bundle)
-    }
-
-    private fun setUp(email: String, provider: String, name: String)
-    {
-        title = "Inicio"
-
-        /*val text = email + " " + provider + " " + name
-        val textRefill = findViewById<TextView>(R.id.textRefill)
-        textRefill.setText(text)*/
-    }
-
-    // Código para pruebas
-    fun getSuperheros(): MutableList<itemEnterprise>
-    {
-
-        var empresas:MutableList<itemEnterprise> = ArrayList()
-        empresas.add(itemEnterprise("https://firebasestorage.googleapis.com/v0/b/mybooker-6c774.appspot.com/o/fariolen.jpeg?alt=media&token=97015846-6787-4ecb-9f76-059dd42e97d9", "Empresa 1", "Calle 1", "Peluqueria"))
-        empresas.add(itemEnterprise("https://firebasestorage.googleapis.com/v0/b/mybooker-6c774.appspot.com/o/fariolen.jpeg?alt=media&token=97015846-6787-4ecb-9f76-059dd42e97d9", "Empresa 2", "Calle 2", "Gym"))
-        empresas.add(itemEnterprise("https://firebasestorage.googleapis.com/v0/b/mybooker-6c774.appspot.com/o/fariolen.jpeg?alt=media&token=97015846-6787-4ecb-9f76-059dd42e97d9", "Empresa 3", "Calle 3", "Belleza"))
-        empresas.add(itemEnterprise("https://firebasestorage.googleapis.com/v0/b/mybooker-6c774.appspot.com/o/fariolen.jpeg?alt=media&token=97015846-6787-4ecb-9f76-059dd42e97d9", "Empresa 4", "Calle 4", "IT"))
-        empresas.add(itemEnterprise("https://firebasestorage.googleapis.com/v0/b/mybooker-6c774.appspot.com/o/fariolen.jpeg?alt=media&token=97015846-6787-4ecb-9f76-059dd42e97d9", "Empresa 5", "Calle 5", "IT"))
-        empresas.add(itemEnterprise("https://firebasestorage.googleapis.com/v0/b/mybooker-6c774.appspot.com/o/fariolen.jpeg?alt=media&token=97015846-6787-4ecb-9f76-059dd42e97d9", "Empresa 6", "Calle 6", "Padel"))
-        empresas.add(itemEnterprise("https://firebasestorage.googleapis.com/v0/b/mybooker-6c774.appspot.com/o/fariolen.jpeg?alt=media&token=97015846-6787-4ecb-9f76-059dd42e97d9", "Empresa 7", "Calle 7", "Piscina"))
-
-        return empresas
     }
 }
 
