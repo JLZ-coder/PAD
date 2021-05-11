@@ -8,11 +8,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import es.ucm.fdi.mybooker.adapters.EnterpriseAdapter
 import es.ucm.fdi.mybooker.fragment.HomeFragment
 import es.ucm.fdi.mybooker.fragment.ProfileFragment
 import es.ucm.fdi.mybooker.fragment.ScheduleFragment
-import es.ucm.fdi.mybooker.objects.itemEnterprise
 
 enum class ProviderType {
     MAIL
@@ -24,7 +22,6 @@ class MainActivity : AppCompatActivity()
     private var mAuth = FirebaseAuth.getInstance()
 
     private lateinit var mRecyclerView : RecyclerView
-
 
     //Navigation view
     private lateinit var mBottonNavigation : BottomNavigationView
@@ -48,6 +45,13 @@ class MainActivity : AppCompatActivity()
             changeFragment(currentFragment)
         }
 
+        // TODO: No llega el usuario ni el mail ni nada. REVISAR
+        // Lo he movido para aquí porque necesito el mail en Schedule
+        val bundle:Bundle? = intent.extras
+        val email = bundle?.getString("email")
+        val provider = bundle?.getString("provider")
+        val name = bundle?.getString("name")
+
         val boolBottonNavigation = BottomNavigationView.OnNavigationItemSelectedListener { item ->
 
             when (item.itemId) {
@@ -57,7 +61,7 @@ class MainActivity : AppCompatActivity()
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.navigation_dashboard -> {
-                    currentFragment = ScheduleFragment.newInstance()
+                    currentFragment = ScheduleFragment.newInstance(email)!!
                     changeFragment(currentFragment)
                     return@OnNavigationItemSelectedListener true
                 }
@@ -73,11 +77,6 @@ class MainActivity : AppCompatActivity()
         mBottonNavigation.setOnNavigationItemSelectedListener(boolBottonNavigation)
 
         analytics();
-
-        val bundle:Bundle? = intent.extras
-        val email = bundle?.getString("email")
-        val provider = bundle?.getString("provider")
-        val name = bundle?.getString("name")
 
         //setUpRecyclerView()
         // setUp(email ?: "no user found", provider ?: "empty", name ?: "no name")
