@@ -2,21 +2,25 @@ package es.ucm.fdi.mybooker
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import es.ucm.fdi.mybooker.adapters.ReserveAdapter
 import es.ucm.fdi.mybooker.databinding.ActivityEmpresaReservasBinding
+import es.ucm.fdi.mybooker.objects.itemEnterprise_2
 import es.ucm.fdi.mybooker.objects.itemReserve
+import java.time.LocalDateTime
+
 
 class EmpresaReservasActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEmpresaReservasBinding
     private lateinit var reserveAdapter: ReserveAdapter
+    private lateinit var userInfo: itemEnterprise_2
 
     private var db = FirebaseFirestore.getInstance()
     private var mAuth = FirebaseAuth.getInstance()
@@ -24,10 +28,41 @@ class EmpresaReservasActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_empresa_reservas)
-
-
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_empresa_reservas)
+
+        val from_login:Bundle? = intent.extras
+        val userId = from_login?.getString("userId")
+        userInfo = getUserInfo(userId)
+
+        setUp(userInfo)
+    }
+
+    private fun gotoHorario() {
+        val i = Intent(this, EmpresaHorarioActivity::class.java).apply {
+            putExtra("userInfo", userInfo)
+        }
+        startActivity(i)
+    }
+
+    private fun gotoSettings() {
+        val i = Intent(this, EmpresaSettingsActivity::class.java).apply {
+            putExtra("userInfo", userInfo)
+        }
+        startActivity(i)
+    }
+
+    private fun setUp(userInfo: itemEnterprise_2) {
+        binding.empresaTitle.text = userInfo.name.toString()
+
+        reserveAdapter = ReserveAdapter(getReservas(userInfo.userId.toString()))
+        binding.empresaResumen.layoutManager = LinearLayoutManager(this)
+        binding.empresaResumen.adapter = reserveAdapter
+
+        binding.logout.setOnClickListener() {
+            mAuth.signOut()
+            val i = Intent(this, ActivityLogin::class.java)
+            startActivity(i)
+        }
 
         val boolBottonNavigation = BottomNavigationView.OnNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -38,34 +73,50 @@ class EmpresaReservasActivity : AppCompatActivity() {
             false
         }
         binding.navigationView.setOnNavigationItemSelectedListener(boolBottonNavigation)
-
-        binding.empresaTitle.text = "name"
-
-        val uno = itemReserve("15:00", "YO", 1)
-        val dos = itemReserve("15:10", "YO TAMBIEN", 1)
-        reserveAdapter = ReserveAdapter(listOf(
-            uno, dos
-        ))
-        binding.empresaResumen.layoutManager = LinearLayoutManager(this)
-        binding.empresaResumen.adapter = reserveAdapter
-
-        binding.logout.setOnClickListener() {
-            mAuth.signOut()
-            val i = Intent(this, ActivityLogin::class.java)
-            startActivity(i)
-        }
     }
 
-    private fun gotoHorario() {
-        val i = Intent(this, EmpresaHorarioActivity::class.java).apply {
-            putExtra("userId", findViewById<EditText>(R.id.editTextUser).text.toString())
+    private fun getUserInfo(userId: String?): itemEnterprise_2 {
+        var Info = itemEnterprise_2("userId","name", "email", "category", "location", 1)
+        if (userId != null) {
+            db.collection("users").document(userId).get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful()) {
+                        val document: DocumentSnapshot? = task.getResult()
+                        if (document != null) {
+                            val name = document.getString("name")
+                            val email = document.getString("email")
+                            val cp = document.get("cp") as Long
+                            val category = document.getString("category")
+                            val location = document.getString("location")
+
+                            Info = itemEnterprise_2(userId, name, email, category, location, cp)
+                            setUp(Info)
+                        } else {
+                            mAuth.signOut()
+                            val i = Intent(this, ActivityLogin::class.java)
+                            startActivity(i)
+                        }
+                    }
+                }
         }
-        i.putExtra("tipoUsuario", "usuario")
-        startActivity(i)
+        return Info
     }
 
-    private fun gotoSettings() {
+    private fun getReservas(userId: String): List<itemReserve> {
+        var reservas = mutableListOf<itemReserve>()
+        if (userId != null) {
+            db.collection("reserves").whereEqualTo("id_enterprise", userId).get()
+                .addOnSuccessListener {documents ->
+                    for (document in documents) {
+                        val hora = document.getTimestamp("hora") as LocalDateTime
+                        val nombre_cliente = document.getString("nombre_cliente")
+                        val personas = document.get("personas") as Int
+                        reservas.add(itemReserve(hora, nombre_cliente, personas))
+                    }
+                }
+        }
 
+        return reservas
     }
 
 }

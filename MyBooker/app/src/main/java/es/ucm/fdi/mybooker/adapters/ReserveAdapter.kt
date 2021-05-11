@@ -20,8 +20,8 @@ class ReserveAdapter(private val dataSet: List<itemReserve>) : RecyclerView.Adap
         val personas: TextView = view.findViewById(R.id.reserva_personas)
 
         fun render(reserva : itemReserve) {
-            hora.text = reserva.hora
-            nombre.text = reserva.nombre
+            hora.text = reserva.hora.hour.toString() + ":" + reserva.hora.minute.toString()
+            nombre.text = reserva.nombre_cliente.toString()
             personas.text = reserva.personas.toString()
         }
     }

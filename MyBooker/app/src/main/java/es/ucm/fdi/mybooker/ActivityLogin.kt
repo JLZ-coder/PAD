@@ -122,8 +122,8 @@ class ActivityLogin : AppCompatActivity()
         db.collection("users").document(userId).get()
             .addOnSuccessListener {document ->
                 if (document != null) {
-                    name = document.getString("name")
-                    email = document.getString("email")
+                    name = document["name"].toString()
+                    email = document["email"].toString()
                 } else {
                     mAuth.signOut()
                 }
@@ -153,6 +153,7 @@ class ActivityLogin : AppCompatActivity()
 
         // TODO: Nos vamos a ir a la info del usuario cndo haga login, o a la empresa que clique, pero eso hay q mirarlo bien
         val homeIntent = Intent(this, EmpresaReservasActivity::class.java).apply {
+            putExtra("userId", userId)
             putExtra("userName", name)
             putExtra("email", email)
         }

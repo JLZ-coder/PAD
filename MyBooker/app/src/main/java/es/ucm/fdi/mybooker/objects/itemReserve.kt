@@ -1,3 +1,5 @@
 package es.ucm.fdi.mybooker.objects
 
-data class itemReserve(val hora: String, val nombre: String, val personas: Int)
+import java.time.LocalDateTime
+
+data class itemReserve(val hora: LocalDateTime, val nombre_cliente: String?, val personas: Int)
