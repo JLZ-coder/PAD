@@ -19,9 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="Categorías"
-            android:textSize="35sp"></TextView>
-
-
+            android:textSize="35sp" />
     </RelativeLayout>
 
     <GridLayout

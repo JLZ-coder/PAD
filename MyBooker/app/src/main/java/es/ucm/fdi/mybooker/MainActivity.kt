@@ -11,8 +11,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import es.ucm.fdi.mybooker.adapters.EnterpriseAdapter
 import es.ucm.fdi.mybooker.fragment.HomeFragment
 import es.ucm.fdi.mybooker.fragment.ProfileFragment
+import es.ucm.fdi.mybooker.fragment.ScheduleFragment
 import es.ucm.fdi.mybooker.objects.itemEnterprise
-
 
 enum class ProviderType {
     MAIL
@@ -56,19 +56,23 @@ class MainActivity : AppCompatActivity()
                 R.id.navigation_home -> {
                     currentFragment = HomeFragment.newInstance()
                     changeFragment(currentFragment)
-                    return@OnNavigationItemSelectedListener true}
+                    return@OnNavigationItemSelectedListener true
+                }
                 R.id.navigation_dashboard -> {
+                    currentFragment = ScheduleFragment.newInstance()
+                    changeFragment(currentFragment)
+                    return@OnNavigationItemSelectedListener true
+                }
+                R.id.navigation_profile -> {
                     currentFragment = ProfileFragment.newInstance()
                     changeFragment(currentFragment)
-                    return@OnNavigationItemSelectedListener true}
-                R.id.navigation_profile -> return@OnNavigationItemSelectedListener true
+                    return@OnNavigationItemSelectedListener true
+                }
             }
             false
         }
 
-
         mBottonNavigation.setOnNavigationItemSelectedListener(boolBottonNavigation)
-
 
         title = "Inicio"
         analytics();
@@ -135,8 +139,4 @@ class MainActivity : AppCompatActivity()
     }
 }
 
-private fun BottomNavigationView.setOnNavigationItemSelectedListener(any: Any, any1: Any) {
-
-}
-
-
+private fun BottomNavigationView.setOnNavigationItemSelectedListener(any: Any, any1: Any) {}
