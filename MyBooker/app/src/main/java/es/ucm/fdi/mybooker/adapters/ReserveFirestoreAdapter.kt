@@ -5,46 +5,44 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import es.ucm.fdi.mybooker.R
 import es.ucm.fdi.mybooker.objects.itemReserve
 
-class ReserveAdapter(private val dataSet: List<itemReserve>) : RecyclerView.Adapter<ReserveAdapter.ViewHolder>() {
+class ReserveFirestoreAdapter(options: FirestoreRecyclerOptions<itemReserve>) : FirestoreRecyclerAdapter<itemReserve, ReserveFirestoreAdapter.ReserveViewHolder>(options) {
 
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder).
      */
-    class ViewHolder(view:View) : RecyclerView.ViewHolder(view) {
+    class ReserveViewHolder(view:View) : RecyclerView.ViewHolder(view) {
         val hora: TextView = view.findViewById(R.id.reserva_hora)
         val nombre: TextView = view.findViewById(R.id.reserva_nombre)
         val personas: TextView = view.findViewById(R.id.reserva_personas)
 
         fun render(reserva : itemReserve) {
-            hora.text = reserva.hora.hour.toString() + ":" + reserva.hora.minute.toString()
+            hora.text = reserva.hora?.hours.toString() + ":" + reserva.hora?.minutes
             nombre.text = reserva.nombre_cliente.toString()
             personas.text = reserva.personas.toString()
         }
     }
 
     // Create new views (invoked by the layout manager)
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ReserveViewHolder {
         // Create a new view, which defines the UI of the list item
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.reserve_row, viewGroup, false)
 
-        return ViewHolder(view)
+        return ReserveViewHolder(view)
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
-    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-
-        // Get element from your dataset at this position and replace the
-        // contents of the view with that element
-        //viewHolder.textView.text = dataSet[position].enterpriseImg
-        viewHolder.render(dataSet[position])
+    override fun onBindViewHolder(holder: ReserveViewHolder, position: Int, model: itemReserve) {
+        holder.render(model)
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
-    override fun getItemCount() = dataSet.size
+    override fun onDataChanged() {
+        itemCount
+    }
 
 }

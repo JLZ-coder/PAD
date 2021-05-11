@@ -5,21 +5,23 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import es.ucm.fdi.mybooker.adapters.ReserveAdapter
+import com.google.firebase.firestore.Query
+import es.ucm.fdi.mybooker.adapters.ReserveFirestoreAdapter
 import es.ucm.fdi.mybooker.databinding.ActivityEmpresaReservasBinding
 import es.ucm.fdi.mybooker.objects.itemEnterprise_2
 import es.ucm.fdi.mybooker.objects.itemReserve
-import java.time.LocalDateTime
 
 
 class EmpresaReservasActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEmpresaReservasBinding
-    private lateinit var reserveAdapter: ReserveAdapter
+    //private lateinit var reserveAdapter: ReserveAdapter
+    private var adapter: ReserveFirestoreAdapter? = null
     private lateinit var userInfo: itemEnterprise_2
 
     private var db = FirebaseFirestore.getInstance()
@@ -33,8 +35,47 @@ class EmpresaReservasActivity : AppCompatActivity() {
         val from_login:Bundle? = intent.extras
         val userId = from_login?.getString("userId")
         userInfo = getUserInfo(userId)
+        //getReservas(userId)
 
-        setUp(userInfo)
+        val query: Query = db.collection("reserves").whereEqualTo("id_enterprise", userId)
+        val options = FirestoreRecyclerOptions.Builder<itemReserve>().setQuery(query, itemReserve::class.java).build()
+        adapter = ReserveFirestoreAdapter(options)
+        binding.empresaResumen.layoutManager = LinearLayoutManager(this)
+        binding.empresaResumen.adapter = adapter
+
+        //setUp(userInfo)
+        // Update the timestamp field with the value from the server
+        /*val updates = hashMapOf<String, Any>(
+            "hora" to FieldValue.serverTimestamp()
+        )
+
+        db.collection("reserves").whereEqualTo("id_enterprise", userId).get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful()) {
+                    val documents: QuerySnapshot? = task.getResult()
+                    if (documents != null) {
+                        for (document in documents) {
+                            document.reference.update(updates)
+                        }
+
+                    }
+                    else {
+                        mAuth.signOut()
+                        val i = Intent(this, ActivityLogin::class.java)
+                        startActivity(i)
+                    }
+                }
+            }*/
+    }
+
+    override fun onStart() {
+        super.onStart()
+        adapter!!.startListening()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        adapter!!.stopListening()
     }
 
     private fun gotoHorario() {
@@ -53,10 +94,6 @@ class EmpresaReservasActivity : AppCompatActivity() {
 
     private fun setUp(userInfo: itemEnterprise_2) {
         binding.empresaTitle.text = userInfo.name.toString()
-
-        reserveAdapter = ReserveAdapter(getReservas(userInfo.userId.toString()))
-        binding.empresaResumen.layoutManager = LinearLayoutManager(this)
-        binding.empresaResumen.adapter = reserveAdapter
 
         binding.logout.setOnClickListener() {
             mAuth.signOut()
@@ -100,23 +137,6 @@ class EmpresaReservasActivity : AppCompatActivity() {
                 }
         }
         return Info
-    }
-
-    private fun getReservas(userId: String): List<itemReserve> {
-        var reservas = mutableListOf<itemReserve>()
-        if (userId != null) {
-            db.collection("reserves").whereEqualTo("id_enterprise", userId).get()
-                .addOnSuccessListener {documents ->
-                    for (document in documents) {
-                        val hora = document.getTimestamp("hora") as LocalDateTime
-                        val nombre_cliente = document.getString("nombre_cliente")
-                        val personas = document.get("personas") as Int
-                        reservas.add(itemReserve(hora, nombre_cliente, personas))
-                    }
-                }
-        }
-
-        return reservas
     }
 
 }
