@@ -150,10 +150,7 @@ class ActivityLogin : AppCompatActivity()
             putExtra("email", email)
         }
         startActivity(homeIntent);
+        
     }
 
-    override fun onPause() {
-        super.onPause()
-            finish()
-    }
 }
