@@ -20,7 +20,7 @@ enum class ProviderType {
 
 class MainActivity : AppCompatActivity()
 {
-     var db = FirebaseFirestore.getInstance()
+    private var db = FirebaseFirestore.getInstance()
     private var mAuth = FirebaseAuth.getInstance()
 
     private lateinit var mRecyclerView : RecyclerView
@@ -32,6 +32,8 @@ class MainActivity : AppCompatActivity()
     //Parameters
     private lateinit var name:String
     private lateinit var email:String
+    //Cuenta atras
+    private var presionado:Long = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -93,7 +95,7 @@ class MainActivity : AppCompatActivity()
                     return@OnNavigationItemSelectedListener true
                 }
             }
-            false
+            return@OnNavigationItemSelectedListener false
         }
 
         mBottonNavigation.setOnNavigationItemSelectedListener(boolBottonNavigation)
@@ -104,10 +106,25 @@ class MainActivity : AppCompatActivity()
 
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, fragment)
-        transaction.addToBackStack(null)
+        //transaction.addToBackStack(null)
         transaction.commit()
     }
 
+    override fun onBackPressed() {
+
+
+        if (supportFragmentManager.backStackEntryCount > 1) {
+            super.onBackPressed()
+        }else{
+            if (presionado + 2000 > System.currentTimeMillis()) {
+                super.onBackPressed();
+                super.onBackPressed();
+            }else
+                Toast.makeText(this, "Vuelve a presionar para salir", Toast.LENGTH_SHORT).show();
+
+            presionado = System.currentTimeMillis();
+        }
+    }
     private fun analytics()
     {
 
@@ -117,4 +134,14 @@ class MainActivity : AppCompatActivity()
         bundle.putString("message", "MainActivity opened")
         analytics.logEvent("InitScreen", bundle)
     }
+
+    override fun onStart() {
+        super.onStart()
+
+        if(mAuth.currentUser == null){
+            finish()
+        }
+    }
+
+
 }

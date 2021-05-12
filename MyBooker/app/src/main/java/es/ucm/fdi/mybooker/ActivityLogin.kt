@@ -151,4 +151,9 @@ class ActivityLogin : AppCompatActivity()
         }
         startActivity(homeIntent);
     }
+
+    override fun onPause() {
+        super.onPause()
+            finish()
+    }
 }
