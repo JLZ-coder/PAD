@@ -3,8 +3,10 @@ package es.ucm.fdi.mybooker
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +22,7 @@ class ActivityLogin : AppCompatActivity()
     private var db = FirebaseFirestore.getInstance()
     private var mAuth = FirebaseAuth.getInstance()
     private lateinit var login: Button
+    private lateinit var loadingLogin: ProgressBar
 
     private lateinit var binding: ActivityLoginBinding
 
@@ -68,8 +71,12 @@ class ActivityLogin : AppCompatActivity()
         val userPass: EditText = findViewById<EditText>(R.id.editTextPassword)
 
         login = findViewById<Button>(R.id.btnLogIn)
+        loadingLogin = findViewById<ProgressBar>(R.id.loadingLogin)
+
         login.setOnClickListener {
             login.isEnabled = false
+            loadingLogin.visibility = View.VISIBLE
+
             if (userPass.text.isNotEmpty() && userMail.text.isNotEmpty()) {
                 mAuth.signInWithEmailAndPassword(
                     userMail.text.toString(),
@@ -95,6 +102,7 @@ class ActivityLogin : AppCompatActivity()
                             }
                             .addOnFailureListener { exception ->
                                 login.isEnabled = true
+                                loadingLogin.visibility = View.GONE
                                 Log.d("login_getDocument", "get failed with ", exception)
                             }
                     }
@@ -112,6 +120,7 @@ class ActivityLogin : AppCompatActivity()
     {
 
         login.isEnabled = true
+        loadingLogin.visibility = View.GONE
 
         val builder = AlertDialog.Builder(this)
         builder.setTitle("ERROR")
