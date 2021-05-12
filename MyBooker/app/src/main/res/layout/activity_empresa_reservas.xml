@@ -74,7 +74,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/empresa_resumen"
             app:layout_constraintVertical_bias="1.0"
-            app:menu="@menu/bottom_nav_menu">
+            app:menu="@menu/bottom_nav_menu_enterprise">
 
 
         </com.google.android.material.bottomnavigation.BottomNavigationView>

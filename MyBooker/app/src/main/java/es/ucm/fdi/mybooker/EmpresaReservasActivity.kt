@@ -22,7 +22,7 @@ class EmpresaReservasActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEmpresaReservasBinding
     //private lateinit var reserveAdapter: ReserveAdapter
     private var adapter: ReserveFirestoreAdapter? = null
-    private lateinit var true_userInfo: itemEnterprise_2
+    private var userId: String?=null
 
     private var db = FirebaseFirestore.getInstance()
     private var mAuth = FirebaseAuth.getInstance()
@@ -33,7 +33,7 @@ class EmpresaReservasActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_empresa_reservas)
 
         val from_login:Bundle? = intent.extras
-        val userId = from_login?.getString("userId")
+        userId = from_login?.getString("userId")
         getUserInfo(userId)
 
         val query: Query = db.collection("reserves").whereEqualTo("id_enterprise", userId)
@@ -42,29 +42,15 @@ class EmpresaReservasActivity : AppCompatActivity() {
         binding.empresaResumen.layoutManager = LinearLayoutManager(this)
         binding.empresaResumen.adapter = adapter
 
-        //setUp(userInfo)
-        // Update the timestamp field with the value from the server
-        /*val updates = hashMapOf<String, Any>(
-            "hora" to FieldValue.serverTimestamp()
-        )
-
-        db.collection("reserves").whereEqualTo("id_enterprise", userId).get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful()) {
-                    val documents: QuerySnapshot? = task.getResult()
-                    if (documents != null) {
-                        for (document in documents) {
-                            document.reference.update(updates)
-                        }
-
-                    }
-                    else {
-                        mAuth.signOut()
-                        val i = Intent(this, ActivityLogin::class.java)
-                        startActivity(i)
-                    }
-                }
-            }*/
+        val boolBottonNavigation = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> return@OnNavigationItemSelectedListener true
+                R.id.navigation_dashboard -> gotoHorario()
+                R.id.navigation_profile -> gotoSettings()
+            }
+            false
+        }
+        binding.navigationView.setOnNavigationItemSelectedListener(boolBottonNavigation)
     }
 
     override fun onStart() {
@@ -79,21 +65,19 @@ class EmpresaReservasActivity : AppCompatActivity() {
 
     private fun gotoHorario() {
         val i = Intent(this, EmpresaHorarioActivity::class.java).apply {
-            putExtra("userInfo", true_userInfo)
+            putExtra("userId", userId)
         }
         startActivity(i)
     }
 
     private fun gotoSettings() {
         val i = Intent(this, EmpresaSettingsActivity::class.java).apply {
-            putExtra("userInfo", true_userInfo)
+            putExtra("userId", userId)
         }
         startActivity(i)
     }
 
     private fun setUp(userInfo: itemEnterprise_2) {
-        true_userInfo = userInfo
-
         binding.empresaTitle.text = userInfo.name.toString()
 
         binding.logout.setOnClickListener() {
@@ -101,16 +85,6 @@ class EmpresaReservasActivity : AppCompatActivity() {
             val i = Intent(this, ActivityLogin::class.java)
             startActivity(i)
         }
-
-        val boolBottonNavigation = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.navigation_home -> return@OnNavigationItemSelectedListener true
-                R.id.navigation_dashboard -> gotoHorario()
-                R.id.navigation_profile -> gotoSettings()
-            }
-            false
-        }
-        binding.navigationView.setOnNavigationItemSelectedListener(boolBottonNavigation)
     }
 
     private fun getUserInfo(userId: String?): itemEnterprise_2 {

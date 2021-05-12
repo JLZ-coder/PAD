@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -144,7 +143,7 @@ class ActivityLogin : AppCompatActivity()
             }
 
         // TODO: Nos vamos a ir a la info del usuario cndo haga login, o a la empresa que clique, pero eso hay q mirarlo bien
-        val homeIntent = Intent(this, EmpresaReservasActivity::class.java).apply {
+        val homeIntent = Intent(this, EnterpriseMainActivity::class.java).apply {
             putExtra("userId", userId)
             putExtra("userName", name)
             putExtra("email", email)
