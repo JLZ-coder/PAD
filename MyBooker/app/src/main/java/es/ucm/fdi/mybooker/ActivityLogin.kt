@@ -68,6 +68,7 @@ class ActivityLogin : AppCompatActivity()
 
         val login = findViewById<Button>(R.id.btnLogIn)
         login.setOnClickListener {
+            login.isEnabled = false
             if (userPass.text.isNotEmpty() && userMail.text.isNotEmpty()) {
                 mAuth.signInWithEmailAndPassword(
                     userMail.text.toString(),
@@ -92,6 +93,7 @@ class ActivityLogin : AppCompatActivity()
                                 }
                             }
                             .addOnFailureListener { exception ->
+                                login.isEnabled = true
                                 Log.d("login_getDocument", "get failed with ", exception)
                             }
                     }
