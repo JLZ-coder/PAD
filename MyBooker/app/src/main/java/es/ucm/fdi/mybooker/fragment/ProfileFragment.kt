@@ -10,17 +10,10 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil.setContentView
+import com.google.firebase.auth.FirebaseAuth
 import es.ucm.fdi.mybooker.ActivityLogin
 import es.ucm.fdi.mybooker.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-
-//Boton logout
-private lateinit var mLogoutbtn : Button
 /**
  * A simple [Fragment] subclass.
  * Use the [profileFragment.newInstance] factory method to
@@ -33,46 +26,41 @@ class ProfileFragment : Fragment() {
     //Vista
     private lateinit var nameText : TextView
     private lateinit var emailText : TextView
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        arguments?.let {
-            name = it.getString("name")
-            email = it.getString("email")
-        }
-        Toast.makeText(this@ProfileFragment.context,  name, Toast.LENGTH_SHORT).show()
-
-
-
-    }
+    //Boton logout
+    private lateinit var mLogoutbtn : Button
+    //Firebase
+    private var mAuth = FirebaseAuth.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view: View = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        Toast.makeText(this@ProfileFragment.context,  email, Toast.LENGTH_SHORT).show()
-        nameText = view.findViewById(R.id.nombreTextView)
-        emailText = view.findViewById(R.id.emailTextView)
+        return inflater.inflate(R.layout.fragment_profile, container, false)
+    }
 
-        
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        arguments?.let {
+            name = it.getString("name")
+            email = it.getString("email")
+        }
+        nameText = view?.findViewById<TextView>(R.id.nombreTextView)!!
+        emailText = view?.findViewById<TextView>(R.id.emailTextView)!!
+
         nameText.text = name
         emailText.text = email
 
         //Este boton irá en el perfil del usuario
-       mLogoutbtn = view.findViewById(R.id.logout)
-       mLogoutbtn.setOnClickListener() {
-           val i = Intent(this@ProfileFragment.context, ActivityLogin::class.java)
-           startActivity(i)
-       }
+        mLogoutbtn = view?.findViewById<Button>(R.id.logout)!!
+        mLogoutbtn.setOnClickListener {
+            mAuth.signOut()
+            val i = Intent(this@ProfileFragment.context, ActivityLogin::class.java)
+            startActivity(i)
 
-
-
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        }
     }
+
 
     companion object {
         /**

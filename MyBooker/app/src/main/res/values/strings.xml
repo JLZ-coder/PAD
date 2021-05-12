@@ -54,9 +54,12 @@
     <string name="title_dashboard">Agenda</string>
     <string name="tittle_profile">Perfil</string>
     <string name="title_notifications">Notificaciones</string>
+    <string name="title_enterprise_home">Inicio</string>
+    <string name="title_enterprise_dashboard">Agenda</string>
+    <string name="tittle_enterprise_profile">Perfil</string>
+    <string name="title_enterprise_notifications">Notificaciones</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_empresa_settings">EmpresaSettingsActivity</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
