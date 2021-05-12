@@ -46,6 +46,9 @@
     <string name="user_image">Imagen</string>
     <string name="label_empresas">Empresas</string>
     <string name="title_activity_empresa_main">MainActivity</string>
+    <string name="label_nombre">Nombre</string>
+    <string name="label_email">Correo electrónico</string>
+    <string name="logout">Logout</string>
     <!--Textos menu-->
     <string name="title_home">Inicio</string>
     <string name="title_dashboard">Agenda</string>

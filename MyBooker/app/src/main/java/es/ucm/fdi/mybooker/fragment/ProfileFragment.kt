@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
+import androidx.databinding.DataBindingUtil.setContentView
 import es.ucm.fdi.mybooker.ActivityLogin
 import es.ucm.fdi.mybooker.R
 
@@ -25,21 +27,44 @@ private lateinit var mLogoutbtn : Button
  */
 class ProfileFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var email: String? = null
+    private var name: String? = null
+    //Vista
+    private lateinit var nameText : TextView
+    private lateinit var emailText : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            email = it.getString(ARG_PARAM1)
+            name = it.getString(ARG_PARAM2)
         }
+
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val view: View = inflater.inflate(R.layout.fragment_profile, container, false)
+
+        nameText = view.findViewById(R.id.nombreTextView)
+        emailText = view.findViewById(R.id.emailTextView)
+
+        nameText.text = name
+        emailText.text = email
+
+        //Este boton irá en el perfil del usuario
+       mLogoutbtn = view.findViewById(R.id.logout)
+       mLogoutbtn.setOnClickListener() {
+           val i = Intent(this@ProfileFragment.context, ActivityLogin::class.java)
+           startActivity(i)
+       }
+
+
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false)
     }
@@ -55,7 +80,12 @@ class ProfileFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(): ProfileFragment = ProfileFragment()
+        fun newInstance(name:String, email:String) = ProfileFragment().apply {
+            arguments = Bundle().apply {
+                putString(ARG_PARAM1, name)
+                putString(ARG_PARAM2, email)
+            }
+        }
 
     }
 }

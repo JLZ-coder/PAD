@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -79,8 +80,10 @@ class ActivityLogin : AppCompatActivity()
                                 if (document != null) {
                                     //Log.d("", "DocumentSnapshot data: ${document.data}")
                                     val tipo = document["tipoUsuario"].toString()
+                                    val name = document["name"].toString()
+                                    val email = document["email"].toString()
                                     when (tipo) {
-                                        "usuario" -> showUserInfo(user_uid)
+                                        "usuario" -> showUserInfo(user_uid,name,email)
                                         "empresa" -> showEmpresaInfo(user_uid)
                                         else -> Log.d("login_getDocument", "No such document")
                                     }
@@ -115,25 +118,14 @@ class ActivityLogin : AppCompatActivity()
         dialog.show()
     }
 
-    private fun showUserInfo(userId : String)
+    private fun showUserInfo(userId : String, name:String, email:String)
     {
-        var name : String? = ""
-        var email : String? = ""
-        db.collection("users").document(userId).get()
-            .addOnSuccessListener {document ->
-                if (document != null) {
-                    name = document["name"].toString()
-                    email = document["email"].toString()
-                } else {
-                    mAuth.signOut()
-                }
-            }
 
         // TODO: Nos vamos a ir a la info del usuario cndo haga login, o a la empresa que clique, pero eso hay q mirarlo bien
-        val homeIntent = Intent(this, MainActivity::class.java).apply {
-            putExtra("userName", name)
-            putExtra("email", email)
-        }
+        val homeIntent = Intent(this, MainActivity::class.java)
+        Toad
+        homeIntent.putExtra("userName", name)
+        homeIntent.putExtra("email", email)
         startActivity(homeIntent);
     }
 
