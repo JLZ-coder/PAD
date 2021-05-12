@@ -19,6 +19,7 @@ class ActivityLogin : AppCompatActivity()
     // TODO: HAbrá q estructurar esto bien. Era puna prueba para el login de usuarios
     private var db = FirebaseFirestore.getInstance()
     private var mAuth = FirebaseAuth.getInstance()
+    private lateinit var login: Button
 
     private lateinit var binding: ActivityLoginBinding
 
@@ -66,7 +67,7 @@ class ActivityLogin : AppCompatActivity()
         val userMail: EditText = findViewById<EditText>(R.id.editTextUser)
         val userPass: EditText = findViewById<EditText>(R.id.editTextPassword)
 
-        val login = findViewById<Button>(R.id.btnLogIn)
+        login = findViewById<Button>(R.id.btnLogIn)
         login.setOnClickListener {
             login.isEnabled = false
             if (userPass.text.isNotEmpty() && userMail.text.isNotEmpty()) {
@@ -109,6 +110,8 @@ class ActivityLogin : AppCompatActivity()
 
     private fun showAlert()
     {
+
+        login.isEnabled = true
 
         val builder = AlertDialog.Builder(this)
         builder.setTitle("ERROR")
