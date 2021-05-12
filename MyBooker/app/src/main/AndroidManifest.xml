@@ -16,8 +16,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyBooker">
 
-        <activity android:name=".EmpresaHorarioActivity" />
-        <activity android:name=".EmpresaReservasActivity" />
         <activity android:name=".EnterpriseMainActivity"
             android:exported="true"/>
         <activity android:name=".ActivityRegister" />
