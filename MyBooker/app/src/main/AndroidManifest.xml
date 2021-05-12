@@ -19,7 +19,8 @@
             android:name=".EmpresaSettingsActivity"
             android:label="@string/title_activity_empresa_settings"></activity>
         <activity android:name=".EmpresaHorarioActivity" />
-        <activity android:name=".EmpresaReservasActivity" />
+        <activity android:name=".EmpresaReservasActivity"
+            android:exported="true"/>
         <activity android:name=".ActivityRegister" />
         <activity android:name=".ActivityLogin">
             <intent-filter>
