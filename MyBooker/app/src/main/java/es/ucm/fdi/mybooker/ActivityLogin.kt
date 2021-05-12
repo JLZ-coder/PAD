@@ -123,7 +123,6 @@ class ActivityLogin : AppCompatActivity()
 
         // TODO: Nos vamos a ir a la info del usuario cndo haga login, o a la empresa que clique, pero eso hay q mirarlo bien
         val homeIntent = Intent(this, MainActivity::class.java)
-        Toad
         homeIntent.putExtra("userName", name)
         homeIntent.putExtra("email", email)
         startActivity(homeIntent);
