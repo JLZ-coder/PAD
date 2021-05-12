@@ -125,6 +125,7 @@ class ActivityLogin : AppCompatActivity()
         val homeIntent = Intent(this, MainActivity::class.java)
         homeIntent.putExtra("userName", name)
         homeIntent.putExtra("email", email)
+
         startActivity(homeIntent);
     }
 

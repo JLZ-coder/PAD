@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil.setContentView
 import es.ucm.fdi.mybooker.ActivityLogin
 import es.ucm.fdi.mybooker.R
@@ -37,9 +38,11 @@ class ProfileFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            email = it.getString(ARG_PARAM1)
-            name = it.getString(ARG_PARAM2)
+            name = it.getString("name")
+            email = it.getString("email")
         }
+        Toast.makeText(this@ProfileFragment.context,  name, Toast.LENGTH_SHORT).show()
+
 
 
     }
@@ -50,9 +53,11 @@ class ProfileFragment : Fragment() {
     ): View? {
         val view: View = inflater.inflate(R.layout.fragment_profile, container, false)
 
+        Toast.makeText(this@ProfileFragment.context,  email, Toast.LENGTH_SHORT).show()
         nameText = view.findViewById(R.id.nombreTextView)
         emailText = view.findViewById(R.id.emailTextView)
 
+        
         nameText.text = name
         emailText.text = email
 
@@ -80,12 +85,9 @@ class ProfileFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(name:String, email:String) = ProfileFragment().apply {
-            arguments = Bundle().apply {
-                putString(ARG_PARAM1, name)
-                putString(ARG_PARAM2, email)
-            }
-        }
+        fun newInstance() : ProfileFragment  = ProfileFragment()
 
     }
+
+
 }

@@ -43,28 +43,31 @@ class MainActivity : AppCompatActivity()
         mBottonNavigation = findViewById<BottomNavigationView>(R.id.navigationView)
         title = "MyBooker"
 
-
-        title = "Inicio"
-        analytics();
-
-        val objectIntent:Intent = intent
-        email = objectIntent.getStringExtra("userName").toString()
-        name = objectIntent.getStringExtra("mail").toString()
-
-        Toast.makeText(this, name, Toast.LENGTH_SHORT).show()
-
-        //Fragmento inicial
-        if (savedInstanceState == null){
-            currentFragment = HomeFragment.newInstance()
-            changeFragment(currentFragment)
-        }
-
         // TODO: No llega el usuario ni el mail ni nada. REVISAR
         // Lo he movido para aquí porque necesito el mail en Schedule
         val bundle:Bundle? = intent.extras
         email = bundle?.getString("email").toString()
         val provider = bundle?.getString("provider")
-        name = bundle?.getString("name").toString()
+        name = bundle?.getString("userName").toString()
+
+
+
+        title = "Inicio"
+
+        if (savedInstanceState == null){
+            currentFragment = HomeFragment.newInstance()
+            changeFragment(currentFragment)
+        }
+
+
+        analytics();
+
+
+        //setUpRecyclerView()
+        setUp()
+    }
+
+    private fun setUp(){
 
 
         val boolBottonNavigation = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -81,7 +84,11 @@ class MainActivity : AppCompatActivity()
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.navigation_profile -> {
-                    currentFragment = ProfileFragment.newInstance(name,email)
+                    currentFragment = ProfileFragment.newInstance()
+                    val bundle: Bundle = Bundle()
+                    bundle.putString("name", name)
+                    bundle.putString("email", email)
+                    currentFragment.arguments = bundle
                     changeFragment(currentFragment)
                     return@OnNavigationItemSelectedListener true
                 }
@@ -90,15 +97,11 @@ class MainActivity : AppCompatActivity()
         }
 
         mBottonNavigation.setOnNavigationItemSelectedListener(boolBottonNavigation)
-
-        analytics();
-
-
-        //setUpRecyclerView()
-        // setUp(email ?: "no user found", provider ?: "empty", name ?: "no name")
     }
 
+
     private fun changeFragment(fragment: Fragment) {
+
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, fragment)
         transaction.addToBackStack(null)
