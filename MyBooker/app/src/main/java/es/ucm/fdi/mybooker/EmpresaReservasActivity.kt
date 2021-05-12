@@ -22,7 +22,7 @@ class EmpresaReservasActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEmpresaReservasBinding
     //private lateinit var reserveAdapter: ReserveAdapter
     private var adapter: ReserveFirestoreAdapter? = null
-    private lateinit var userInfo: itemEnterprise_2
+    private lateinit var true_userInfo: itemEnterprise_2
 
     private var db = FirebaseFirestore.getInstance()
     private var mAuth = FirebaseAuth.getInstance()
@@ -34,8 +34,7 @@ class EmpresaReservasActivity : AppCompatActivity() {
 
         val from_login:Bundle? = intent.extras
         val userId = from_login?.getString("userId")
-        userInfo = getUserInfo(userId)
-        //getReservas(userId)
+        getUserInfo(userId)
 
         val query: Query = db.collection("reserves").whereEqualTo("id_enterprise", userId)
         val options = FirestoreRecyclerOptions.Builder<itemReserve>().setQuery(query, itemReserve::class.java).build()
@@ -80,19 +79,21 @@ class EmpresaReservasActivity : AppCompatActivity() {
 
     private fun gotoHorario() {
         val i = Intent(this, EmpresaHorarioActivity::class.java).apply {
-            putExtra("userInfo", userInfo)
+            putExtra("userInfo", true_userInfo)
         }
         startActivity(i)
     }
 
     private fun gotoSettings() {
         val i = Intent(this, EmpresaSettingsActivity::class.java).apply {
-            putExtra("userInfo", userInfo)
+            putExtra("userInfo", true_userInfo)
         }
         startActivity(i)
     }
 
     private fun setUp(userInfo: itemEnterprise_2) {
+        true_userInfo = userInfo
+
         binding.empresaTitle.text = userInfo.name.toString()
 
         binding.logout.setOnClickListener() {
