@@ -55,6 +55,11 @@ class HomeFragment : Fragment() {
         }
       })
 
+    /*val add_shift_btn: Button = root.findViewById(R.id.add_shift_button)
+    add_shift_btn.setOnClickListener() {
+
+    }*/
+
     return root
   }
 
