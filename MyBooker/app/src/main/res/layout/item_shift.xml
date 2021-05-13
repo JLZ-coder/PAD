@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="4dp" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_gravity="start|center">
+
+        <TextView
+            android:id="@+id/start_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00-10:00"
+            android:textSize="28sp" />
+
+        <TextView
+            android:id="@+id/period"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cada 10 min"
+            android:textSize="20sp"
+            android:layout_marginStart="8dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="end|center">
+
+        <TextView
+            android:id="@+id/lunes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="L"
+            android:textSize="20sp"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/martes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="M"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:layout_marginStart="4dp"/>
+
+        <TextView
+            android:id="@+id/miercoles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="X"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:layout_marginStart="4dp"/>
+
+        <TextView
+            android:id="@+id/jueves"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="J"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:layout_marginStart="4dp"/>
+
+        <TextView
+            android:id="@+id/viernes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="V"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:layout_marginStart="4dp"/>
+
+        <TextView
+            android:id="@+id/sabado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="S"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:layout_marginStart="4dp"/>
+
+        <TextView
+            android:id="@+id/domingo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="D"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:layout_marginStart="4dp"/>
+
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>
