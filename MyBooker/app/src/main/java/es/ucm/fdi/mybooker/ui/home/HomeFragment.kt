@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
@@ -55,10 +57,10 @@ class HomeFragment : Fragment() {
         }
       })
 
-    /*val add_shift_btn: Button = root.findViewById(R.id.add_shift_button)
-    add_shift_btn.setOnClickListener() {
-
-    }*/
+    val add_shift_btn: Button = root.findViewById(R.id.add_shift_button)
+    add_shift_btn.setOnClickListener { view : View ->
+      view.findNavController().navigate(R.id.action_navigation_home_to_navigation_add_shift)
+    }
 
     return root
   }

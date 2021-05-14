@@ -33,8 +33,4 @@ class HomeViewModel : ViewModel() {
     private fun setUp() {
 
     }
-
-    companion object {
-
-    }
 }

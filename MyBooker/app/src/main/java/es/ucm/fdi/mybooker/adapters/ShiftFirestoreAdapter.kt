@@ -36,7 +36,7 @@ class ShiftFirestoreAdapter(options: FirestoreRecyclerOptions<itemShift>) : Fire
             val end_minutes = turno.end?.minutes.toString()
 
             start_end.text = "$start_hours:$start_minutes-$end_hours:$end_minutes"
-            period.text = "Cada ${turno.period} min"
+            period.text = "Cada ${turno.period.toString()} min"
             turno.days?.forEach {
                 list_of_days[it].setBackgroundColor(Color.YELLOW)
             }
