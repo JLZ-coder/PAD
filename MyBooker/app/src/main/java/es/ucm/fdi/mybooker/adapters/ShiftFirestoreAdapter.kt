@@ -20,6 +20,7 @@ class ShiftFirestoreAdapter(options: FirestoreRecyclerOptions<itemShift>) : Fire
     class ShiftViewHolder(view:View) : RecyclerView.ViewHolder(view) {
         val start_end: TextView = view.findViewById(R.id.start_end)
         val period: TextView = view.findViewById(R.id.period)
+        val max_personas: TextView = view.findViewById(R.id.max_personas)
         val lunes: TextView = view.findViewById(R.id.lunes)
         val martes: TextView = view.findViewById(R.id.martes)
         val miercoles: TextView = view.findViewById(R.id.miercoles)
@@ -30,13 +31,14 @@ class ShiftFirestoreAdapter(options: FirestoreRecyclerOptions<itemShift>) : Fire
         val list_of_days = listOf<TextView>(lunes, martes, miercoles, jueves, viernes, sabado, domingo)
 
         fun render(turno : itemShift) {
-            val start_hours = turno.start?.hours.toString()
-            val start_minutes = turno.start?.minutes.toString()
-            val end_hours = turno.end?.hours.toString()
-            val end_minutes = turno.end?.minutes.toString()
+            val start_hours = turno.start?.substringBefore(":")
+            val start_minutes = turno.start?.substringAfter(":")
+            val end_hours = turno.end?.substringBefore(":")
+            val end_minutes = turno.end?.substringAfter(":")
 
             start_end.text = "$start_hours:$start_minutes-$end_hours:$end_minutes"
             period.text = "Cada ${turno.period.toString()} min"
+            max_personas.text = "${turno.max_personas.toString()} personas por cita"
             turno.days?.forEach {
                 list_of_days[it].setBackgroundColor(Color.YELLOW)
             }

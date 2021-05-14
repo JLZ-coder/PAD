@@ -32,6 +32,13 @@
             android:text="Cada 10 min"
             android:textSize="20sp" />
 
+        <TextView
+            android:id="@+id/max_personas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3 personas por cita"
+            android:textSize="20sp" />
+
     </LinearLayout>
 
     <LinearLayout

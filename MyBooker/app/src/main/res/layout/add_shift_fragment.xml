@@ -132,7 +132,6 @@
                 android:layout_marginBottom="8dp"
                 android:text="Maximo de reservas por cita"
                 android:textSize="20sp"
-                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@+id/editTextTime_shift_start"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.174"
@@ -145,7 +144,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:visibility="gone"
                 android:inputType="number"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -167,7 +165,7 @@
                 android:id="@+id/checkBox_lunes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lunes"
+                android:text="@string/lunes"
 
                 />
 
@@ -176,35 +174,35 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/checkBox_lunes"
-                android:text="Martes" />
+                android:text="@string/martes" />
 
             <CheckBox
                 android:id="@+id/checkBox_miercoles"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/checkBox_martes"
-                android:text="Miercoles" />
+                android:text="@string/miercoles" />
 
             <CheckBox
                 android:id="@+id/checkBox_jueves"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/checkBox_miercoles"
-                android:text="Jueves" />
+                android:text="@string/jueves" />
 
             <CheckBox
                 android:id="@+id/checkBox_viernes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/checkBox_jueves"
-                android:text="Viernes" />
+                android:text="@string/viernes" />
 
             <CheckBox
                 android:id="@+id/checkBox_sabado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/checkBox_lunes"
-                android:text="Sabado" />
+                android:text="@string/sabado" />
 
             <CheckBox
                 android:id="@+id/checkBox_domingo"
@@ -212,7 +210,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/checkBox_lunes"
                 android:layout_toRightOf="@id/checkBox_sabado"
-                android:text="Domingo" />
+                android:text="@string/domingo" />
 
         </RelativeLayout>
 
