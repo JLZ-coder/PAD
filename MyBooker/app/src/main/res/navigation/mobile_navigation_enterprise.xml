@@ -30,11 +30,26 @@
         android:id="@+id/navigation_dashboard"
         android:name="es.ucm.fdi.mybooker.ui.dashboard.DashboardFragment"
         android:label="@string/title_enterprise_dashboard"
-        tools:layout="@layout/fragment_enterprise_dashboard" />
+        tools:layout="@layout/fragment_enterprise_dashboard" >
+        <action
+            android:id="@+id/action_navigation_dashboard_to_navigation_allreserves"
+            app:destination="@id/navigation_allreserves" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="es.ucm.fdi.mybooker.ui.notifications.NotificationsFragment"
         android:label="@string/title_enterprise_notifications"
         tools:layout="@layout/fragment_enterprise_notifications" />
+
+    <fragment
+        android:id="@+id/navigation_allreserves"
+        android:name="es.ucm.fdi.mybooker.ui.dashboard.EnterpriseCalendarFragment"
+        android:label="@string/title_enterprise_calendar"
+        tools:layout="@layout/fragment_enterprise_calendar" >
+        <action
+            android:id="@+id/action_navigation_allreserves_to_navigation_dashboard"
+            app:destination="@id/navigation_dashboard"
+            app:popUpTo="@id/navigation_dashboard" />
+    </fragment>
 </navigation>

@@ -13,7 +13,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import es.ucm.fdi.mybooker.R
 import es.ucm.fdi.mybooker.objects.itemShift
 
-class ShiftFirestoreAdapter(options: FirestoreRecyclerOptions<itemShift>, private val clickListener: (itemShift) -> Unit) : FirestoreRecyclerAdapter<itemShift, ShiftFirestoreAdapter.ShiftViewHolder>(options) {
+class ShiftFirestoreAdapter(options: FirestoreRecyclerOptions<itemShift>) : FirestoreRecyclerAdapter<itemShift, ShiftFirestoreAdapter.ShiftViewHolder>(options) {
 
     /**
      * Provide a reference to the type of views that you are using
@@ -32,7 +32,7 @@ class ShiftFirestoreAdapter(options: FirestoreRecyclerOptions<itemShift>, privat
         val domingo: TextView = view.findViewById(R.id.domingo)
         val list_of_days = listOf<TextView>(lunes, martes, miercoles, jueves, viernes, sabado, domingo)
 
-        fun render(turno : itemShift, clickListener: (itemShift) -> Unit, position: Int) {
+        fun render(turno : itemShift) {
             val start_hours = turno.start?.substringBefore(":")
             val start_minutes = turno.start?.substringAfter(":")
             val end_hours = turno.end?.substringBefore(":")
@@ -64,7 +64,7 @@ class ShiftFirestoreAdapter(options: FirestoreRecyclerOptions<itemShift>, privat
     }
 
     override fun onBindViewHolder(holder: ShiftViewHolder, position: Int, model: itemShift) {
-        holder.render(model, clickListener, position)
+        holder.render(model)
         holder.itemView.setOnClickListener {
             val shift_id = snapshots.getSnapshot(position).id
             val bundle = bundleOf("shift" to model, "shift_id" to shift_id)
