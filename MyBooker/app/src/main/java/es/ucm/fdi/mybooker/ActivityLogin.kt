@@ -1,18 +1,19 @@
 package es.ucm.fdi.mybooker
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import es.ucm.fdi.mybooker.databinding.ActivityLoginBinding
 
 class ActivityLogin : AppCompatActivity()
 {
@@ -21,26 +22,32 @@ class ActivityLogin : AppCompatActivity()
     private var db = FirebaseFirestore.getInstance()
     private var mAuth = FirebaseAuth.getInstance()
     private lateinit var login: Button
+    private lateinit var regUser: TextView
+    private lateinit var regEnter: TextView
     private lateinit var loadingLogin: ProgressBar
 
-    private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_login)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
+        regUser = findViewById<TextView>(R.id.btnRegisterUser)
+        regEnter = findViewById<TextView>(R.id.btnRegisterEnt)
 
-        binding.btnRegisterUser.setOnClickListener {
+        loadingLogin = findViewById<ProgressBar>(R.id.loadingLogin)
+
+        regUser.setOnClickListener {
             goRegisterUser()
         }
 
-        binding.btnRegisterEnt.setOnClickListener {
+        regEnter.setOnClickListener {
             goRegisterEnt()
         }
 
         setUp()
+
     }
+
 
     private fun goRegisterUser()
     {
@@ -70,7 +77,6 @@ class ActivityLogin : AppCompatActivity()
         val userPass: EditText = findViewById<EditText>(R.id.editTextPassword)
 
         login = findViewById<Button>(R.id.btnLogIn)
-        loadingLogin = findViewById<ProgressBar>(R.id.loadingLogin)
 
         login.setOnClickListener {
             login.isEnabled = false
