@@ -18,8 +18,7 @@
         android:theme="@style/Theme.MyBooker">
 
         <activity android:name=".EnterpriseMainActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="true"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".ActivityRegister" />
         <activity android:name=".ActivityLogin">
             <intent-filter>

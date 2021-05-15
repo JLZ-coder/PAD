@@ -224,6 +224,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
+        <Button
+            android:id="@+id/button_del_shift"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/df_red"
+            android:text="Eliminar"
+            android:textSize="10sp"
+            android:visibility="gone"
+            app:layout_constraintBaseline_toBaselineOf="@+id/button_add_shift"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.777"
+            app:layout_constraintStart_toEndOf="@+id/button_add_shift" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

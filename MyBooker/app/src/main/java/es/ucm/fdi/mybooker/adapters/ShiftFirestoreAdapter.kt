@@ -5,13 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.os.bundleOf
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import es.ucm.fdi.mybooker.R
 import es.ucm.fdi.mybooker.objects.itemShift
 
-class ShiftFirestoreAdapter(options: FirestoreRecyclerOptions<itemShift>) : FirestoreRecyclerAdapter<itemShift, ShiftFirestoreAdapter.ShiftViewHolder>(options) {
+class ShiftFirestoreAdapter(options: FirestoreRecyclerOptions<itemShift>, private val clickListener: (itemShift) -> Unit) : FirestoreRecyclerAdapter<itemShift, ShiftFirestoreAdapter.ShiftViewHolder>(options) {
 
     /**
      * Provide a reference to the type of views that you are using
@@ -30,7 +32,7 @@ class ShiftFirestoreAdapter(options: FirestoreRecyclerOptions<itemShift>) : Fire
         val domingo: TextView = view.findViewById(R.id.domingo)
         val list_of_days = listOf<TextView>(lunes, martes, miercoles, jueves, viernes, sabado, domingo)
 
-        fun render(turno : itemShift) {
+        fun render(turno : itemShift, clickListener: (itemShift) -> Unit, position: Int) {
             val start_hours = turno.start?.substringBefore(":")
             val start_minutes = turno.start?.substringAfter(":")
             val end_hours = turno.end?.substringBefore(":")
@@ -42,6 +44,12 @@ class ShiftFirestoreAdapter(options: FirestoreRecyclerOptions<itemShift>) : Fire
             turno.days?.forEach {
                 list_of_days[it].setBackgroundColor(Color.YELLOW)
             }
+            /*itemView.setOnClickListener {
+                clickListener(turno)
+                val shift_id =
+                val bundle = bundleOf("shift" to turno, "shift_id" to )
+                it.findNavController().navigate(R.id.action_navigation_add_shift_to_navigation_home, )
+            }*/
         }
     }
 
@@ -51,11 +59,17 @@ class ShiftFirestoreAdapter(options: FirestoreRecyclerOptions<itemShift>) : Fire
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.item_shift, viewGroup, false)
 
+
         return ShiftViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ShiftViewHolder, position: Int, model: itemShift) {
-        holder.render(model)
+        holder.render(model, clickListener, position)
+        holder.itemView.setOnClickListener {
+            val shift_id = snapshots.getSnapshot(position).id
+            val bundle = bundleOf("shift" to model, "shift_id" to shift_id)
+            it.findNavController().navigate(R.id.action_navigation_home_to_navigation_add_shift, bundle)
+        }
     }
 
     override fun onDataChanged() {

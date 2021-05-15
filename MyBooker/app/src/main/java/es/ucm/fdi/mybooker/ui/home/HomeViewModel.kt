@@ -7,7 +7,6 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import es.ucm.fdi.mybooker.adapters.ShiftFirestoreAdapter
 import es.ucm.fdi.mybooker.objects.itemShift
 
 class HomeViewModel : ViewModel() {
@@ -24,7 +23,6 @@ class HomeViewModel : ViewModel() {
 
     val query: Query = db.collection("shifts").whereEqualTo("id_enterprise", userId)
     val options = FirestoreRecyclerOptions.Builder<itemShift>().setQuery(query, itemShift::class.java).build()
-    val firebase_adapter = ShiftFirestoreAdapter(options)
 
     init {
         setUp()

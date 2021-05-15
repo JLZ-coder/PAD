@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import es.ucm.fdi.mybooker.R
 import es.ucm.fdi.mybooker.adapters.ShiftFirestoreAdapter
+import es.ucm.fdi.mybooker.objects.itemShift
 
 class HomeFragment : Fragment() {
 
@@ -37,8 +38,9 @@ class HomeFragment : Fragment() {
 
     val turnos: RecyclerView = root.findViewById(R.id.shifts_recycler)
     turnos.layoutManager = LinearLayoutManager(activity)
-    turnos.adapter = homeViewModel.firebase_adapter
-    mAdapter = homeViewModel.firebase_adapter
+
+    mAdapter = ShiftFirestoreAdapter(homeViewModel.options, { shift -> shiftItemClicked(shift) })
+    turnos.adapter = mAdapter
 
     mAdapter.registerAdapterDataObserver(object : AdapterDataObserver() {
         override fun onItemRangeInserted(positionStart : Int, itemCount: Int) {
@@ -73,5 +75,9 @@ class HomeFragment : Fragment() {
   override fun onStop() {
     super.onStop()
     mAdapter!!.stopListening()
+  }
+
+  private fun shiftItemClicked(itemShift: itemShift) {
+
   }
 }

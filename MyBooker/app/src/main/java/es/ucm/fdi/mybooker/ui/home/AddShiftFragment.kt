@@ -9,7 +9,6 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -26,8 +25,8 @@ class AddShiftFragment : Fragment() {
     private var mAuth = FirebaseAuth.getInstance()
     private val userId = mAuth.currentUser.uid
 
-    private lateinit var viewModel: AddShiftViewModel
     private lateinit var new_shift: itemShift
+    private var is_editShift = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +47,25 @@ class AddShiftFragment : Fragment() {
         val domingo: CheckBox = root.findViewById(R.id.checkBox_domingo)
         val days = listOf<CheckBox>(lunes, martes, miercoles, jueves, viernes, sabado, domingo)
         val done_button: Button = root.findViewById(R.id.button_add_shift)
+        val del_button: Button = root.findViewById(R.id.button_del_shift)
+
+        if (arguments != null) {
+            if (requireArguments().containsKey("shift_id") && requireArguments().containsKey("shift")) {
+                is_editShift = true
+            }
+        }
+
+        if (is_editShift) {
+            val editShift = requireArguments().getSerializable("shift") as itemShift
+            start_input.setText(editShift.start)
+            end_input.setText(editShift.end)
+            period.setText(editShift.period.toString())
+            max_personas.setText(editShift.max_personas.toString())
+            editShift.days?.forEach {
+                days[it].isChecked = true
+            }
+            del_button.visibility = View.VISIBLE
+        }
 
         done_button.setOnClickListener {view : View ->
             val f_start = start_input.text.toString()
@@ -70,22 +88,49 @@ class AddShiftFragment : Fragment() {
             }
 
             new_shift = itemShift(userId, f_start, f_end, f_period, f_max_personas, f_days)
-            db.collection("shifts").add(new_shift)
-                .addOnSuccessListener { documentReference ->
-                    Log.d("addShiftFragment", "DocumentSnapshot written with ID: ${documentReference.id}")
-                    view.findNavController().navigate(R.id.action_navigation_add_shift_to_navigation_home)
+
+            if (is_editShift) {
+                val shift_id = requireArguments().getString("shift_id")
+                if (shift_id != null) {
+                    db.collection("shifts").document(shift_id).set(new_shift)
+                        .addOnSuccessListener {
+                            Log.d("addShiftFragment", "DocumentSnapshot written with ID: $shift_id")
+                            view.findNavController().navigate(R.id.action_navigation_add_shift_to_navigation_home)
+                        }
+                        .addOnFailureListener { e->
+                            Log.w("addShiftFragment", "Error adding document", e)
+                        }
                 }
-                .addOnFailureListener { e ->
-                    Log.w("addShiftFragment", "Error adding document", e)
-                }
+            }
+            else {
+                db.collection("shifts").add(new_shift)
+                    .addOnSuccessListener { documentReference ->
+                        Log.d("addShiftFragment", "DocumentSnapshot written with ID: ${documentReference.id}")
+                        view.findNavController().navigate(R.id.action_navigation_add_shift_to_navigation_home)
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w("addShiftFragment", "Error adding document", e)
+                    }
+            }
         }
+
+        del_button.setOnClickListener {view ->
+            val shift_id = requireArguments().getString("shift_id")
+            if (shift_id != null) {
+                db.collection("shifts").document(shift_id).delete()
+                    .addOnSuccessListener {
+                        Log.d("addShiftFragment", "DocumentSnapshot successfully deleted!")
+                        view.findNavController().navigate(R.id.action_navigation_add_shift_to_navigation_home)
+                    }
+                    .addOnFailureListener { e -> Log.w("addShiftFragment", "Error deleting document", e) }
+            }
+        }
+
         return root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    /*override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(AddShiftViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
+    }*/
 
 }
