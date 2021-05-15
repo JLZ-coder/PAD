@@ -2,6 +2,9 @@ package es.ucm.fdi.mybooker
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.PersistableBundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -28,13 +31,15 @@ class MainActivity : AppCompatActivity()
     //Navigation view
     private lateinit var mBottonNavigation : BottomNavigationView
     //Fragments
-    private lateinit var currentFragment: Fragment
+    private  var currentFragment: Fragment? = null
     //Parameters
     private lateinit var name:String
     private lateinit var email:String
     //Cuenta atras
     private var presionado:Long = 0
-
+    //Menu
+    private lateinit var btnSearch: MenuItem
+    private var booleanAux: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -53,13 +58,17 @@ class MainActivity : AppCompatActivity()
         name = bundle?.getString("userName").toString()
 
 
-
         title = "Inicio"
 
         if (savedInstanceState == null){
             currentFragment = HomeFragment.newInstance()
-            changeFragment(currentFragment)
+            changeFragment(currentFragment as HomeFragment)
+            booleanAux = true
+        }else {
+            booleanAux = savedInstanceState?.getBoolean("fragment")
         }
+
+
 
 
         analytics();
@@ -69,29 +78,44 @@ class MainActivity : AppCompatActivity()
         setUp()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        if(currentFragment is HomeFragment) {
+            outState.putBoolean("fragment", true)
+        }
+        else {
+            outState.putBoolean("fragment", false)
+        }
+
+
+    }
     private fun setUp(){
+
 
 
         val boolBottonNavigation = BottomNavigationView.OnNavigationItemSelectedListener { item ->
 
             when (item.itemId) {
                 R.id.navigation_home -> {
+                    btnSearch.isVisible = true
                     currentFragment = HomeFragment.newInstance()
-                    changeFragment(currentFragment)
+                    changeFragment(currentFragment as HomeFragment)
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.navigation_dashboard -> {
+                    btnSearch.isVisible = false
                     currentFragment = ScheduleFragment.newInstance(email)!!
-                    changeFragment(currentFragment)
+                    changeFragment(currentFragment as ScheduleFragment)
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.navigation_profile -> {
+                    btnSearch.isVisible = false
                     currentFragment = ProfileFragment.newInstance()
                     val bundle: Bundle = Bundle()
                     bundle.putString("name", name)
                     bundle.putString("email", email)
-                    currentFragment.arguments = bundle
-                    changeFragment(currentFragment)
+                    (currentFragment as ProfileFragment).arguments = bundle
+                    changeFragment(currentFragment as ProfileFragment)
                     return@OnNavigationItemSelectedListener true
                 }
             }
@@ -99,15 +123,32 @@ class MainActivity : AppCompatActivity()
         }
 
         mBottonNavigation.setOnNavigationItemSelectedListener(boolBottonNavigation)
+
+
     }
 
 
     private fun changeFragment(fragment: Fragment) {
-
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, fragment)
         //transaction.addToBackStack(null)
         transaction.commit()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.search, menu)
+        btnSearch = menu?.findItem(R.id.search)!!
+
+
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        if(currentFragment != null){
+            Toast.makeText(this, "Menu", Toast.LENGTH_SHORT).show();
+        }
+        btnSearch.isVisible = booleanAux
+        return super.onPrepareOptionsMenu(menu)
     }
 
     override fun onBackPressed() {
@@ -142,6 +183,5 @@ class MainActivity : AppCompatActivity()
             finish()
         }
     }
-
 
 }

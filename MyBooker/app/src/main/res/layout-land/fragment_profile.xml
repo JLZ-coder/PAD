@@ -21,66 +21,69 @@
                             android:layout_width="match_parent"
                             android:layout_height="200dp"
                             android:layout_gravity="center"
-                            android:layout_marginLeft="50dp"
-                            android:layout_marginRight="50dp"
+                            android:layout_marginLeft="70dp"
+                            android:layout_marginRight="20dp"
                             android:contentDescription="@string/advisor"
                             android:src="@drawable/ic_profile"
                             app:layout_constraintBottom_toTopOf="@+id/labelNombre" />
                 </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-                <TextView
-                    android:layout_marginTop="40dp"
-                    android:id="@+id/labelNombre"
-                    android:textSize="25sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="15dp"
-                    android:textColor="@color/black"
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/label_nombre"/>
 
-                <TextView
-                    android:id="@+id/nombreTextView"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="35dp" />
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_marginTop="10dp"
+                            android:id="@+id/labelNombre"
+                            android:textSize="25sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="10dp"
+                            android:textColor="@color/black"
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/label_nombre"/>
+
+                        <TextView
+                            android:id="@+id/nombreTextView"
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp" />
 
 
-                <TextView
-                    android:id="@+id/labelEmail"
-                    android:textSize="25sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:text="@string/label_email" />
+                        <TextView
+                            android:id="@+id/labelEmail"
+                            android:textSize="25sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:text="@string/label_email" />
 
-                <TextView
-                    android:id="@+id/emailTextView"
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    />
+                        <TextView
+                            android:id="@+id/emailTextView"
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            />
 
-                <Button
-                    android:id="@+id/logout"
-                    android:gravity="center"
-                    android:layout_marginTop="100dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Cerrar sesión"
-                    />
-        </LinearLayout>
+                        <Button
+                            android:id="@+id/logout"
+                            android:gravity="center"
+                            android:layout_marginTop="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Cerrar sesión"
+                            />
+
+                </LinearLayout>
 
         </LinearLayout>
 
