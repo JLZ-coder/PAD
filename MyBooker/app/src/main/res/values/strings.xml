@@ -54,10 +54,10 @@
     <string name="title_dashboard">Agenda</string>
     <string name="tittle_profile">Perfil</string>
     <string name="title_notifications">Notificaciones</string>
-    <string name="title_enterprise_home">Inicio</string>
-    <string name="title_enterprise_dashboard">Agenda</string>
+    <string name="title_enterprise_home">Horario</string>
+    <string name="title_enterprise_dashboard">Reservas</string>
     <string name="tittle_enterprise_profile">Perfil</string>
-    <string name="title_enterprise_notifications">Notificaciones</string>
+    <string name="title_enterprise_notifications">Perfil</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
@@ -86,4 +86,8 @@
     <string name="viernes">Viernes</string>
     <string name="sabado">Sabado</string>
     <string name="domingo">Domingo</string>
+    <string name="title_enterprise_calendar">Todas mis Reservas</string>
+    <string name="menu_dashboard">Mis Reservas</string>
+    <string name="menu_home">Mi Horario</string>
+    <string name="menu_notifications">Mi Perfil</string>
 </resources>

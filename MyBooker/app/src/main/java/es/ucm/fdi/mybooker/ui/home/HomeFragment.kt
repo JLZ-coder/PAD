@@ -39,13 +39,13 @@ class HomeFragment : Fragment() {
     val turnos: RecyclerView = root.findViewById(R.id.shifts_recycler)
     turnos.layoutManager = LinearLayoutManager(activity)
 
-    mAdapter = ShiftFirestoreAdapter(homeViewModel.options, { shift -> shiftItemClicked(shift) })
+    mAdapter = ShiftFirestoreAdapter(homeViewModel.options)
     turnos.adapter = mAdapter
 
     mAdapter.registerAdapterDataObserver(object : AdapterDataObserver() {
         override fun onItemRangeInserted(positionStart : Int, itemCount: Int) {
           val totalNumberOfItems = itemCount
-          if (totalNumberOfItems == 1) {
+          if (totalNumberOfItems >= 1) {
             turnos.visibility = View.VISIBLE
             empty_textview.visibility = View.GONE
           }

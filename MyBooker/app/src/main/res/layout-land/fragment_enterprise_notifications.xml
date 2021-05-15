@@ -13,12 +13,13 @@
         android:layout_height="match_parent"
         tools:context=".ui.notifications.NotificationsFragment" >
 
+        
 
         <ImageView
             android:id="@+id/imageView_profile_enterprise"
             android:layout_width="177dp"
             android:layout_height="221dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:contentDescription="@string/advisor"
             android:gravity="center"
             android:src="@drawable/ic_profile"
@@ -33,6 +34,7 @@
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:text="@string/label_nombre"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView_profile_enterprise" />
@@ -44,6 +46,7 @@
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:text="@string/label_email"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/label_enterprise_name" />
@@ -55,6 +58,7 @@
             android:gravity="center"
             android:text="Category"
             android:layout_marginTop="20dp"
+            android:textSize="20sp"
             tools:layout_editor_absoluteX="170dp"
             tools:layout_editor_absoluteY="378dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -67,6 +71,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Location"
+            android:textSize="20sp"
             android:layout_marginTop="20dp"
             tools:layout_editor_absoluteX="170dp"
             tools:layout_editor_absoluteY="378dp"
@@ -80,6 +85,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="CP"
+            android:textSize="20sp"
             android:layout_marginTop="20dp"
             tools:layout_editor_absoluteX="170dp"
             tools:layout_editor_absoluteY="378dp"

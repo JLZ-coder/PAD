@@ -129,8 +129,4 @@ class AddShiftFragment : Fragment() {
         return root
     }
 
-    /*override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }*/
-
 }

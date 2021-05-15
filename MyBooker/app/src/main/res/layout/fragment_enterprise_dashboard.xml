@@ -47,13 +47,14 @@
         app:layout_constraintTop_toBottomOf="@+id/empresa_num_reservas" />
 
     <Button
-        android:id="@+id/logout_enterprise"
+        android:id="@+id/button_enterprise_allreserves"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
-        android:text="Logout"
+        android:layout_marginBottom="24dp"
+        android:text="Todas mis reservas"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/empresa_resumen" />
+        app:layout_constraintStart_toStartOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

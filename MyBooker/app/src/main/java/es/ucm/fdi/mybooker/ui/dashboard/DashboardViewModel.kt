@@ -8,8 +8,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import es.ucm.fdi.mybooker.adapters.ReserveFirestoreAdapter
 import es.ucm.fdi.mybooker.objects.itemReserve
+import java.util.*
 
 class DashboardViewModel : ViewModel() {
 
@@ -23,13 +23,11 @@ class DashboardViewModel : ViewModel() {
     val title: LiveData<String> = _title
 
     private val _n_reservas = MutableLiveData<String>().apply {
-        value = "Estas reservas"
+        value = "Aún no hay reservas para hoy"
     }
     val n_reservas: LiveData<String> = _n_reservas
 
-    val query: Query = db.collection("reserves").whereEqualTo("id_enterprise", userId)
-    val options = FirestoreRecyclerOptions.Builder<itemReserve>().setQuery(query, itemReserve::class.java).build()
-    val firebase_adapter = ReserveFirestoreAdapter(options)
+    var options : FirestoreRecyclerOptions<itemReserve>? = null
 
     init {
         setUp()
@@ -53,5 +51,16 @@ class DashboardViewModel : ViewModel() {
                     }
                 }
             }
+
+        val today = Calendar.getInstance(TimeZone.getTimeZone("UTC+2"))
+        today.set(Calendar.HOUR_OF_DAY, 0)
+        today.set(Calendar.MINUTE, 0);
+        val start_of_day = today.time
+        today.add(Calendar.DATE, 1)
+        val end_of_day = today.time
+
+        val query: Query = db.collection("reserves").whereGreaterThanOrEqualTo("hora", start_of_day)
+            .whereLessThan("hora", end_of_day)
+        options = FirestoreRecyclerOptions.Builder<itemReserve>().setQuery(query, itemReserve::class.java).build()
     }
 }
