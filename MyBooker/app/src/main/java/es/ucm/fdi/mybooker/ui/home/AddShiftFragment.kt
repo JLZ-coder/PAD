@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.google.firebase.auth.FirebaseAuth
@@ -89,29 +90,54 @@ class AddShiftFragment : Fragment() {
 
             new_shift = itemShift(userId, f_start, f_end, f_period, f_max_personas, f_days)
 
-            if (is_editShift) {
-                val shift_id = requireArguments().getString("shift_id")
-                if (shift_id != null) {
-                    db.collection("shifts").document(shift_id).set(new_shift)
-                        .addOnSuccessListener {
-                            Log.d("addShiftFragment", "DocumentSnapshot written with ID: $shift_id")
-                            view.findNavController().navigate(R.id.action_navigation_add_shift_to_navigation_home)
+            val start_hours = new_shift.start?.split(":")?.get(0)?.toInt()
+            val start_minutes = new_shift.start?.split(":")?.get(1)?.toInt()
+            val end_hours = new_shift.end?.split(":")?.get(0)?.toInt()
+            val end_minutes = new_shift.end?.split(":")?.get(1)?.toInt()
+            val start_time = start_hours!! * 60 + start_minutes!!
+            val end_time = end_hours!! * 60 + end_minutes!!
+
+            db.collection("shifts").whereEqualTo("id_enterprise", userId).get()
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        var ok = true
+                        for (document in it.getResult()!!) {
+                            val doc_start_hours = document.getString("start")?.split(":")?.get(0)?.toInt()
+                            val doc_start_minutes = document.getString("start")?.split(":")?.get(1)?.toInt()
+                            val doc_end_hours = document.getString("end")?.split(":")?.get(0)?.toInt()
+                            val doc_end_minutes = document.getString("end")?.split(":")?.get(1)?.toInt()
+                            val doc_start_time = doc_start_hours!! * 60 + doc_start_minutes!!
+                            val doc_end_time = doc_end_hours!! * 60 + doc_end_minutes!!
+                            if (!is_editShift) {
+                                val doc_days = document.get("days") as List<Int>
+                                doc_days.forEach {
+                                    if (it in new_shift.days!!) {
+                                        if (start_time < doc_end_time && end_time > doc_start_time) {
+                                            ok = false
+                                        }
+                                    }
+                                }
+                                if (!ok) break
+                            }
+                            else if (document.id != requireArguments().getString("shift_id")){
+                                val doc_days = document.get("days") as List<Int>
+                                doc_days.forEach {
+                                    if (it in new_shift.days!!) {
+                                        if (start_time < doc_end_time && end_time > doc_start_time) {
+                                            ok = false
+                                        }
+                                    }
+                                }
+                                if (!ok) break
+                            }
                         }
-                        .addOnFailureListener { e->
-                            Log.w("addShiftFragment", "Error adding document", e)
-                        }
+                        if (ok) upload(new_shift, view)
+                        else Toast.makeText(activity, "Las horas no pueden solapar para los mismos dias", Toast.LENGTH_LONG).show()
+                    }
+                    else {
+                        Toast.makeText(activity, "Firebase no respondió", Toast.LENGTH_LONG).show()
+                    }
                 }
-            }
-            else {
-                db.collection("shifts").add(new_shift)
-                    .addOnSuccessListener { documentReference ->
-                        Log.d("addShiftFragment", "DocumentSnapshot written with ID: ${documentReference.id}")
-                        view.findNavController().navigate(R.id.action_navigation_add_shift_to_navigation_home)
-                    }
-                    .addOnFailureListener { e ->
-                        Log.w("addShiftFragment", "Error adding document", e)
-                    }
-            }
         }
 
         del_button.setOnClickListener {view ->
@@ -129,4 +155,29 @@ class AddShiftFragment : Fragment() {
         return root
     }
 
+    private fun upload(new_shift: itemShift, view : View) {
+        if (is_editShift) {
+            val shift_id = requireArguments().getString("shift_id")
+            if (shift_id != null) {
+                db.collection("shifts").document(shift_id).set(new_shift)
+                    .addOnSuccessListener {
+                        Log.d("addShiftFragment", "DocumentSnapshot written with ID: $shift_id")
+                        view.findNavController().navigate(R.id.action_navigation_add_shift_to_navigation_home)
+                    }
+                    .addOnFailureListener { e->
+                        Log.w("addShiftFragment", "Error adding document", e)
+                    }
+            }
+        }
+        else {
+            db.collection("shifts").add(new_shift)
+                .addOnSuccessListener { documentReference ->
+                    Log.d("addShiftFragment", "DocumentSnapshot written with ID: ${documentReference.id}")
+                    view.findNavController().navigate(R.id.action_navigation_add_shift_to_navigation_home)
+                }
+                .addOnFailureListener { e ->
+                    Log.w("addShiftFragment", "Error adding document", e)
+                }
+        }
+    }
 }

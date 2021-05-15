@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import es.ucm.fdi.mybooker.R
 import es.ucm.fdi.mybooker.adapters.ShiftFirestoreAdapter
-import es.ucm.fdi.mybooker.objects.itemShift
 
 class HomeFragment : Fragment() {
 
@@ -77,7 +76,4 @@ class HomeFragment : Fragment() {
     mAdapter!!.stopListening()
   }
 
-  private fun shiftItemClicked(itemShift: itemShift) {
-
-  }
 }
