@@ -55,13 +55,13 @@ class HomeFragment : Fragment() {
         val view: View = inflater.inflate(R.layout.fragment_home, container, false)
 
         // SETEAMOS LOS LISTENER A LOS BOTONES
-        setButtonsListeners(view)
+        //setButtonsListeners(view)
 
         // Inflate the layout for this fragment
         return view
     }
 
-    private fun setButtonsListeners(view: View)
+    /*private fun setButtonsListeners(view: View)
     {
         val searchAll: CardView = view.findViewById(R.id.todas)
         searchAll.setOnClickListener {
@@ -88,7 +88,7 @@ class HomeFragment : Fragment() {
             searchEnterprisesByCathegory("restaurant")
         }
     }
-
+*/
     /**
      * Busca todas las empresas
      */
