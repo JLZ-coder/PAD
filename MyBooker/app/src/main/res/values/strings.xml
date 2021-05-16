@@ -90,4 +90,5 @@
     <string name="menu_dashboard">Mis Reservas</string>
     <string name="menu_home">Mi Horario</string>
     <string name="menu_notifications">Mi Perfil</string>
+    <string name="all">Todas</string>
 </resources>

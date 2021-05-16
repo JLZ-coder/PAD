@@ -1,11 +1,16 @@
 package es.ucm.fdi.mybooker.fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.GridLayout
+import android.widget.TextView
+import androidx.cardview.widget.CardView
+import com.google.firebase.firestore.FirebaseFirestore
 import es.ucm.fdi.mybooker.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -31,6 +36,8 @@ class HomeFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private var db = FirebaseFirestore.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -44,8 +51,74 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        val view: View = inflater.inflate(R.layout.fragment_home, container, false)
+
+        // SETEAMOS LOS LISTENER A LOS BOTONES
+        setButtonsListeners(view)
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        return view
+    }
+
+    private fun setButtonsListeners(view: View)
+    {
+        val searchAll: CardView = view.findViewById(R.id.todas)
+        searchAll.setOnClickListener {
+            searchAll()
+        }
+        val searchSalud: CardView = view.findViewById(R.id.salud)
+        searchAll.setOnClickListener {
+            searchEnterprisesByCathegory("salud")
+        }
+        val searchAsesoria: CardView = view.findViewById(R.id.asesoria)
+        searchAll.setOnClickListener {
+            searchEnterprisesByCathegory("asesoria")
+        }
+        val searchBelleza: CardView = view.findViewById(R.id.belleza)
+        searchAll.setOnClickListener {
+            searchEnterprisesByCathegory("belleza")
+        }
+        val searchOcio: CardView = view.findViewById(R.id.ocio)
+        searchAll.setOnClickListener {
+            searchEnterprisesByCathegory("ocio")
+        }
+        val searchRestaurant: CardView = view.findViewById(R.id.restaurant)
+        searchAll.setOnClickListener {
+            searchEnterprisesByCathegory("restaurant")
+        }
+    }
+
+    /**
+     * Busca todas las empresas
+     */
+    private fun searchAll()
+    {
+
+        db.collection("enterprises").whereEqualTo("type", true).get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    Log.d("AAAAAAA", "${document.id} => ${document.data}")
+                }
+            }.addOnFailureListener { exception ->
+                Log.w("ERROROROROR ", "Error getting documents: ", exception)
+            }
+    }
+
+    /**
+     * Busca las empresas por categoría
+     */
+    private fun searchEnterprisesByCathegory(category: String)
+    {
+
+        db.collection("enterprises").whereEqualTo("type", category).get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    Log.d("AAAAAAA", "${document.id} => ${document.data}")
+                }
+            }.addOnFailureListener { exception ->
+                Log.w("ERROROROROR ", "Error getting documents: ", exception)
+            }
     }
 
     companion object {
