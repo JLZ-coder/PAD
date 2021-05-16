@@ -206,7 +206,6 @@ class MainActivity : AppCompatActivity()
         }else{
             if (presionado + 2000 > System.currentTimeMillis()) {
                 super.onBackPressed();
-                super.onBackPressed();
             }else
                 Toast.makeText(this, "Vuelve a presionar para salir", Toast.LENGTH_SHORT).show();
 
