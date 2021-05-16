@@ -51,15 +51,9 @@ class MainActivity : AppCompatActivity()
         mBottonNavigation = findViewById<BottomNavigationView>(R.id.navigationView)
         title = "MyBooker"
 
-        // TODO: No llega el usuario ni el mail ni nada. REVISAR
-        // Lo he movido para aquí porque necesito el mail en Schedule
         val bundle:Bundle? = intent.extras
         email = bundle?.getString("email").toString()
-        val provider = bundle?.getString("provider")
         name = bundle?.getString("userName").toString()
-
-
-        title = "Inicio"
 
         if (savedInstanceState == null){
             currentFragment = HomeFragment.newInstance()
@@ -69,17 +63,13 @@ class MainActivity : AppCompatActivity()
             booleanAux = savedInstanceState?.getBoolean("fragment")
         }
 
-
-
-
         analytics();
-
-
-        //setUpRecyclerView()
         setUp()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
+    override fun onSaveInstanceState(outState: Bundle)
+    {
+
         super.onSaveInstanceState(outState)
         if(currentFragment is HomeFragment) {
             outState.putBoolean("fragment", true)
@@ -87,10 +77,10 @@ class MainActivity : AppCompatActivity()
         else {
             outState.putBoolean("fragment", false)
         }
-
-
     }
-    private fun setUp(){
+
+    private fun setUp()
+    {
 
         val boolButtonNavigation = BottomNavigationView.OnNavigationItemSelectedListener { item ->
 
@@ -122,64 +112,64 @@ class MainActivity : AppCompatActivity()
         }
 
         mBottonNavigation.setOnNavigationItemSelectedListener(boolButtonNavigation)
-
-
     }
 
+    private fun changeFragment(fragment: Fragment)
+    {
 
-    private fun changeFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, fragment)
-        //transaction.addToBackStack(null)
         transaction.commit()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean
+    {
+
         menuInflater.inflate(R.menu.search, menu)
         btnSearch = menu?.findItem(R.id.search)!!
 
-                    return true
+        return true
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean
+    {
+
         btnSearch.isVisible = booleanAux
         return super.onPrepareOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean
+    {
+
         return when (item.itemId){
             R.id.search->{//Fragmento
                 btnSearch.isVisible = true
-                currentFragment = SearchFragment.newInstance()
+                currentFragment = SearchFragment.newInstance(btnSearch.toString())
                 val bundle: Bundle = Bundle()
                 bundle.putString("type", name)
                 (currentFragment as SearchFragment).arguments = bundle
                 changeFragment(currentFragment as SearchFragment)
                 true
             }
-
             android.R.id.icon-> {
-
                 Toast.makeText(this, "F", Toast.LENGTH_SHORT).show();
                 onBackPressed();
                 btnSearch.isVisible = true
                 currentFragment = HomeFragment.newInstance()
                 changeFragment(currentFragment as HomeFragment)
-
                 false
             }
-
             else -> super.onOptionsItemSelected(item)
-
         }
     }
-    override fun onBackPressed() {
 
+    override fun onBackPressed()
+    {
 
         if (supportFragmentManager.backStackEntryCount > 1) {
             Toast.makeText(this, "F", Toast.LENGTH_SHORT).show();
             super.onBackPressed()
-        }else{
+        } else {
             if (presionado + 2000 > System.currentTimeMillis()) {
                 super.onBackPressed();
                 super.onBackPressed();
@@ -189,22 +179,22 @@ class MainActivity : AppCompatActivity()
             presionado = System.currentTimeMillis();
         }
     }
+
     private fun analytics()
     {
 
-        // Trozo analytics
         val analytics:FirebaseAnalytics = FirebaseAnalytics.getInstance(this)
         val bundle = Bundle()
         bundle.putString("message", "MainActivity opened")
         analytics.logEvent("InitScreen", bundle)
     }
 
-    override fun onStart() {
+    override fun onStart()
+    {
         super.onStart()
 
         if(mAuth.currentUser == null){
             finish()
         }
     }
-
 }

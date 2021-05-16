@@ -36,7 +36,6 @@ class ScheduleFragment() : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?)
     {
 
-        // ClientScheduleAdapter
         super.onCreate(savedInstanceState)
         arguments?.let {
             this.email = it.getString(ARG_PARAM1)
@@ -101,7 +100,7 @@ class ScheduleFragment() : Fragment() {
         fun newInstance(email: String?): ScheduleFragment? {
             val myFragment = ScheduleFragment()
             val args = Bundle()
-            args.putString("email", email)
+            args.putString(ARG_PARAM1, email)
             myFragment.arguments = args
             return myFragment
         }
