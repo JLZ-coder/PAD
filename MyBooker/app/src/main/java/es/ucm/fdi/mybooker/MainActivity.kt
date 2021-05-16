@@ -16,6 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import es.ucm.fdi.mybooker.fragment.HomeFragment
 import es.ucm.fdi.mybooker.fragment.ProfileFragment
 import es.ucm.fdi.mybooker.fragment.ScheduleFragment
+import es.ucm.fdi.mybooker.fragment.SearchFragment
 
 enum class ProviderType {
     MAIL
@@ -91,9 +92,7 @@ class MainActivity : AppCompatActivity()
     }
     private fun setUp(){
 
-
-
-        val boolBottonNavigation = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        val boolButtonNavigation = BottomNavigationView.OnNavigationItemSelectedListener { item ->
 
             when (item.itemId) {
                 R.id.navigation_home -> {
@@ -122,7 +121,7 @@ class MainActivity : AppCompatActivity()
             return@OnNavigationItemSelectedListener false
         }
 
-        mBottonNavigation.setOnNavigationItemSelectedListener(boolBottonNavigation)
+        mBottonNavigation.setOnNavigationItemSelectedListener(boolButtonNavigation)
 
 
     }
@@ -139,22 +138,46 @@ class MainActivity : AppCompatActivity()
         menuInflater.inflate(R.menu.search, menu)
         btnSearch = menu?.findItem(R.id.search)!!
 
-
-        return true
+                    return true
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        if(currentFragment != null){
-            Toast.makeText(this, "Menu", Toast.LENGTH_SHORT).show();
-        }
         btnSearch.isVisible = booleanAux
         return super.onPrepareOptionsMenu(menu)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId){
+            R.id.search->{//Fragmento
+                btnSearch.isVisible = true
+                currentFragment = SearchFragment.newInstance()
+                val bundle: Bundle = Bundle()
+                bundle.putString("type", name)
+                (currentFragment as SearchFragment).arguments = bundle
+                changeFragment(currentFragment as SearchFragment)
+                true
+            }
+
+            android.R.id.icon-> {
+
+                Toast.makeText(this, "F", Toast.LENGTH_SHORT).show();
+                onBackPressed();
+                btnSearch.isVisible = true
+                currentFragment = HomeFragment.newInstance()
+                changeFragment(currentFragment as HomeFragment)
+
+                false
+            }
+
+            else -> super.onOptionsItemSelected(item)
+
+        }
+    }
     override fun onBackPressed() {
 
 
         if (supportFragmentManager.backStackEntryCount > 1) {
+            Toast.makeText(this, "F", Toast.LENGTH_SHORT).show();
             super.onBackPressed()
         }else{
             if (presionado + 2000 > System.currentTimeMillis()) {
