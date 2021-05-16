@@ -5,10 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.google.firebase.auth.FirebaseAuth
@@ -28,6 +25,8 @@ class AddShiftFragment : Fragment() {
 
     private lateinit var new_shift: itemShift
     private var is_editShift = false
+    private lateinit var mArrayAdapter: ArrayAdapter<CharSequence>
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,8 +36,8 @@ class AddShiftFragment : Fragment() {
 
         val start_input: EditText = root.findViewById(R.id.editTextTime_shift_start)
         val end_input: EditText = root.findViewById(R.id.editTextTime_shift_end)
-        val period: EditText = root.findViewById(R.id.editTextNumber_period)
-        val max_personas: EditText = root.findViewById(R.id.editTextNumber_maxPersonas)
+        //val period: EditText = root.findViewById(R.id.editTextNumber_period)
+        //val max_personas: EditText = root.findViewById(R.id.editTextNumber_maxPersonas)
         val lunes: CheckBox = root.findViewById(R.id.checkBox_lunes)
         val martes: CheckBox = root.findViewById(R.id.checkBox_martes)
         val miercoles: CheckBox = root.findViewById(R.id.checkBox_miercoles)
@@ -49,6 +48,7 @@ class AddShiftFragment : Fragment() {
         val days = listOf<CheckBox>(lunes, martes, miercoles, jueves, viernes, sabado, domingo)
         val done_button: Button = root.findViewById(R.id.button_add_shift)
         val del_button: Button = root.findViewById(R.id.button_del_shift)
+        val spinner: Spinner = root.findViewById(R.id.Spinner_period)
 
         if (arguments != null) {
             if (requireArguments().containsKey("shift_id") && requireArguments().containsKey("shift")) {
@@ -56,12 +56,31 @@ class AddShiftFragment : Fragment() {
             }
         }
 
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        activity?.baseContext?.let {
+            ArrayAdapter.createFromResource(
+                it,
+                R.array.duration_array,
+                android.R.layout.simple_spinner_item
+            ).also { adapter ->
+                // Specify the layout to use when the list of choices appears
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                // Apply the adapter to the spinner
+                spinner.adapter = adapter
+                mArrayAdapter = adapter
+            }
+        }
+        var spinnerPosition = mArrayAdapter.getPosition("10")
+        if (spinnerPosition == -1) spinnerPosition = 1
+        spinner.setSelection(spinnerPosition)
+
         if (is_editShift) {
             val editShift = requireArguments().getSerializable("shift") as itemShift
             start_input.setText(editShift.start)
             end_input.setText(editShift.end)
-            period.setText(editShift.period.toString())
-            max_personas.setText(editShift.max_personas.toString())
+            var spinnerPosition = mArrayAdapter.getPosition(editShift.period.toString())
+            if (spinnerPosition == -1) spinnerPosition = 1
+            spinner.setSelection(spinnerPosition)
             editShift.days?.forEach {
                 days[it].isChecked = true
             }
@@ -69,10 +88,19 @@ class AddShiftFragment : Fragment() {
         }
 
         done_button.setOnClickListener {view : View ->
+            var ok = true
             val f_start = start_input.text.toString()
             val f_end = end_input.text.toString()
-            val f_period = period.text.toString().toInt()
-            val f_max_personas = max_personas.text.toString().toInt()
+            if (!f_start.matches("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$".toRegex())) {
+                start_input.error = "La hora no está en formato correcto"
+                ok = false
+            }
+            if (!f_end.matches("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$".toRegex())) {
+                end_input.error = "La hora no está en formato correcto"
+                ok = false
+            }
+            val f_period = spinner.selectedItem.toString().toInt()
+            //val f_max_personas = max_personas.text.toString().toInt()
             val f_days = mutableListOf<Int>()
             days.forEach() {
                 if (it.isChecked) {
@@ -88,56 +116,10 @@ class AddShiftFragment : Fragment() {
                 }
             }
 
-            new_shift = itemShift(userId, f_start, f_end, f_period, f_max_personas, f_days)
-
-            val start_hours = new_shift.start?.split(":")?.get(0)?.toInt()
-            val start_minutes = new_shift.start?.split(":")?.get(1)?.toInt()
-            val end_hours = new_shift.end?.split(":")?.get(0)?.toInt()
-            val end_minutes = new_shift.end?.split(":")?.get(1)?.toInt()
-            val start_time = start_hours!! * 60 + start_minutes!!
-            val end_time = end_hours!! * 60 + end_minutes!!
-
-            db.collection("shifts").whereEqualTo("id_enterprise", userId).get()
-                .addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        var ok = true
-                        for (document in it.getResult()!!) {
-                            val doc_start_hours = document.getString("start")?.split(":")?.get(0)?.toInt()
-                            val doc_start_minutes = document.getString("start")?.split(":")?.get(1)?.toInt()
-                            val doc_end_hours = document.getString("end")?.split(":")?.get(0)?.toInt()
-                            val doc_end_minutes = document.getString("end")?.split(":")?.get(1)?.toInt()
-                            val doc_start_time = doc_start_hours!! * 60 + doc_start_minutes!!
-                            val doc_end_time = doc_end_hours!! * 60 + doc_end_minutes!!
-                            if (!is_editShift) {
-                                val doc_days = document.get("days") as List<Int>
-                                doc_days.forEach {
-                                    if (it in new_shift.days!!) {
-                                        if (start_time < doc_end_time && end_time > doc_start_time) {
-                                            ok = false
-                                        }
-                                    }
-                                }
-                                if (!ok) break
-                            }
-                            else if (document.id != requireArguments().getString("shift_id")){
-                                val doc_days = document.get("days") as List<Int>
-                                doc_days.forEach {
-                                    if (it in new_shift.days!!) {
-                                        if (start_time < doc_end_time && end_time > doc_start_time) {
-                                            ok = false
-                                        }
-                                    }
-                                }
-                                if (!ok) break
-                            }
-                        }
-                        if (ok) upload(new_shift, view)
-                        else Toast.makeText(activity, "Las horas no pueden solapar para los mismos dias", Toast.LENGTH_LONG).show()
-                    }
-                    else {
-                        Toast.makeText(activity, "Firebase no respondió", Toast.LENGTH_LONG).show()
-                    }
-                }
+            if (ok) {
+                new_shift = itemShift(userId, f_start, f_end, f_period, f_days)
+                check_overlaps(new_shift, view)
+            }
         }
 
         del_button.setOnClickListener {view ->
@@ -179,5 +161,56 @@ class AddShiftFragment : Fragment() {
                     Log.w("addShiftFragment", "Error adding document", e)
                 }
         }
+    }
+
+    private fun check_overlaps(new_shift: itemShift, view: View) {
+        val start_hours = new_shift.start?.split(":")?.get(0)?.toInt()
+        val start_minutes = new_shift.start?.split(":")?.get(1)?.toInt()
+        val end_hours = new_shift.end?.split(":")?.get(0)?.toInt()
+        val end_minutes = new_shift.end?.split(":")?.get(1)?.toInt()
+        val start_time = start_hours!! * 60 + start_minutes!!
+        val end_time = end_hours!! * 60 + end_minutes!!
+
+        db.collection("shifts").whereEqualTo("id_enterprise", userId).get()
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    var ok = true
+                    for (document in it.getResult()!!) {
+                        val doc_start_hours = document.getString("start")?.split(":")?.get(0)?.toInt()
+                        val doc_start_minutes = document.getString("start")?.split(":")?.get(1)?.toInt()
+                        val doc_end_hours = document.getString("end")?.split(":")?.get(0)?.toInt()
+                        val doc_end_minutes = document.getString("end")?.split(":")?.get(1)?.toInt()
+                        val doc_start_time = doc_start_hours!! * 60 + doc_start_minutes!!
+                        val doc_end_time = doc_end_hours!! * 60 + doc_end_minutes!!
+                        if (!is_editShift) {
+                            val doc_days = document.get("days") as List<Int>
+                            doc_days.forEach {
+                                if (it in new_shift.days!!) {
+                                    if (start_time < doc_end_time && end_time > doc_start_time) {
+                                        ok = false
+                                    }
+                                }
+                            }
+                            if (!ok) break
+                        }
+                        else if (document.id != requireArguments().getString("shift_id")){
+                            val doc_days = document.get("days") as List<Int>
+                            doc_days.forEach {
+                                if (it in new_shift.days!!) {
+                                    if (start_time < doc_end_time && end_time > doc_start_time) {
+                                        ok = false
+                                    }
+                                }
+                            }
+                            if (!ok) break
+                        }
+                    }
+                    if (ok) upload(new_shift, view)
+                    else Toast.makeText(activity, "Las horas solapan con otros horarios", Toast.LENGTH_LONG).show()
+                }
+                else {
+                    Toast.makeText(activity, "Firebase no respondió", Toast.LENGTH_LONG).show()
+                }
+            }
     }
 }

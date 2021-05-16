@@ -40,7 +40,7 @@ class ShiftFirestoreAdapter(options: FirestoreRecyclerOptions<itemShift>) : Fire
 
             start_end.text = "$start_hours:$start_minutes-$end_hours:$end_minutes"
             period.text = "Cada ${turno.period.toString()} min"
-            max_personas.text = "${turno.max_personas.toString()} personas por cita"
+            //max_personas.text = "${turno.max_personas.toString()} personas por cita"
             turno.days?.forEach {
                 list_of_days[it].setBackgroundColor(Color.YELLOW)
             }

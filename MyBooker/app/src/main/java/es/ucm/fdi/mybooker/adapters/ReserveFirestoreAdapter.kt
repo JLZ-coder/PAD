@@ -23,8 +23,8 @@ class ReserveFirestoreAdapter(options: FirestoreRecyclerOptions<itemReserve>) : 
 
         fun render(reserva : itemReserve) {
             hora.text = reserva.hora?.hours.toString() + ":" + reserva.hora?.minutes
-            nombre.text = reserva.nombre_cliente.toString()
-            personas.text = reserva.personas.toString()
+            nombre.text = "A nombre de " + reserva.nombre_cliente.toString()
+            personas.text = reserva.personas.toString() + " persona(s)"
         }
     }
 

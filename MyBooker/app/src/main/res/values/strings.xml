@@ -78,7 +78,7 @@
     <string name="agenda">Agenda</string>
     <string name="hora">Hora</string>
     <string name="no_data">No tiene citas pendientes</string>
-    <string name="title_enterprise_home_addShift">Crear Turno</string>
+    <string name="title_enterprise_home_addShift">Crear Horario</string>
     <string name="lunes">Lunes</string>
     <string name="martes">Martes</string>
     <string name="miercoles">Miercoles</string>

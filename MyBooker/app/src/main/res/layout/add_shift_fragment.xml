@@ -15,7 +15,7 @@
             android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_margin="16dp"
             android:gravity="center"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
@@ -29,32 +29,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="Desde"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toTopOf="@+id/editTextTime_shift_start"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.174"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.854" />
+                android:textSize="24sp" />
 
             <EditText
                 android:id="@+id/editTextTime_shift_start"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ems="10"
+                android:ems="5"
+                android:hint="12:00"
                 android:inputType="time"
-                android:textSize="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="24dp" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_margin="16dp"
             android:gravity="center"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
@@ -68,34 +59,26 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="Hasta"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toTopOf="@+id/editTextTime_shift_start"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.174"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.854" />
+                android:textSize="24sp" />
 
             <EditText
                 android:id="@+id/editTextTime_shift_end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ems="10"
+                android:ems="5"
                 android:inputType="time"
-                android:textSize="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:hint="13:00"
+                android:textSize="24dp" />
 
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="28dp"
             android:orientation="vertical"
+            android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout">
@@ -104,26 +87,29 @@
                 android:id="@+id/textView_period"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="16dp"
                 android:text="Duracion de cada cita"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toTopOf="@+id/editTextTime_shift_start"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.174"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.854" />
+                android:textSize="24sp" />
 
-            <EditText
-                android:id="@+id/editTextNumber_period"
+            <Spinner
+                android:id="@+id/Spinner_period"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="16dp"
+                android:textAlignment="center"
+                android:entries="@array/duration_array"
+                android:layout_below="@+id/textView_period"/>
+
+            <TextView
+                android:id="@+id/TextView_period"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="number"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.008"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextTime_shift_start" />
+                android:text="(en minutos)"
+                android:layout_centerHorizontal="true"
+                android:textSize="18sp"
+                android:layout_below="@id/Spinner_period" />
 
             <TextView
                 android:id="@+id/textView_maxPersonas"
@@ -132,7 +118,7 @@
                 android:layout_marginBottom="8dp"
                 android:text="Maximo de reservas por cita"
                 android:textSize="20sp"
-                app:layout_constraintBottom_toTopOf="@+id/editTextTime_shift_start"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.174"
                 app:layout_constraintStart_toStartOf="parent"
@@ -144,13 +130,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:visibility="gone"
                 android:inputType="number"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextTime_shift_end" />
-
-        </LinearLayout>
+                app:layout_constraintStart_toStartOf="parent"/>
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/relativeLayout2"
