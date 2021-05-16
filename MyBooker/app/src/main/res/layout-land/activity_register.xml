@@ -105,7 +105,12 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/location"
                         android:visibility="gone" />
-
+                    <TextView
+                        android:id="@+id/labelCategory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Categorías"
+                        android:visibility="gone"/>
                     <Spinner
                         android:id="@+id/categoria"
                         android:layout_width="match_parent"
