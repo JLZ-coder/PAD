@@ -15,10 +15,7 @@ import es.ucm.fdi.mybooker.R
 import es.ucm.fdi.mybooker.adapters.EnterpriseAdapter
 import es.ucm.fdi.mybooker.objects.itemEnterprise
 import java.lang.Exception
-import java.util.zip.Inflater
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "type"
 
 /**
@@ -40,20 +37,20 @@ class SearchFragment : Fragment()
     override fun onCreate(savedInstanceState: Bundle?)
     {
 
-        // ClientScheduleAdapter
         super.onCreate(savedInstanceState)
 
-        Log.i("savedInstanceState", savedInstanceState.toString())
-        if (savedInstanceState != null) {
-            this.type = savedInstanceState.getString(ARG_PARAM1)
+        this.type = requireArguments().getString(ARG_PARAM1)
+        if (this.type == null || this.type == "") {
+            // Nos ha llegado vacío o a null, seteamos a all y nos enviamos notificación a Firebase
+            FirebaseCrashlytics.getInstance().recordException(Exception("El parámetro de búsqueda type ha llegado vacío"))
+            this.type = "all"
         }
-
-        Log.i("NONONONO" , this.type.toString())
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
 
+        Log.i("savedInstanceState", savedInstanceState.toString())
         val view: View = inflater.inflate(R.layout.fragment_search, container, false)
 
         emptyText = view.findViewById(R.id.empty_view)
@@ -61,21 +58,17 @@ class SearchFragment : Fragment()
 
         mRecyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
 
-        if (type == "" || type == null) {
-            FirebaseCrashlytics.getInstance().recordException(Exception("El parámetro de búsqueda type ha llegado vacío"))
-        }
-
-        Log.i("EL TYYYPE", type.toString())
-
         when(type) {
             "all" -> {
                 searchAll(inflater)
+                true
             }
             else -> {
                 searchEnterprisesByCathegory(type, inflater)
+                true
             }
         }
-        // Inflate the layout for this fragment
+
         return view
     }
 
@@ -90,7 +83,7 @@ class SearchFragment : Fragment()
             .addOnSuccessListener { documents ->
                 enterprises = ArrayList()
                 for (document in documents) {
-                    buildObjectAdapter(document.data["name"].toString(), document.data["profileImg"].toString(), document.data["address"].toString(), document.data["type"].toString())
+                    enterprises.add(itemEnterprise(document.data["profileImg"].toString(), document.data["name"].toString(), document.data["address"].toString(), document.data["type"].toString()))
                     Log.i("AAAAAAA", "${document.id} => ${document.data}")
                 }
                 if(enterprises.isNotEmpty()) {
@@ -101,7 +94,7 @@ class SearchFragment : Fragment()
                     mRecyclerView.visibility = View.GONE
                 }
             }.addOnFailureListener { exception ->
-                Log.w("ERROROROROR ", "Error getting documents: ", exception)
+                FirebaseCrashlytics.getInstance().recordException(Exception("ERROR: Error getting documents ${exception.message}"))
             }
     }
 
@@ -118,7 +111,8 @@ class SearchFragment : Fragment()
                 enterprises = ArrayList()
                 for (document in documents) {
 
-                    buildObjectAdapter(document.data["name"].toString(), document.data["profileImg"].toString(), document.data["address"].toString(), document.data["type"].toString())
+                    // TODO, comprobar los espacios vacios
+                    enterprises.add(itemEnterprise(document.data["profileImg"].toString(), document.data["name"].toString(), document.data["address"].toString(), document.data["type"].toString()))
                 }
                 if(enterprises.isNotEmpty()) {
                     setAdapter(inflater.context, mRecyclerView)
@@ -142,33 +136,8 @@ class SearchFragment : Fragment()
         mRecyclerView.adapter = mAdapter
     }
 
-    private fun buildObjectAdapter(name: String, img: String, address: String, type: String)
-    {
-
-        enterprises.add(itemEnterprise(img, name, address, type))
-    }
-
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SearchFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(searchParam: String): SearchFragment?{
-
-            val myFragment = SearchFragment()
-            val args = Bundle()
-            args.putString(ARG_PARAM1, searchParam)
-            myFragment.arguments = args
-
-            Log.i("ASDASDASDASD", args.toString())
-            return myFragment
-        }
-
+        fun newInstance(): SearchFragment = SearchFragment()
     }
 }

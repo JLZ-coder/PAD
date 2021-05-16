@@ -72,6 +72,7 @@ open class ActivityRegister : AppCompatActivity() {
     private fun setUpUsuario()
     {
 
+        // https://grokonez.com/android/kotlin-firebase-storage-get-list-files-example-image-list-firebaserecycleradapter-example-android
         btnRegister.setOnClickListener {
             if (userName.text.isNotEmpty() && userPass.text.isNotEmpty() && userConfirmPass.text.isNotEmpty() && userMail.text.isNotEmpty() && userConfirmPass.text.toString() == userPass.text.toString()) {
 

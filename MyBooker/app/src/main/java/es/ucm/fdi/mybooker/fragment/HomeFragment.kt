@@ -1,23 +1,24 @@
 package es.ucm.fdi.mybooker.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import es.ucm.fdi.mybooker.R
+
 
 /**
  * A simple [Fragment] subclass.
  * Use the [homeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+@Suppress("DEPRECATION")
 class HomeFragment : Fragment()
 {
-
+    private  var currentTag: String = "homeFragment"
     private  var currentFragment: Fragment? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View
@@ -35,53 +36,53 @@ class HomeFragment : Fragment()
 
         val searchAll: CardView = view.findViewById(R.id.todas)
         searchAll.setOnClickListener {
-            currentFragment = SearchFragment.newInstance("all")
-            changeFragment(currentFragment as SearchFragment)
+            currentFragment = SearchFragment.newInstance()
+            changeFragment(currentFragment as SearchFragment, "all")
             return@setOnClickListener
         }
         val searchSalud: CardView = view.findViewById(R.id.salud)
         searchSalud.setOnClickListener {
-
-            currentFragment = ScheduleFragment.newInstance("salud")!!
-            changeFragment(currentFragment as ScheduleFragment)
+            currentFragment = SearchFragment.newInstance()
+            changeFragment(currentFragment as SearchFragment, "salud")
             return@setOnClickListener
         }
         val searchAsesoria: CardView = view.findViewById(R.id.asesoria)
         searchAsesoria.setOnClickListener {
-            currentFragment = SearchFragment.newInstance("asesoria")
-            changeFragment(currentFragment as SearchFragment)
+            currentFragment = SearchFragment.newInstance()
+            changeFragment(currentFragment as SearchFragment, "asesoria")
             return@setOnClickListener
         }
         val searchBelleza: CardView = view.findViewById(R.id.belleza)
         searchBelleza.setOnClickListener {
-            currentFragment = SearchFragment.newInstance("belleza")
-            changeFragment(currentFragment as SearchFragment)
+            currentFragment = SearchFragment.newInstance()
+            changeFragment(currentFragment as SearchFragment, "belleza")
             return@setOnClickListener
         }
         val searchOcio: CardView = view.findViewById(R.id.ocio)
         searchOcio.setOnClickListener {
-            currentFragment = SearchFragment.newInstance("ocio")
-            changeFragment(currentFragment as SearchFragment)
+            currentFragment = SearchFragment.newInstance()
+            changeFragment(currentFragment as SearchFragment, "ocio")
             return@setOnClickListener
         }
         val searchRestaurant: CardView = view.findViewById(R.id.restaurant)
         searchRestaurant.setOnClickListener {
-            currentFragment = SearchFragment.newInstance("restaurant")
-            changeFragment(currentFragment as SearchFragment)
+            currentFragment = SearchFragment.newInstance()
+            changeFragment(currentFragment as SearchFragment, "restauracion")
             return@setOnClickListener
         }
     }
 
-
-    private fun changeFragment(fragment: Fragment)
+    private fun changeFragment(fragment: Fragment, type: String?)
     {
 
-        val searchFragment = SearchFragment()
-        val fragmentManager: FragmentManager? = fragmentManager
-        val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
-        fragmentTransaction.replace(R.id.container, searchFragment)
-        fragmentTransaction.addToBackStack(null)
-        fragmentTransaction.commit()
+        val bn: Bundle = Bundle()
+        bn.putString("type", type)
+        fragment.arguments = bn
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.container, fragment)
+            .addToBackStack(currentTag)
+            .commit()
+
     }
 
     companion object {

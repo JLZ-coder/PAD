@@ -1,14 +1,20 @@
 package es.ucm.fdi.mybooker.adapters
 
+import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
 import es.ucm.fdi.mybooker.R
 import es.ucm.fdi.mybooker.objects.itemEnterprise
+
 
 class EnterpriseAdapter(val enterprises: List<itemEnterprise>) : RecyclerView.Adapter<EnterpriseAdapter.EnterpriseHolder>()
 {
@@ -38,7 +44,21 @@ class EnterpriseAdapter(val enterprises: List<itemEnterprise>) : RecyclerView.Ad
 
         fun render(enterprise: itemEnterprise) {
 
-            Picasso.with(view.context).load(enterprise.enterpriseImg).into(entImg)
+
+            // TODO: Hacer que esto funcione bien
+            if (enterprise.enterpriseImg != "" || enterprise.enterpriseImg != null) {
+
+                val storage = Firebase.storage
+                val imgUrl: String = enterprise.enterpriseImg
+                imgUrl.replace("gs://mybooker-6c774.appspot.com", "", false)
+                val storageReference = storage.getReferenceFromUrl("gs://mybooker-6c774.appspot.com").child(imgUrl)
+                storageReference.downloadUrl.addOnSuccessListener {
+                        uri -> Picasso.with(view.context).load(uri.toString()).into(entImg)
+                }.addOnFailureListener {
+                    Log.i("POLLAS ", "EN VINAGRE")
+                }
+            }
+
             entName.text = enterprise.enterpriseName
             entCategory.text = enterprise.enterpriseCategory
             entAddress.text = enterprise.enterpriseAddress

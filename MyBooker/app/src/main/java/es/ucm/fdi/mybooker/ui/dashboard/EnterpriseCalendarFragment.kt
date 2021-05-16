@@ -22,7 +22,7 @@ import java.util.*
 class EnterpriseCalendarFragment : Fragment() {
     private var db = FirebaseFirestore.getInstance()
     private var mAuth = FirebaseAuth.getInstance()
-    private val userId = mAuth.currentUser.uid
+    private val userId = mAuth.currentUser?.uid
     private lateinit var mAdapter: ReserveFirestoreAdapter
 
     override fun onCreateView(

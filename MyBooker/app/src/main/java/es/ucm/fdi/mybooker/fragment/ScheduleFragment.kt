@@ -26,8 +26,9 @@ private const val ARG_PARAM1 = "email"
  * Use the [scheduleFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ScheduleFragment() : Fragment() {
-    // TODO: Rename and change types of parameters
+class ScheduleFragment() : Fragment()
+{
+
     private var email: String? = ""
     private lateinit var agenda: MutableList<itemClientSchedule>
 
