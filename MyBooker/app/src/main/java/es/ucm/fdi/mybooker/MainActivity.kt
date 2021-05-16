@@ -153,11 +153,11 @@ class MainActivity : AppCompatActivity()
 
         return when (item.itemId){
             R.id.search->{//Fragmento
-                val search = SearchFragment.newInstance()
+                val search = SearchFragment.newInstance("type")
                 val bundle: Bundle = Bundle()
                 bundle.putString("type", name)
-                search.arguments = bundle
-                changeFragment(search, "searchFragment")
+                search?.arguments = bundle
+                //changeFragment(search, "searchFragment")
                 true
             }
 
