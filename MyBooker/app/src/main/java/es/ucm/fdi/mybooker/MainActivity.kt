@@ -21,6 +21,7 @@ import es.ucm.fdi.mybooker.fragment.SearchFragment
 enum class ProviderType {
     MAIL
 }
+data class StateFragment(val currentTag: String, var oldTag: String)
 
 class MainActivity : AppCompatActivity()
 {
@@ -31,8 +32,7 @@ class MainActivity : AppCompatActivity()
 
     //Navigation view
     private lateinit var mBottonNavigation : BottomNavigationView
-    //Fragments
-    private  var currentFragment: Fragment? = null
+
     //Parameters
     private lateinit var name:String
     private lateinit var email:String
@@ -40,7 +40,11 @@ class MainActivity : AppCompatActivity()
     private var presionado:Long = 0
     //Menu
     private lateinit var btnSearch: MenuItem
-    private var booleanAux: Boolean = false
+    //Tag fragments
+    private  var currentTag: String = "homeFragment"
+    private  var oldTag: String = "homeFragment"
+    private var stack = mutableListOf<StateFragment>()
+    private var currentMenuItemId: Int = R.id.navigation_home
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -56,11 +60,10 @@ class MainActivity : AppCompatActivity()
         name = bundle?.getString("userName").toString()
 
         if (savedInstanceState == null){
-            currentFragment = HomeFragment.newInstance()
-            changeFragment(currentFragment as HomeFragment)
-            booleanAux = true
-        }else {
-            booleanAux = savedInstanceState?.getBoolean("fragment")
+            loadFirstFragment()
+        }else{
+            currentTag = savedInstanceState?.getString("fragment").toString()
+            currentMenuItemId = savedInstanceState?.getInt("idItem")
         }
 
         analytics();
@@ -71,70 +74,77 @@ class MainActivity : AppCompatActivity()
     {
 
         super.onSaveInstanceState(outState)
-        if(currentFragment is HomeFragment) {
-            outState.putBoolean("fragment", true)
-        }
-        else {
-            outState.putBoolean("fragment", false)
-        }
-    }
 
-    private fun setUp()
-    {
+        outState.putString("fragment", currentTag)
+        outState.putInt("idItem", currentMenuItemId)
+    }
+    private fun setUp(){
 
         val boolButtonNavigation = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+            if(currentMenuItemId != item.itemId) {
+                currentMenuItemId = item.itemId
 
-            when (item.itemId) {
-                R.id.navigation_home -> {
-                    btnSearch.isVisible = true
-                    currentFragment = HomeFragment.newInstance()
-                    changeFragment(currentFragment as HomeFragment)
-                    return@OnNavigationItemSelectedListener true
-                }
-                R.id.navigation_dashboard -> {
-                    btnSearch.isVisible = false
-                    currentFragment = ScheduleFragment.newInstance(email)!!
-                    changeFragment(currentFragment as ScheduleFragment)
-                    return@OnNavigationItemSelectedListener true
-                }
-                R.id.navigation_profile -> {
-                    btnSearch.isVisible = false
-                    currentFragment = ProfileFragment.newInstance()
-                    val bundle: Bundle = Bundle()
-                    bundle.putString("name", name)
-                    bundle.putString("email", email)
-                    (currentFragment as ProfileFragment).arguments = bundle
-                    changeFragment(currentFragment as ProfileFragment)
-                    return@OnNavigationItemSelectedListener true
+                when (item.itemId) {
+                    R.id.navigation_home -> {
+                        changeFragment(HomeFragment.newInstance() as HomeFragment, "homeFragment")
+                        return@OnNavigationItemSelectedListener true
+                    }
+                    R.id.navigation_dashboard -> {
+                        changeFragment(ScheduleFragment.newInstance(email)!!, "scheduleFragment")
+                        return@OnNavigationItemSelectedListener true
+                    }
+                    R.id.navigation_profile -> {
+                        var profile = ProfileFragment.newInstance()
+                        val bundle: Bundle = Bundle()
+                        bundle.putString("name", name)
+                        bundle.putString("email", email)
+                        profile.arguments = bundle
+                        changeFragment(profile, "profileFragment")
+                        return@OnNavigationItemSelectedListener true
+                    }
                 }
             }
             return@OnNavigationItemSelectedListener false
         }
 
         mBottonNavigation.setOnNavigationItemSelectedListener(boolButtonNavigation)
+
+
     }
 
-    private fun changeFragment(fragment: Fragment)
-    {
 
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.container, fragment)
-        transaction.commit()
+    private fun changeFragment(fragment: Fragment, tag:String) {
+        if(currentTag != tag) {
+            val transaction = supportFragmentManager.beginTransaction()
+
+            val currentFragment = supportFragmentManager.findFragmentByTag(currentTag)
+            val fragmentToReplaceByTag = supportFragmentManager.findFragmentByTag(tag)
+
+            //Actualizamos los tags
+            oldTag = currentTag
+            currentTag = tag
+
+            if (fragmentToReplaceByTag != null) {
+                currentFragment?.let { transaction.hide(it).show(fragmentToReplaceByTag) }
+            } else {
+                currentFragment?.let { transaction.hide(it).add(R.id.container, fragment, tag) }
+            }
+            transaction.commit()
+
+            //Añadimos a la pila
+            stack.add(StateFragment(currentTag, oldTag))
+        }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean
-    {
-
+    //Menu
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.search, menu)
         btnSearch = menu?.findItem(R.id.search)!!
-
         return true
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean
-    {
-
-        btnSearch.isVisible = booleanAux
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        btnSearch.isVisible = true
         return super.onPrepareOptionsMenu(menu)
     }
 
@@ -143,33 +153,57 @@ class MainActivity : AppCompatActivity()
 
         return when (item.itemId){
             R.id.search->{//Fragmento
-                btnSearch.isVisible = true
-                currentFragment = SearchFragment.newInstance(btnSearch.toString())
+                val search = SearchFragment.newInstance()
                 val bundle: Bundle = Bundle()
                 bundle.putString("type", name)
-                (currentFragment as SearchFragment).arguments = bundle
-                changeFragment(currentFragment as SearchFragment)
+                search.arguments = bundle
+                changeFragment(search, "searchFragment")
                 true
             }
-            android.R.id.icon-> {
-                Toast.makeText(this, "F", Toast.LENGTH_SHORT).show();
-                onBackPressed();
-                btnSearch.isVisible = true
-                currentFragment = HomeFragment.newInstance()
-                changeFragment(currentFragment as HomeFragment)
-                false
-            }
+
             else -> super.onOptionsItemSelected(item)
+
         }
     }
 
-    override fun onBackPressed()
-    {
+    private fun loadFirstFragment() {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.add(
+            R.id.container,
+            HomeFragment.newInstance(),
+            "homeFragment")
+        transaction.commit()
+    }
 
-        if (supportFragmentManager.backStackEntryCount > 1) {
-            Toast.makeText(this, "F", Toast.LENGTH_SHORT).show();
-            super.onBackPressed()
+    private fun recoverFragment(){
+        val lastState = stack.last()
+
+        val transaction = supportFragmentManager.beginTransaction()
+
+        val currentFragment = supportFragmentManager.findFragmentByTag(lastState.currentTag)
+        val oldFragment = supportFragmentManager.findFragmentByTag(lastState.oldTag)
+
+        if (currentFragment?.isVisible!! && oldFragment?.isHidden!!) {
+            transaction.hide(currentFragment).show(oldFragment)
+        }
+
+        transaction.commit()
+
+        stack.remove(stack.last())
+        if (stack.isEmpty()) {
+            currentTag = "homeFragment"
+            oldTag = "homeFragment"
         } else {
+            currentTag = stack.last().currentTag
+            oldTag = stack.last().oldTag
+        }
+    }
+
+    override fun onBackPressed() {
+
+        if (stack.size >= 1) {
+            recoverFragment()
+        }else{
             if (presionado + 2000 > System.currentTimeMillis()) {
                 super.onBackPressed();
                 super.onBackPressed();
