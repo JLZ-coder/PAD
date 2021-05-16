@@ -44,7 +44,8 @@
             android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="8dp"
-            app:cardElevation="8dp">
+            app:cardElevation="8dp"
+            android:id="@+id/deportes">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -84,7 +85,8 @@
             android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="8dp"
-            app:cardElevation="8dp">
+            app:cardElevation="8dp"
+            android:id="@+id/restaurant">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -92,8 +94,6 @@
                 android:layout_gravity="center_horizontal|center_vertical"
                 android:layout_margin="16dp"
                 android:orientation="vertical"
-
-
                 >
 
                 <ImageView
@@ -127,7 +127,8 @@
             android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="8dp"
-            app:cardElevation="8dp">
+            app:cardElevation="8dp"
+            android:id="@+id/ocio">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -170,7 +171,8 @@
             android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="8dp"
-            app:cardElevation="8dp">
+            app:cardElevation="8dp"
+            android:id="@+id/belleza">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -212,7 +214,8 @@
             android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="8dp"
-            app:cardElevation="8dp">
+            app:cardElevation="8dp"
+            android:id="@+id/asesoria">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -254,7 +257,8 @@
             android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="8dp"
-            app:cardElevation="8dp">
+            app:cardElevation="8dp"
+            android:id="@+id/salud">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -283,7 +287,42 @@
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
-    </GridLayout>
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/todas"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_margin="16dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_all" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/all"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+    </GridLayout>
 </LinearLayout>
 

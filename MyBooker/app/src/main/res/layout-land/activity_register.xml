@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/registerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    tools:context=".ActivityRegister">
+
+    <LinearLayout
+        style="@style/df_row_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="107dp"
+            android:background="@color/app_color"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:ignore="Suspicious0dp">
+
+            <TextView
+                style="@style/df_h3"
+                android:layout_width="wrap_content"
+                android:text="@string/app_name"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/label_empresas"
+                style="@style/df_h3"
+                android:layout_width="wrap_content"
+                android:text="@string/label_empresas"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:visibility="invisible" />
+        </LinearLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="false">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/formBg"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="20dp"
+                tools:ignore="Suspicious0dp">
+
+                <LinearLayout
+                    android:id="@+id/sendOtpLayout"
+                    style="@style/df_row_vertical"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
+
+                    <EditText
+                        android:id="@+id/editTextUserName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/name"
+                        android:singleLine="true" />
+
+                    <EditText
+                        android:id="@+id/editTextUserMail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/email"
+                        android:singleLine="true" />
+
+                    <EditText
+                        android:id="@+id/editTextPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/password"
+                        android:inputType="textPassword"
+                        android:singleLine="true" />
+
+                    <EditText
+                        android:id="@+id/editTextConfirmPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/confirmPassword"
+                        android:inputType="textPassword"
+                        android:singleLine="true" />
+
+                    <EditText
+                        android:id="@+id/editTextCodePostal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:ellipsize="start"
+                        android:hint="@string/codePostal"
+                        android:maxLength="5"
+                        android:inputType="numberDecimal"
+                        android:visibility="gone"/>
+
+                    <EditText
+                        android:id="@+id/editTextLocation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/location"
+                        android:visibility="gone" />
+                    <TextView
+                        android:id="@+id/labelCategory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Categorías"
+                        android:visibility="gone"/>
+                    <Spinner
+                        android:id="@+id/categoria"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="invisible" />
+
+                    <Button
+                        android:id="@+id/btnRegisterUser"
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/register" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -153,7 +153,7 @@ class MainActivity : AppCompatActivity()
 
         return when (item.itemId){
             R.id.search->{//Fragmento
-                val search = SearchFragment.newInstance()
+                var search = SearchFragment.newInstance("nombre")
                 val bundle: Bundle = Bundle()
                 bundle.putString("type", name)
                 search.arguments = bundle
@@ -205,7 +205,6 @@ class MainActivity : AppCompatActivity()
             recoverFragment()
         }else{
             if (presionado + 2000 > System.currentTimeMillis()) {
-                super.onBackPressed();
                 super.onBackPressed();
             }else
                 Toast.makeText(this, "Vuelve a presionar para salir", Toast.LENGTH_SHORT).show();

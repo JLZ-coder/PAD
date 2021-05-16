@@ -27,6 +27,7 @@ open class ActivityRegister : AppCompatActivity() {
     private lateinit var location: EditText
     private lateinit var cp: EditText
     private lateinit var spinner: Spinner
+    private lateinit var categoryEmpresas: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +49,7 @@ open class ActivityRegister : AppCompatActivity() {
         val lista = resources.getStringArray(R.array.categorias)
         val adaptador = ArrayAdapter(this, android.R.layout.simple_spinner_item, lista)
         spinner.adapter = adaptador
-
+        categoryEmpresas = findViewById<TextView>(R.id.labelCategory)
 
         setUp()
     }
@@ -120,6 +121,7 @@ open class ActivityRegister : AppCompatActivity() {
         location.visibility = View.VISIBLE
         cp.visibility = View.VISIBLE
         spinner.visibility = View.VISIBLE
+        categoryEmpresas.visibility = View.VISIBLE
         btnRegister.setOnClickListener {
             if (userName.text.isNotEmpty() && userPass.text.isNotEmpty() && userConfirmPass.text.isNotEmpty()
                 && userMail.text.isNotEmpty() && userConfirmPass == userPass) {
