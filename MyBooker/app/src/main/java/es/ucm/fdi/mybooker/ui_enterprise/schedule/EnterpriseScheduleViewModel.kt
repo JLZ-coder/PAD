@@ -1,4 +1,4 @@
-package es.ucm.fdi.mybooker.ui.home
+package es.ucm.fdi.mybooker.ui_enterprise.schedule
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,7 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import es.ucm.fdi.mybooker.objects.itemShift
 
-class HomeViewModel : ViewModel() {
+class EnterpriseScheduleViewModel : ViewModel() {
 
     private var db = FirebaseFirestore.getInstance()
     private var mAuth = FirebaseAuth.getInstance()

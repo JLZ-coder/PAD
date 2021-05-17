@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="es.ucm.fdi.mybooker.ui.home.HomeFragment"
+        android:name="es.ucm.fdi.mybooker.ui_enterprise.schedule.EnterpriseScheduleFragment"
         android:label="@string/title_enterprise_home"
-        tools:layout="@layout/fragment_enterprise_home" >
+        tools:layout="@layout/fragment_enterprise_schedule" >
         <action
             android:id="@+id/action_navigation_home_to_navigation_add_shift"
             app:destination="@id/navigation_add_shift" />
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/navigation_add_shift"
-        android:name="es.ucm.fdi.mybooker.ui.home.AddShiftFragment"
+        android:name="es.ucm.fdi.mybooker.ui_enterprise.schedule.AddShiftFragment"
         android:label="@string/title_enterprise_home_addShift"
         tools:layout="@layout/add_shift_fragment" >
         <action
@@ -28,9 +28,9 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="es.ucm.fdi.mybooker.ui.dashboard.DashboardFragment"
+        android:name="es.ucm.fdi.mybooker.ui_enterprise.reservas.EnterpriseReservasFragment"
         android:label="@string/title_enterprise_dashboard"
-        tools:layout="@layout/fragment_enterprise_dashboard" >
+        tools:layout="@layout/fragment_enterprise_reservas" >
         <action
             android:id="@+id/action_navigation_dashboard_to_navigation_allreserves"
             app:destination="@id/navigation_allreserves" />
@@ -38,13 +38,13 @@
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="es.ucm.fdi.mybooker.ui.notifications.NotificationsFragment"
+        android:name="es.ucm.fdi.mybooker.ui_enterprise.profile.EnterpriseProfileFragment"
         android:label="@string/title_enterprise_notifications"
-        tools:layout="@layout/fragment_enterprise_notifications" />
+        tools:layout="@layout/fragment_enterprise_profile" />
 
     <fragment
         android:id="@+id/navigation_allreserves"
-        android:name="es.ucm.fdi.mybooker.ui.dashboard.EnterpriseCalendarFragment"
+        android:name="es.ucm.fdi.mybooker.ui_enterprise.reservas.EnterpriseCalendarFragment"
         android:label="@string/title_enterprise_calendar"
         tools:layout="@layout/fragment_enterprise_calendar" >
         <action

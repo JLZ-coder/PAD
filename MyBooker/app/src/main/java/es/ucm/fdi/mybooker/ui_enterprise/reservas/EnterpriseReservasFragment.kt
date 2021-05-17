@@ -1,4 +1,4 @@
-package es.ucm.fdi.mybooker.ui.dashboard
+package es.ucm.fdi.mybooker.ui_enterprise.reservas
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,9 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import es.ucm.fdi.mybooker.R
 import es.ucm.fdi.mybooker.adapters.ReserveFirestoreAdapter
 
-class DashboardFragment : Fragment() {
+class EnterpriseReservasFragment : Fragment() {
 
-  private lateinit var dashboardViewModel: DashboardViewModel
+  private lateinit var dashboardViewModel: EnterpriseReservasViewModel
   private var mAdapter: ReserveFirestoreAdapter? = null
 
   override fun onCreateView(
@@ -27,9 +27,9 @@ class DashboardFragment : Fragment() {
   ): View? {
     val userId = activity?.intent?.extras?.getString("userId")
     dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
+            ViewModelProvider(this).get(EnterpriseReservasViewModel::class.java)
 
-    val root = inflater.inflate(R.layout.fragment_enterprise_dashboard, container, false)
+    val root = inflater.inflate(R.layout.fragment_enterprise_reservas, container, false)
 
     val title: TextView = root.findViewById(R.id.empresa_title)
     dashboardViewModel.title.observe(viewLifecycleOwner, Observer {

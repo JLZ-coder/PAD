@@ -1,4 +1,4 @@
-package es.ucm.fdi.mybooker.ui.home
+package es.ucm.fdi.mybooker.ui_enterprise.schedule
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import es.ucm.fdi.mybooker.R
 import es.ucm.fdi.mybooker.adapters.ShiftFirestoreAdapter
 
-class HomeFragment : Fragment() {
+class EnterpriseScheduleFragment : Fragment() {
 
-  private lateinit var homeViewModel: HomeViewModel
+  private lateinit var homeViewModel: EnterpriseScheduleViewModel
   private lateinit var mAdapter: ShiftFirestoreAdapter
 
   override fun onCreateView(
@@ -27,8 +27,8 @@ class HomeFragment : Fragment() {
     savedInstanceState: Bundle?
   ): View? {
     homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
-    val root = inflater.inflate(R.layout.fragment_enterprise_home, container, false)
+            ViewModelProvider(this).get(EnterpriseScheduleViewModel::class.java)
+    val root = inflater.inflate(R.layout.fragment_enterprise_schedule, container, false)
 
     val empty_textview: TextView = root.findViewById(R.id.shifts_empty_view)
     homeViewModel.empty_recycler_text.observe(viewLifecycleOwner, Observer {

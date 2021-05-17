@@ -1,4 +1,4 @@
-package es.ucm.fdi.mybooker.ui.dashboard
+package es.ucm.fdi.mybooker.ui_enterprise.reservas
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,7 +11,7 @@ import com.google.firebase.firestore.Query
 import es.ucm.fdi.mybooker.objects.itemReserve
 import java.util.*
 
-class DashboardViewModel : ViewModel() {
+class EnterpriseReservasViewModel : ViewModel() {
 
     private var db = FirebaseFirestore.getInstance()
     var mAuth = FirebaseAuth.getInstance()

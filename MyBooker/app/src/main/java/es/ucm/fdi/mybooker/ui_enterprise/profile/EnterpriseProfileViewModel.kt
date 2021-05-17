@@ -1,4 +1,4 @@
-package es.ucm.fdi.mybooker.ui.notifications
+package es.ucm.fdi.mybooker.ui_enterprise.profile
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,7 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
-class NotificationsViewModel : ViewModel() {
+class EnterpriseProfileViewModel : ViewModel() {
 
     private var db = FirebaseFirestore.getInstance()
     var mAuth = FirebaseAuth.getInstance()

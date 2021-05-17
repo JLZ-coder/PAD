@@ -1,4 +1,4 @@
-package es.ucm.fdi.mybooker.ui.notifications
+package es.ucm.fdi.mybooker.ui_enterprise.profile
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,9 +13,9 @@ import androidx.lifecycle.ViewModelProvider
 import es.ucm.fdi.mybooker.ActivityLogin
 import es.ucm.fdi.mybooker.R
 
-class NotificationsFragment : Fragment() {
+class EnterpriseProfileFragment : Fragment() {
 
-  private lateinit var notificationsViewModel: NotificationsViewModel
+  private lateinit var notificationsViewModel: EnterpriseProfileViewModel
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -23,8 +23,8 @@ class NotificationsFragment : Fragment() {
     savedInstanceState: Bundle?
   ): View? {
     notificationsViewModel =
-            ViewModelProvider(this).get(NotificationsViewModel::class.java)
-    val root = inflater.inflate(R.layout.fragment_enterprise_notifications, container, false)
+            ViewModelProvider(this).get(EnterpriseProfileViewModel::class.java)
+    val root = inflater.inflate(R.layout.fragment_enterprise_profile, container, false)
     val name: TextView = root.findViewById(R.id.label_enterprise_name)
     notificationsViewModel.name.observe(viewLifecycleOwner, Observer {
       name.text = it
