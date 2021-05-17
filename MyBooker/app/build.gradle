@@ -78,4 +78,7 @@ dependencies {
     implementation "com.firebaseui:firebase-ui-auth:3.0.0"
     implementation "com.firebaseui:firebase-ui-firestore:3.0.0"
     implementation 'com.google.firebase:firebase-storage-ktx'
+
+    //Gson
+    implementation 'com.google.code.gson:gson:2.8.5'
 }

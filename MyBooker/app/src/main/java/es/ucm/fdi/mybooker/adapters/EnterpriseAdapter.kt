@@ -65,14 +65,14 @@ class EnterpriseAdapter(val enterprises: List<itemEnterprise>, var inter:onClick
             entAddress.text = enterprise.enterpriseAddress
 
             itemView.setOnClickListener(){
-                action.openItemClick(adapterPosition)
+                action.openItemClick(enterprise, adapterPosition)
             }
         }
 
     }
 
     interface onClickListener {
-        fun openItemClick(position: Int)
+        fun openItemClick(enterprise: itemEnterprise, position: Int)
     }
 }
 

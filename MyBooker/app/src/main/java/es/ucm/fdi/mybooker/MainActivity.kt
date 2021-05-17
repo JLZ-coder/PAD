@@ -23,7 +23,7 @@ enum class ProviderType {
 }
 data class StateFragment(val currentTag: String, var oldTag: String)
 
-class MainActivity : AppCompatActivity(), HomeFragment.Actualizar
+class MainActivity : AppCompatActivity(), HomeFragment.Actualizar, SearchFragment.Actualizar
 {
     private var db = FirebaseFirestore.getInstance()
     private var mAuth = FirebaseAuth.getInstance()
@@ -235,5 +235,11 @@ class MainActivity : AppCompatActivity(), HomeFragment.Actualizar
 
     override fun actualizarStack(fragment: Fragment, tag:String) {
         changeFragment(fragment,tag)
+    }
+
+    override fun actualizarStackProfile(fragment: Fragment, tag: String) {
+        changeFragment(fragment,tag)
+
+        Toast.makeText(this, "entra", Toast.LENGTH_SHORT).show()
     }
 }
