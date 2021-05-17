@@ -37,6 +37,7 @@
                 android:layout_height="wrap_content"
                 android:ems="5"
                 android:hint="12:00"
+                android:maxLength="5"
                 android:inputType="time"
                 android:textSize="24dp" />
 
@@ -67,6 +68,7 @@
                 android:layout_height="wrap_content"
                 android:ems="5"
                 android:inputType="time"
+                android:maxLength="5"
                 android:hint="13:00"
                 android:textSize="24dp" />
 

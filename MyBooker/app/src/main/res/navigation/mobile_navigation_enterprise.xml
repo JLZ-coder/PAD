@@ -40,7 +40,11 @@
         android:id="@+id/navigation_notifications"
         android:name="es.ucm.fdi.mybooker.ui_enterprise.profile.EnterpriseProfileFragment"
         android:label="@string/title_enterprise_notifications"
-        tools:layout="@layout/fragment_enterprise_profile" />
+        tools:layout="@layout/fragment_enterprise_profile" >
+        <action
+            android:id="@+id/action_navigation_notifications_to_enterpriseEditProfileFragment"
+            app:destination="@id/enterpriseEditProfileFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_allreserves"
@@ -51,5 +55,15 @@
             android:id="@+id/action_navigation_allreserves_to_navigation_dashboard"
             app:destination="@id/navigation_dashboard"
             app:popUpTo="@id/navigation_dashboard" />
+    </fragment>
+    <fragment
+        android:id="@+id/enterpriseEditProfileFragment"
+        android:name="es.ucm.fdi.mybooker.ui_enterprise.profile.EnterpriseEditProfileFragment"
+        android:label="fragment_enterprise_edit_profile"
+        tools:layout="@layout/fragment_enterprise_edit_profile" >
+        <action
+            android:id="@+id/action_enterpriseEditProfileFragment_to_navigation_notifications"
+            app:destination="@id/navigation_notifications"
+            app:popUpTo="@id/navigation_notifications" />
     </fragment>
 </navigation>
