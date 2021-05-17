@@ -3,31 +3,56 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="5dp">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@android:color/holo_blue_light">
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/entName"
+        <View
+            android:id="@+id/dividerTop"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/name" />
+            android:layout_height="10dp"
+            android:background="#CDE2FB" />
 
-        <TextView
-            android:id="@+id/scheduleTime"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/hora" />
+            android:layout_height="90dp"
+            android:orientation="vertical"
+            android:background="@android:color/holo_blue_dark">
 
-        <TextView
-            android:id="@+id/location"
+            <TextView
+                android:id="@+id/entName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/name"
+                android:textColor="@color/white"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"/>
+
+            <TextView
+                android:id="@+id/scheduleTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/hora"
+                android:textColor="@color/white"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"/>
+
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ent_address"
+                android:textColor="@color/white"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"/>
+        </LinearLayout>
+        <View
+            android:id="@+id/dividerBottom"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/ent_address" />
+            android:layout_height="10dp"
+            android:background="#CDE2FB" />
     </LinearLayout>
 </RelativeLayout>

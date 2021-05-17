@@ -14,9 +14,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import es.ucm.fdi.mybooker.R
 import es.ucm.fdi.mybooker.adapters.ClientScheduleAdapter
 import es.ucm.fdi.mybooker.objects.itemClientSchedule
-import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 // Lo utilizaremos para recuperar, de la base de datos, las citas que tenga el usuario
 private const val ARG_PARAM1 = "email"
@@ -73,7 +73,8 @@ class ScheduleFragment() : Fragment()
                         val entName: String = it.data?.get("ent_name").toString()
                         val location: String = it.data?.get("location").toString()
 
-                        agenda.add(itemClientSchedule("Fecha: $date", "Cita con: $entName", "Dirección: $location"))
+                        // HE añadido el mail pq lo necesito para borrar la cita
+                        agenda.add(itemClientSchedule("Fecha: $date", "Cita con: $entName", "Dirección: $location", it.id, email!!))
                     }
 
                     if(agenda.isNotEmpty()) {
