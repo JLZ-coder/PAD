@@ -24,7 +24,7 @@ private const val ARG_PARAM1 = "type"
  * Use the [SearchFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class SearchFragment : Fragment()
+class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
 {
 
     private var type: String? = null
@@ -134,7 +134,7 @@ class SearchFragment : Fragment()
     private fun setAdapter(context: android.content.Context, mRecyclerView: RecyclerView)
     {
 
-        val mAdapter : EnterpriseAdapter = EnterpriseAdapter(enterprises)
+        val mAdapter : EnterpriseAdapter = EnterpriseAdapter(enterprises, this)
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = LinearLayoutManager(context)
         mRecyclerView.adapter = mAdapter
@@ -143,5 +143,9 @@ class SearchFragment : Fragment()
     companion object {
         @JvmStatic
         fun newInstance(): SearchFragment = SearchFragment()
+    }
+
+    override fun openItemClick(position: Int) {
+        Toast.makeText(this@SearchFragment.context, "entra", Toast.LENGTH_SHORT).show()
     }
 }
