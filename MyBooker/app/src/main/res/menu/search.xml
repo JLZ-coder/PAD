@@ -8,4 +8,13 @@
         android:title="@string/search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="collapseActionView|ifRoom" />
+
+    <!--
+    <item
+        android:id="@+id/notification"
+        android:icon="@drawable/ic_baseline_notifications_24"
+        android:title="@string/search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="collapseActionView|ifRoom" />
+    -->
 </menu>

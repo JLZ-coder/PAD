@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -34,21 +35,18 @@ class SearchFragment : Fragment()
     private lateinit var mRecyclerView : RecyclerView
     private lateinit var emptyText: TextView
 
-    override fun onCreate(savedInstanceState: Bundle?)
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
 
-        super.onCreate(savedInstanceState)
-
         this.type = requireArguments().getString(ARG_PARAM1)
+
+        //Toast.makeText(this@SearchFragment.context, this.type, Toast.LENGTH_SHORT).show();
         if (this.type == null || this.type == "") {
             // Nos ha llegado vacío o a null, seteamos a all y nos enviamos notificación a Firebase
             FirebaseCrashlytics.getInstance().recordException(Exception("El parámetro de búsqueda type ha llegado vacío"))
             this.type = "all"
         }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
-    {
 
         Log.i("savedInstanceState", savedInstanceState.toString())
         val view: View = inflater.inflate(R.layout.fragment_search, container, false)
@@ -70,6 +68,12 @@ class SearchFragment : Fragment()
         }
 
         return view
+    }
+    /**
+     * Busca las empresas por nombre
+     */
+    private fun searchEnterprisesByName(name:String, inflater: LayoutInflater){
+
     }
 
     /**

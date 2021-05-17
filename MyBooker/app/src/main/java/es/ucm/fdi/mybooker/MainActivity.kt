@@ -23,7 +23,7 @@ enum class ProviderType {
 }
 data class StateFragment(val currentTag: String, var oldTag: String)
 
-class MainActivity : AppCompatActivity()
+class MainActivity : AppCompatActivity(), HomeFragment.Actualizar
 {
     private var db = FirebaseFirestore.getInstance()
     private var mAuth = FirebaseAuth.getInstance()
@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity()
 
                 when (item.itemId) {
                     R.id.navigation_home -> {
-                        changeFragment(HomeFragment.newInstance() as HomeFragment, "homeFragment")
+                        changeFragment(HomeFragment.newInstance(), "homeFragment")
                         return@OnNavigationItemSelectedListener true
                     }
                     R.id.navigation_dashboard -> {
@@ -131,6 +131,7 @@ class MainActivity : AppCompatActivity()
             }
             transaction.commit()
 
+
             //Añadimos a la pila
             stack.add(StateFragment(currentTag, oldTag))
         }
@@ -153,7 +154,7 @@ class MainActivity : AppCompatActivity()
 
         return when (item.itemId){
             R.id.search->{//Fragmento
-                var search = SearchFragment.newInstance("nombre")
+                var search = SearchFragment.newInstance()
                 val bundle: Bundle = Bundle()
                 bundle.putString("type", name)
                 search.arguments = bundle
@@ -186,7 +187,8 @@ class MainActivity : AppCompatActivity()
         if (currentFragment?.isVisible!! && oldFragment?.isHidden!!) {
             transaction.hide(currentFragment).show(oldFragment)
         }
-
+        if(currentFragment is SearchFragment)
+            transaction.remove(currentFragment)
         transaction.commit()
 
         stack.remove(stack.last())
@@ -229,5 +231,9 @@ class MainActivity : AppCompatActivity()
         if(mAuth.currentUser == null){
             finish()
         }
+    }
+
+    override fun actualizarStack(fragment: Fragment, tag:String) {
+        changeFragment(fragment,tag)
     }
 }

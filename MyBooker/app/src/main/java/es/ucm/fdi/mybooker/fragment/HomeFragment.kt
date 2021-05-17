@@ -1,10 +1,12 @@
 package es.ucm.fdi.mybooker.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import es.ucm.fdi.mybooker.R
@@ -18,8 +20,13 @@ import es.ucm.fdi.mybooker.R
 @Suppress("DEPRECATION")
 class HomeFragment : Fragment()
 {
+    var callback: Actualizar? = null
+
+   interface Actualizar{
+        fun actualizarStack(fragment: Fragment, tag:String)
+    }
     private  var currentTag: String = "homeFragment"
-    private  var currentFragment: Fragment? = null
+    //private  var currentFragment: Fragment? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View
     {
@@ -36,53 +43,56 @@ class HomeFragment : Fragment()
 
         val searchAll: CardView = view.findViewById(R.id.todas)
         searchAll.setOnClickListener {
-            currentFragment = SearchFragment.newInstance()
-            changeFragment(currentFragment as SearchFragment, "all")
+            changeFragment(SearchFragment.newInstance(), "all")
             return@setOnClickListener
         }
         val searchSalud: CardView = view.findViewById(R.id.salud)
         searchSalud.setOnClickListener {
-            currentFragment = SearchFragment.newInstance()
-            changeFragment(currentFragment as SearchFragment, "salud")
+            changeFragment(SearchFragment.newInstance(), "salud")
             return@setOnClickListener
         }
         val searchAsesoria: CardView = view.findViewById(R.id.asesoria)
         searchAsesoria.setOnClickListener {
-            currentFragment = SearchFragment.newInstance()
-            changeFragment(currentFragment as SearchFragment, "asesoria")
+            changeFragment(SearchFragment.newInstance(), "asesoria")
             return@setOnClickListener
         }
         val searchBelleza: CardView = view.findViewById(R.id.belleza)
         searchBelleza.setOnClickListener {
-            currentFragment = SearchFragment.newInstance()
-            changeFragment(currentFragment as SearchFragment, "belleza")
+            changeFragment(SearchFragment.newInstance(), "belleza")
             return@setOnClickListener
         }
         val searchOcio: CardView = view.findViewById(R.id.ocio)
         searchOcio.setOnClickListener {
-            currentFragment = SearchFragment.newInstance()
-            changeFragment(currentFragment as SearchFragment, "ocio")
+            changeFragment(SearchFragment.newInstance(), "ocio")
             return@setOnClickListener
         }
         val searchRestaurant: CardView = view.findViewById(R.id.restaurant)
         searchRestaurant.setOnClickListener {
-            currentFragment = SearchFragment.newInstance()
-            changeFragment(currentFragment as SearchFragment, "restauracion")
+            changeFragment(SearchFragment.newInstance(), "restauracion")
             return@setOnClickListener
         }
     }
 
-    private fun changeFragment(fragment: Fragment, type: String?)
-    {
-
+    private fun changeFragment(fragment: Fragment, type: String){
         val bn: Bundle = Bundle()
         bn.putString("type", type)
         fragment.arguments = bn
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.container, fragment)
-            .addToBackStack(currentTag)
-            .commit()
+        callback?.actualizarStack(fragment, "searchFragment")
+    }
 
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is Actualizar) {
+            callback = context
+        }
+
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback = null
     }
 
     companion object {
