@@ -24,6 +24,7 @@ class EnterpriseMainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
     }
 
+    //Para activar el boton de atras
     override fun onSupportNavigateUp(): Boolean {
         val navController = this.findNavController(R.id.nav_host_fragment)
         return navController.navigateUp()

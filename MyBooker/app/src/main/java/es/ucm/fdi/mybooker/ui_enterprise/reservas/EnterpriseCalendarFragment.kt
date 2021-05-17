@@ -1,4 +1,4 @@
-package es.ucm.fdi.mybooker.ui.dashboard
+package es.ucm.fdi.mybooker.ui_enterprise.reservas
 
 import android.os.Bundle
 import android.view.LayoutInflater

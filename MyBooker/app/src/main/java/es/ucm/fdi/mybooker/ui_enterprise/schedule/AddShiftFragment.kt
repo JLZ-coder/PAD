@@ -1,4 +1,4 @@
-package es.ucm.fdi.mybooker.ui.home
+package es.ucm.fdi.mybooker.ui_enterprise.schedule
 
 import android.os.Bundle
 import android.util.Log
