@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import es.ucm.fdi.mybooker.ActivityLogin
 import es.ucm.fdi.mybooker.R
 
@@ -45,6 +46,11 @@ class EnterpriseProfileFragment : Fragment() {
     notificationsViewModel.cp.observe(viewLifecycleOwner, Observer {
       cp.text = it
     })
+
+    val editprofile_btn: Button = root.findViewById(R.id.button_enterprise_editprofile)
+    editprofile_btn.setOnClickListener {view->
+      view.findNavController().navigate(R.id.action_navigation_notifications_to_enterpriseEditProfileFragment)
+    }
 
     val logout_btn: Button = root.findViewById(R.id.logout_enterprise)
     logout_btn.setOnClickListener {

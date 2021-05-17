@@ -1,5 +1,6 @@
 package es.ucm.fdi.mybooker.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.Gson
 import es.ucm.fdi.mybooker.R
 import es.ucm.fdi.mybooker.adapters.EnterpriseAdapter
 import es.ucm.fdi.mybooker.objects.itemEnterprise
@@ -24,7 +26,7 @@ private const val ARG_PARAM1 = "type"
  * Use the [SearchFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class SearchFragment : Fragment()
+class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
 {
 
     private var type: String? = null
@@ -34,6 +36,12 @@ class SearchFragment : Fragment()
 
     private lateinit var mRecyclerView : RecyclerView
     private lateinit var emptyText: TextView
+
+    var act: Actualizar? = null
+
+    interface Actualizar{
+        fun actualizarStackProfile(fragment: Fragment, tag: String)
+    }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
@@ -116,7 +124,8 @@ class SearchFragment : Fragment()
                 for (document in documents) {
 
                     // TODO, comprobar los espacios vacios
-                    enterprises.add(itemEnterprise(document.data["profileImg"].toString(), document.data["name"].toString(), document.data["address"].toString(), document.data["type"].toString()))
+                    enterprises.add(itemEnterprise(document.data["profileImg"].toString(), document.data["name"].toString(),
+                        document.data["address"].toString(), document.data["type"].toString()))
                 }
                 if(enterprises.isNotEmpty()) {
                     setAdapter(inflater.context, mRecyclerView)
@@ -134,7 +143,7 @@ class SearchFragment : Fragment()
     private fun setAdapter(context: android.content.Context, mRecyclerView: RecyclerView)
     {
 
-        val mAdapter : EnterpriseAdapter = EnterpriseAdapter(enterprises)
+        val mAdapter = EnterpriseAdapter(enterprises, this)
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = LinearLayoutManager(context)
         mRecyclerView.adapter = mAdapter
@@ -144,4 +153,38 @@ class SearchFragment : Fragment()
         @JvmStatic
         fun newInstance(): SearchFragment = SearchFragment()
     }
+
+    //Habría que crear nuevo fragment con calendario
+    //Segun id, buscar su horario
+    //Pasar todo a través de un bundle
+    override fun openItemClick(enterprise: itemEnterprise, position: Int) {
+        val bundle = Bundle()
+        val gson = Gson()
+
+        val ser = gson.toJson(enterprise)
+
+        bundle.putString("objectEnterprise",ser)
+
+        var fragment = EnterpriseFragment.newInstance()
+        fragment.arguments = bundle
+
+        act?.actualizarStackProfile(fragment,"enterpriseFragment")
+
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is SearchFragment.Actualizar) {
+            act = context
+        }
+
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        act = null
+    }
+
+
+
 }
