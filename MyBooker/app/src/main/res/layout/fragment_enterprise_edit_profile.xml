@@ -114,6 +114,16 @@
                 android:layout_marginBottom="16dp"
                 android:text="Confirmar" />
 
+            <Button
+                android:id="@+id/button_enterprise_editprofile_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:backgroundTint="@color/df_red"
+                android:layout_marginBottom="16dp"
+                android:text="Borrar&#10;usuario" />
+
 
         </RelativeLayout>
     </ScrollView>

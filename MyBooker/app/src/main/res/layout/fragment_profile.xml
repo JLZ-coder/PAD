@@ -63,16 +63,25 @@
          android:layout_gravity="center"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:layout_marginBottom="15dp"
+         android:layout_marginBottom="24dp"
          />
+
+     <Button
+         android:id="@+id/button_delete_user"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_gravity="center"
+         android:backgroundTint="@color/df_red"
+         android:text="Borrar&#10;usuario" />
 
      <Button
          android:id="@+id/logout"
          android:gravity="center"
-         android:layout_marginTop="100dp"
+         android:layout_marginTop="30dp"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          android:layout_gravity="center"
+         android:backgroundTint="@color/df_red"
          android:text="Cerrar sesión"
          />
 

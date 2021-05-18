@@ -1,5 +1,7 @@
 package es.ucm.fdi.mybooker.ui_enterprise.schedule
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -26,6 +28,8 @@ class AddShiftFragment : Fragment() {
     private lateinit var new_shift: itemShift
     private var is_editShift = false
     private lateinit var mArrayAdapter: ArrayAdapter<CharSequence>
+    private lateinit var start_input: EditText
+    private lateinit var end_input: EditText
 
 
     override fun onCreateView(
@@ -34,8 +38,8 @@ class AddShiftFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.add_shift_fragment, container, false)
 
-        val start_input: EditText = root.findViewById(R.id.editTextTime_shift_start)
-        val end_input: EditText = root.findViewById(R.id.editTextTime_shift_end)
+        start_input = root.findViewById(R.id.editTextTime_shift_start)
+        end_input = root.findViewById(R.id.editTextTime_shift_end)
         //val period: EditText = root.findViewById(R.id.editTextNumber_period)
         //val max_personas: EditText = root.findViewById(R.id.editTextNumber_maxPersonas)
         val lunes: CheckBox = root.findViewById(R.id.checkBox_lunes)
@@ -117,21 +121,39 @@ class AddShiftFragment : Fragment() {
             }
 
             if (ok) {
+                val f_start_hour = f_start.split(":").get(0).toInt()
+                val f_start_minute = f_start.split(":").get(1).toInt()
                 new_shift = itemShift(userId, f_start, f_end, f_period, f_days)
                 check_overlaps(new_shift, view)
             }
         }
 
         del_button.setOnClickListener {view ->
-            val shift_id = requireArguments().getString("shift_id")
-            if (shift_id != null) {
-                db.collection("shifts").document(shift_id).delete()
-                    .addOnSuccessListener {
-                        Log.d("addShiftFragment", "DocumentSnapshot successfully deleted!")
-                        view.findNavController().navigate(R.id.action_navigation_add_shift_to_navigation_home)
+            val alert = AlertDialog.Builder(activity)
+            alert.setTitle("Eliminar Horario")
+            alert.setMessage("¿Estas seguro?")
+            alert.setPositiveButton("SI, estoy seguro", object: DialogInterface.OnClickListener {
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+                    val shift_id = requireArguments().getString("shift_id")
+                    if (shift_id != null) {
+                        db.collection("shifts").document(shift_id).delete()
+                            .addOnSuccessListener {
+                                Log.d("addShiftFragment", "DocumentSnapshot successfully deleted!")
+                                view.findNavController().navigate(R.id.action_navigation_add_shift_to_navigation_home)
+                            }
+                            .addOnFailureListener { e -> Log.w("addShiftFragment", "Error deleting document", e) }
                     }
-                    .addOnFailureListener { e -> Log.w("addShiftFragment", "Error deleting document", e) }
-            }
+                }
+            })
+            alert.setNegativeButton("Cancelar", object: DialogInterface.OnClickListener {
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+                    if (dialog != null) {
+                        dialog.dismiss()
+                    }
+                }
+            })
+
+            alert.show()
         }
 
         return root
@@ -170,6 +192,11 @@ class AddShiftFragment : Fragment() {
         val end_minutes = new_shift.end?.split(":")?.get(1)?.toInt()
         val start_time = start_hours!! * 60 + start_minutes!!
         val end_time = end_hours!! * 60 + end_minutes!!
+
+        if (start_time >= end_time) {
+            end_input.error = "La hora final debe ser superior al del comienzo"
+            return
+        }
 
         db.collection("shifts").whereEqualTo("id_enterprise", userId).get()
             .addOnCompleteListener {

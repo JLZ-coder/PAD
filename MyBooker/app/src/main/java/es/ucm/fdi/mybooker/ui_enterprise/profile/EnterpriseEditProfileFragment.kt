@@ -1,5 +1,8 @@
 package es.ucm.fdi.mybooker.ui_enterprise.profile
 
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,8 +13,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import es.ucm.fdi.mybooker.ActivityLogin
 import es.ucm.fdi.mybooker.R
 import es.ucm.fdi.mybooker.objects.itemEnterprise_2
+
 
 class EnterpriseEditProfileFragment : Fragment() {
 
@@ -35,6 +40,7 @@ class EnterpriseEditProfileFragment : Fragment() {
     val location_editText: EditText = root.findViewById(R.id.editText_enterprise_editprofile_location)
     val spinner: Spinner = root.findViewById(R.id.spinner_enterprise_editprofile_category)
     val confirm_btn: Button = root.findViewById(R.id.button_enterprise_editprofile_confirm)
+    val delete_btn: Button = root.findViewById(R.id.button_enterprise_editprofile_delete)
 
     // Create an ArrayAdapter using the string array and a default spinner layout
     activity?.baseContext?.let {
@@ -80,6 +86,40 @@ class EnterpriseEditProfileFragment : Fragment() {
           Log.w("EnterpriseEditProfileFragment", "Error adding document", e)
           Toast.makeText(activity?.baseContext, "Hubo un problema al guardar los datos", Toast.LENGTH_LONG)
         }
+    }
+
+    delete_btn.setOnClickListener { view ->
+      val alert = AlertDialog.Builder(activity)
+      alert.setTitle("Eliminar cuenta")
+      alert.setMessage("¿Estas seguro?")
+      alert.setPositiveButton("SI, estoy seguro", object: DialogInterface.OnClickListener {
+        override fun onClick(dialog: DialogInterface?, which: Int) {
+          db.collection("users").document(userId).delete()
+            .addOnSuccessListener {
+              FirebaseAuth.getInstance().currentUser!!.delete().addOnCompleteListener {task->
+                if(task.isSuccessful) {
+                  val i = Intent(activity, ActivityLogin::class.java)
+                  startActivity(i)
+                }
+                else {
+                  Toast.makeText(activity?.baseContext, "Hubo un problema al eliminar al usuario", Toast.LENGTH_LONG)
+                  if (dialog != null) {
+                    dialog.dismiss()
+                  }
+                }
+              }
+            }
+        }
+      })
+      alert.setNegativeButton("Cancelar", object: DialogInterface.OnClickListener {
+        override fun onClick(dialog: DialogInterface?, which: Int) {
+          if (dialog != null) {
+            dialog.dismiss()
+          }
+        }
+      })
+
+      alert.show()
     }
 
     return root
