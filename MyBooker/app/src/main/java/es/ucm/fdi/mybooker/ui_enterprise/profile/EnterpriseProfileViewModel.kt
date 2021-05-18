@@ -4,14 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.ktx.toObject
+import es.ucm.fdi.mybooker.objects.itemEnterprise_2
 
 class EnterpriseProfileViewModel : ViewModel() {
 
     private var db = FirebaseFirestore.getInstance()
     var mAuth = FirebaseAuth.getInstance()
     private val userId = mAuth.currentUser.uid
+
+    var enterprise : itemEnterprise_2? = null
 
     private val _name = MutableLiveData<String>().apply {
         value = "Nombre empresa"
@@ -43,24 +47,20 @@ class EnterpriseProfileViewModel : ViewModel() {
     }
 
     private fun setUp() {
-        db.collection("users").document(userId).get()
+        db.collection("enterprises").whereEqualTo("userId", userId).limit(1).get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful()) {
-                    val document: DocumentSnapshot? = task.getResult()
-                    if (document != null) {
-                        val name = document.getString("name")
-                        val email = document.getString("email")
-                        val cp = document.get("cp") as Long
-                        val category = document.getString("category")
-                        val location = document.getString("location")
+                    val documents: QuerySnapshot? = task.getResult()
+                    if (documents != null) {
+                        for (document in documents) {
+                            enterprise = document.toObject<itemEnterprise_2>()
 
-                        _name.value = name
-                        _email.value = email
-                        _category.value = "Categoría: " + category
-                        _location.value = "Ubicación: " + location
-                        _cp.value = "CP: " + cp.toString()
-                    } else {
-                        mAuth.signOut()
+                            _name.value = enterprise?.name
+                            _email.value = enterprise?.email
+                            _category.value = "Categoría: " + enterprise?.category
+                            _location.value = "Ubicación: " + enterprise?.location
+                            _cp.value = "CP: " + enterprise?.cp.toString()
+                        }
                     }
                 }
             }

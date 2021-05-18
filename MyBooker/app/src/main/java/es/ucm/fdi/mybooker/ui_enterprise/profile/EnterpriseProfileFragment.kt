@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -49,7 +50,8 @@ class EnterpriseProfileFragment : Fragment() {
 
     val editprofile_btn: Button = root.findViewById(R.id.button_enterprise_editprofile)
     editprofile_btn.setOnClickListener {view->
-      view.findNavController().navigate(R.id.action_navigation_notifications_to_enterpriseEditProfileFragment)
+      val bundle = bundleOf("enterprise" to notificationsViewModel.enterprise)
+      view.findNavController().navigate(R.id.action_navigation_notifications_to_enterpriseEditProfileFragment, bundle)
     }
 
     val logout_btn: Button = root.findViewById(R.id.logout_enterprise)
