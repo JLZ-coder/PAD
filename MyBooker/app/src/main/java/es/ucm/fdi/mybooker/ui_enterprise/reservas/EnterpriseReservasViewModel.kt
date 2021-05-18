@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 import es.ucm.fdi.mybooker.objects.itemReserve
 import java.util.*
 
@@ -34,20 +34,20 @@ class EnterpriseReservasViewModel : ViewModel() {
     }
 
     private fun setUp() {
-        db.collection("users").document(userId).get()
+        db.collection("enterpises").whereEqualTo("userId", userId).limit(1).get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful()) {
-                    val document: DocumentSnapshot? = task.getResult()
-                    if (document != null) {
-                        val name = document.getString("name")
-                        val email = document.getString("email")
-                        val cp = document.get("cp") as Long
-                        val category = document.getString("category")
-                        val location = document.getString("location")
+                    val documents: QuerySnapshot? = task.getResult()
+                    if (documents != null) {
+                        for (document in documents) {
+                            val name = document.getString("name")
+                            val email = document.getString("email")
+                            val cp = document.get("cp") as Int
+                            val category = document.getString("category")
+                            val location = document.getString("location")
 
-                        _title.value = name
-                    } else {
-                        mAuth.signOut()
+                            _title.value = name
+                        }
                     }
                 }
             }

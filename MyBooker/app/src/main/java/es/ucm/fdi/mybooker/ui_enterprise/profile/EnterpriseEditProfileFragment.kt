@@ -70,7 +70,7 @@ class EnterpriseEditProfileFragment : Fragment() {
       val f_location = location_editText.text.toString()
       val f_category = spinner.selectedItem.toString()
 
-      new_enterprise = itemEnterprise_2(userId, f_name, aux_enterprise.email, f_category, f_location, f_cp.toInt())
+      new_enterprise = itemEnterprise_2(userId, f_name, f_name.toLowerCase(), aux_enterprise.email, f_category, f_location, f_cp.toInt())
       db.collection("enterprises").document(userId).set(new_enterprise)
         .addOnSuccessListener {
           Log.d("EnterpriseEditProfileFragment", "DocumentSnapshot written with ID: $userId")

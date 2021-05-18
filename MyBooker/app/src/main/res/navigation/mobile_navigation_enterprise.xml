@@ -59,7 +59,7 @@
     <fragment
         android:id="@+id/enterpriseEditProfileFragment"
         android:name="es.ucm.fdi.mybooker.ui_enterprise.profile.EnterpriseEditProfileFragment"
-        android:label="fragment_enterprise_edit_profile"
+        android:label="Editar Perfil"
         tools:layout="@layout/fragment_enterprise_edit_profile" >
         <action
             android:id="@+id/action_enterpriseEditProfileFragment_to_navigation_notifications"

@@ -124,7 +124,7 @@ open class ActivityRegister : AppCompatActivity() {
         categoryEmpresas.visibility = View.VISIBLE
         btnRegister.setOnClickListener {
             if (userName.text.isNotEmpty() && userPass.text.isNotEmpty() && userConfirmPass.text.isNotEmpty()
-                && userMail.text.isNotEmpty() && userConfirmPass == userPass) {
+                && userMail.text.isNotEmpty() && userConfirmPass.text.toString() == userPass.text.toString()) {
 
                 mAuth.createUserWithEmailAndPassword(
                     userMail.text.toString(),
@@ -141,11 +141,13 @@ open class ActivityRegister : AppCompatActivity() {
                         )
                         db.collection("enterprises").document(user_uid).set(
                             mapOf(
+                                "userId" to user_uid,
                                 "name" to userName.text.toString(),
+                                "search" to userName.text.toString().toLowerCase(),
                                 "email" to userMail.text.toString(),
                                 "category" to spinner.getSelectedItem().toString() ,
                                 "location" to location.text.toString(),
-                                "cp" to cp.text.toString()
+                                "cp" to cp.text.toString().toInt()
                             )
                         )
                         showEmpresaInfo(it.result?.user?.email ?: "", ProviderType.MAIL, userName.text.toString())
