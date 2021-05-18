@@ -10,9 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-open class ActivityRegister : AppCompatActivity() {
-
-    // TODO: HAbrá q estructurar esto bien. Era puna prueba para el registro de usuarios
+open class ActivityRegister : AppCompatActivity()
+{
 
     private var db = FirebaseFirestore.getInstance()
     private var mAuth = FirebaseAuth.getInstance()
@@ -174,7 +173,6 @@ open class ActivityRegister : AppCompatActivity() {
 
     private fun showUserInfo(email: String, provider: ProviderType, userName: String)
     {
-        // TODO: Nos vamos a ir a la info del usuario cndo haga login, o a la empresa que clique, pero eso hay q mirarlo bien
         val homeIntent = Intent(this, MainActivity::class.java).apply {
             putExtra("email", email)
             putExtra("name", userName)
@@ -185,7 +183,6 @@ open class ActivityRegister : AppCompatActivity() {
 
     private fun showEmpresaInfo(email: String, provider: ProviderType, userName: String)
     {
-        // TODO: Nos vamos a ir a la info del usuario cndo haga login, o a la empresa que clique, pero eso hay q mirarlo bien
         val homeIntent = Intent(this, EnterpriseMainActivity::class.java).apply {
             putExtra("email", email)
             putExtra("name", userName)
