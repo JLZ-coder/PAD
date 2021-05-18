@@ -1,9 +1,7 @@
 package es.ucm.fdi.mybooker
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -13,12 +11,14 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
+import java.lang.Exception
+import java.lang.IllegalArgumentException
 
 class ActivityLogin : AppCompatActivity()
 {
 
-    // TODO: HAbrá q estructurar esto bien. Era puna prueba para el login de usuarios
     private var db = FirebaseFirestore.getInstance()
     private var mAuth = FirebaseAuth.getInstance()
     private lateinit var login: Button
@@ -61,7 +61,6 @@ class ActivityLogin : AppCompatActivity()
 
     private fun goRegisterEnt()
     {
-        // TODO: Registrar empresa
         val i = Intent(this, ActivityRegister::class.java).apply {
             putExtra("mail", findViewById<EditText>(R.id.editTextUser).text.toString())
         }
@@ -92,46 +91,46 @@ class ActivityLogin : AppCompatActivity()
                         db.collection("users").document(user_uid).get()
                             .addOnSuccessListener { document ->
                                 if (document != null) {
-                                    //Log.d("", "DocumentSnapshot data: ${document.data}")
                                     val tipo = document["tipoUsuario"].toString()
                                     val name = document["name"].toString()
                                     val email = document["email"].toString()
                                     when (tipo) {
                                         "usuario" -> showUserInfo(user_uid,name,email)
                                         "empresa" -> showEmpresaInfo(user_uid)
-                                        else -> Log.d("login_getDocument", "No such document")
+                                        else -> FirebaseCrashlytics.getInstance().recordException(Exception("login_getType, No such type $tipo"))
                                     }
                                 } else {
-                                    Log.d("login_getDocument", "No such document")
+                                    FirebaseCrashlytics.getInstance().recordException(Exception("login_getDocument, No such document $document"))
                                 }
                             }
                             .addOnFailureListener { exception ->
-                                login.isEnabled = true
-                                loadingLogin.visibility = View.GONE
-                                Log.d("login_getDocument", "get failed with ", exception)
+                                enableLogin()
+                                FirebaseCrashlytics.getInstance().recordException(Exception("login_getDocument, get failed with ${exception.message.toString()}"))
                             }
-                    }
-                    else {
-                        showAlert()
+                    } else {
+                        showAlert(it.exception?.localizedMessage)
                     }
                 }
             } else {
-                showAlert()
+                showAlert("Usuario y contraseñas no rellenados")
             }
         }
     }
 
-    private fun showAlert()
+    private fun enableLogin()
     {
-
         login.isEnabled = true
         loadingLogin.visibility = View.GONE
+    }
+
+    private fun showAlert(message: String?)
+    {
+
+        enableLogin()
 
         val builder = AlertDialog.Builder(this)
         builder.setTitle("ERROR")
-        builder.setMessage("El usuario no existe")
-        //builder.setPositiveButton("Registrar usuario"){ _, _ -> goRegisterUser() }
-        //builder.setPositiveButton("Resgistrar empresa"){ _, _ -> goRegisterEnt() }
+        builder.setMessage(message.toString())
         builder.setNegativeButton("Reintentar", null)
         val dialog: AlertDialog = builder.create()
         dialog.show()
@@ -140,7 +139,6 @@ class ActivityLogin : AppCompatActivity()
     private fun showUserInfo(userId : String, name:String, email:String)
     {
 
-        // TODO: Nos vamos a ir a la info del usuario cndo haga login, o a la empresa que clique, pero eso hay q mirarlo bien
         val homeIntent = Intent(this, MainActivity::class.java)
         homeIntent.putExtra("userName", name)
         homeIntent.putExtra("email", email)
@@ -162,7 +160,6 @@ class ActivityLogin : AppCompatActivity()
                 }
             }
 
-        // TODO: Nos vamos a ir a la info del usuario cndo haga login, o a la empresa que clique, pero eso hay q mirarlo bien
         val homeIntent = Intent(this, EnterpriseMainActivity::class.java).apply {
             putExtra("userId", userId)
             putExtra("userName", name)
@@ -170,5 +167,4 @@ class ActivityLogin : AppCompatActivity()
         }
         startActivity(homeIntent);
     }
-
 }
