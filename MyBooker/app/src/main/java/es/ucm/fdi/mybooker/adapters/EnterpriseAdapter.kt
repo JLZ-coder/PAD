@@ -56,7 +56,7 @@ class EnterpriseAdapter(val enterprises: List<itemEnterprise>, var inter:onClick
                 storageReference.downloadUrl.addOnSuccessListener {
                         uri -> Picasso.with(view.context).load(uri.toString()).into(entImg)
                 }.addOnFailureListener {
-                    Log.i("POLLAS ", "EN VINAGRE")
+
                 }
             }
 

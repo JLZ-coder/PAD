@@ -3,8 +3,11 @@ package es.ucm.fdi.mybooker
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+// import android.widget.SearchView
+import androidx.appcompat.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -135,33 +138,39 @@ class MainActivity : AppCompatActivity(), HomeFragment.Actualizar, SearchFragmen
     }
 
     //Menu
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean
+    {
+
         menuInflater.inflate(R.menu.search, menu)
         btnSearch = menu?.findItem(R.id.search)!!
+        val searchView = btnSearch.actionView as SearchView
+        searchView.queryHint = "Search View Hint"
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+            override fun onQueryTextSubmit(query: String): Boolean {
+
+                val search = SearchFragment.newInstance()
+                val bundle: Bundle = Bundle()
+                bundle.putString("query", query)
+                Log.i("VAMOS", "vamos")
+                Log.i("NAME", query)
+                search.arguments = bundle
+
+                changeFragment(SearchFragment.newInstance(), "name")
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
         return true
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
         btnSearch.isVisible = true
         return super.onPrepareOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean
-    {
-
-        return when (item.itemId){
-            R.id.search->{//Fragmento
-                var search = SearchFragment.newInstance()
-                val bundle: Bundle = Bundle()
-                bundle.putString("name", name)
-                search.arguments = bundle
-                changeFragment(search, "searchFragment")
-                true
-            }
-
-            else -> super.onOptionsItemSelected(item)
-
-        }
     }
 
     private fun loadFirstFragment() {
