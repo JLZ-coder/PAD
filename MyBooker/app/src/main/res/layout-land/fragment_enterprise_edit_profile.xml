@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="16dp">
-
+    
             <TextView
                 android:id="@+id/textView_enterprise_editprofile_name"
                 android:layout_width="wrap_content"
@@ -26,7 +26,7 @@
                 android:layout_marginBottom="16dp"
                 android:text="@string/name"
                 android:textSize="18sp" />
-
+    
             <EditText
                 android:id="@+id/editText_enterprise_editprofile_name"
                 android:layout_width="match_parent"
@@ -36,7 +36,7 @@
                 android:layout_toRightOf="@id/textView_enterprise_editprofile_name"
                 android:layout_alignBaseline="@id/textView_enterprise_editprofile_name"
                 android:singleLine="true" />
-
+    
             <TextView
                 android:id="@+id/textView_enterprise_editprofile_cp"
                 android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
                 android:layout_marginBottom="16dp"
                 android:text="@string/codePostal"
                 android:textSize="18sp" />
-
+    
             <EditText
                 android:id="@+id/editText_enterprise_editprofile_cp"
                 android:layout_width="match_parent"
@@ -61,7 +61,7 @@
                 android:layout_toRightOf="@id/textView_enterprise_editprofile_cp"
                 android:layout_alignBaseline="@id/textView_enterprise_editprofile_cp"
                 android:singleLine="true" />
-
+    
             <TextView
                 android:id="@+id/textView_enterprise_editprofile_location"
                 android:layout_width="wrap_content"
@@ -73,7 +73,7 @@
                 android:layout_marginBottom="16dp"
                 android:text="@string/location"
                 android:textSize="18sp" />
-
+    
             <EditText
                 android:id="@+id/editText_enterprise_editprofile_location"
                 android:layout_width="match_parent"
@@ -83,7 +83,7 @@
                 android:layout_toRightOf="@id/textView_enterprise_editprofile_location"
                 android:layout_alignBaseline="@id/textView_enterprise_editprofile_location"
                 android:singleLine="true" />
-
+    
             <TextView
                 android:id="@+id/textView_enterprise_editprofile_category"
                 android:layout_width="wrap_content"
@@ -95,7 +95,7 @@
                 android:layout_marginBottom="16dp"
                 android:text="Categorías"
                 android:textSize="18sp" />
-
+    
             <Spinner
                 android:id="@+id/spinner_enterprise_editprofile_category"
                 android:layout_width="match_parent"
@@ -104,7 +104,7 @@
                 android:layout_margin="16dp"
                 android:layout_toRightOf="@id/textView_enterprise_editprofile_category"
                 android:entries="@array/categorias"/>
-
+    
             <Button
                 android:id="@+id/button_enterprise_editprofile_confirm"
                 android:layout_width="wrap_content"
@@ -113,8 +113,8 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="16dp"
                 android:text="Confirmar" />
-
-
+    
+    
         </RelativeLayout>
     </ScrollView>
 </FrameLayout>
