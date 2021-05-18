@@ -153,7 +153,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.Actualizar, SearchFragmen
             R.id.search->{//Fragmento
                 var search = SearchFragment.newInstance()
                 val bundle: Bundle = Bundle()
-                bundle.putString("type", name)
+                bundle.putString("name", name)
                 search.arguments = bundle
                 changeFragment(search, "searchFragment")
                 true

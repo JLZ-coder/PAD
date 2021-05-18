@@ -32,7 +32,10 @@ private const val ARG_PARAM2 = "name"
 class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
 {
 
+    private  var currentTag: String = "searchFragment"
+
     private var type: String? = null
+    private var name: String? = null
 
     private var db = FirebaseFirestore.getInstance()
     private lateinit var enterprises: MutableList<itemEnterprise>
@@ -51,15 +54,8 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
     {
 
         this.type = requireArguments().getString(ARG_PARAM1)
+        this.name = requireArguments().getString(ARG_PARAM2)
 
-        //Toast.makeText(this@SearchFragment.context, this.type, Toast.LENGTH_SHORT).show();
-        if (this.type == null || this.type == "") {
-            // Nos ha llegado vacío o a null, seteamos a all y nos enviamos notificación a Firebase
-            FirebaseCrashlytics.getInstance().recordException(Exception("El parámetro de búsqueda type ha llegado vacío"))
-            this.type = "all"
-        }
-
-        Log.i("savedInstanceState", savedInstanceState.toString())
         val view: View = inflater.inflate(R.layout.fragment_search, container, false)
 
         emptyText = view.findViewById(R.id.empty_view)
@@ -67,16 +63,19 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
 
         mRecyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
 
-        Toast.makeText(this@SearchFragment.context, type, Toast.LENGTH_SHORT).show()
-        when(type) {
-            "all" -> {
-                searchAll(inflater)
-                true
+        if (this.type != null || this.type != "") {
+            when(this.type) {
+                "all" -> {
+                    searchAll(inflater)
+                    true
+                }
+                else -> {
+                    searchEnterprisesByCathegory(this.type, inflater)
+                    true
+                }
             }
-            else -> {
-                searchEnterprisesByCathegory(type, inflater)
-                true
-            }
+        }  else if (this.name != null || this.name != "") {
+            searchEnterprisesByName(this.name, inflater)
         }
 
         return view
@@ -92,7 +91,7 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
     /**
      * Busca las empresas por nombre
      */
-    private fun searchEnterprisesByName(name:String, inflater: LayoutInflater)
+    private fun searchEnterprisesByName(name:String?, inflater: LayoutInflater)
     {
 
         db.collection("enterprises").whereEqualTo(ARG_PARAM1, name).get()
@@ -125,8 +124,6 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
                 for (document in documents) {
                    enterprises.add(itemEnterprise(document.data["userId"].toString(),document.data["profileImg"].toString(), document.data["name"].toString(),
                        document.data["location"].toString(), document.getLong("cp")?.toInt().toString(), document.data["category"].toString()))
-                    Log.i("AAAAAAA", "${document.id} => ${document.data}")
-
                 }
                 if(enterprises.isNotEmpty()) {
                     setAdapter(inflater.context, mRecyclerView)
