@@ -48,34 +48,39 @@ class HomeFragment : Fragment()
         }
         val searchSalud: CardView = view.findViewById(R.id.salud)
         searchSalud.setOnClickListener {
-            changeFragment(SearchFragment.newInstance(), "salud")
+            changeFragment(SearchFragment.newInstance(), "Salud")
             return@setOnClickListener
         }
         val searchAsesoria: CardView = view.findViewById(R.id.asesoria)
         searchAsesoria.setOnClickListener {
-            changeFragment(SearchFragment.newInstance(), "asesoria")
+            changeFragment(SearchFragment.newInstance(), "Asesoria")
             return@setOnClickListener
         }
         val searchBelleza: CardView = view.findViewById(R.id.belleza)
         searchBelleza.setOnClickListener {
-            changeFragment(SearchFragment.newInstance(), "belleza")
+            changeFragment(SearchFragment.newInstance(), "Belleza")
             return@setOnClickListener
         }
         val searchOcio: CardView = view.findViewById(R.id.ocio)
         searchOcio.setOnClickListener {
-            changeFragment(SearchFragment.newInstance(), "ocio")
+            changeFragment(SearchFragment.newInstance(), "Ocio")
             return@setOnClickListener
         }
         val searchRestaurant: CardView = view.findViewById(R.id.restaurant)
         searchRestaurant.setOnClickListener {
-            changeFragment(SearchFragment.newInstance(), "restauracion")
+            changeFragment(SearchFragment.newInstance(), "Restaurantes")
+            return@setOnClickListener
+        }
+        val searchSports: CardView = view.findViewById(R.id.deportes)
+        searchSports.setOnClickListener {
+            changeFragment(SearchFragment.newInstance(), "Deportes")
             return@setOnClickListener
         }
     }
 
-    private fun changeFragment(fragment: Fragment, type: String){
+    private fun changeFragment(fragment: Fragment, category: String){
         val bn: Bundle = Bundle()
-        bn.putString("type", type)
+        bn.putString("category", category)
         fragment.arguments = bn
         callback?.actualizarStack(fragment, "searchFragment")
     }

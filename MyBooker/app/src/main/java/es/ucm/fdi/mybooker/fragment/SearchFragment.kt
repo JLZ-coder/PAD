@@ -19,8 +19,10 @@ import es.ucm.fdi.mybooker.adapters.EnterpriseAdapter
 import es.ucm.fdi.mybooker.objects.itemEnterprise
 import java.lang.Exception
 
-private const val ARG_PARAM1 = "type"
+
+private const val ARG_PARAM1 = "category"
 private const val ARG_PARAM2 = "name"
+
 
 /**
  * A simple [Fragment] subclass.
@@ -65,6 +67,7 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
 
         mRecyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
 
+        Toast.makeText(this@SearchFragment.context, type, Toast.LENGTH_SHORT).show()
         when(type) {
             "all" -> {
                 searchAll(inflater)
@@ -96,7 +99,8 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
             .addOnSuccessListener { documents ->
                 enterprises = ArrayList()
                 for (document in documents) {
-                    enterprises.add(itemEnterprise(document.data["profileImg"].toString(), document.data["name"].toString(), document.data["address"].toString(), document.data["type"].toString()))
+                    enterprises.add(itemEnterprise(document.data["userId"].toString(),document.data["profileImg"].toString(), document.data["name"].toString(),
+                        document.data["location"].toString(), document.getLong("cp")?.toInt().toString(), document.data["category"].toString()))
                 }
                 if(enterprises.isNotEmpty()) {
                     setAdapter(inflater.context, mRecyclerView)
@@ -119,7 +123,10 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
             .addOnSuccessListener { documents ->
                 enterprises = ArrayList()
                 for (document in documents) {
-                    enterprises.add(itemEnterprise(document.data["profileImg"].toString(), document.data["name"].toString(), document.data["address"].toString(), document.data["type"].toString()))
+                   enterprises.add(itemEnterprise(document.data["userId"].toString(),document.data["profileImg"].toString(), document.data["name"].toString(),
+                       document.data["location"].toString(), document.getLong("cp")?.toInt().toString(), document.data["category"].toString()))
+                    Log.i("AAAAAAA", "${document.id} => ${document.data}")
+
                 }
                 if(enterprises.isNotEmpty()) {
                     setAdapter(inflater.context, mRecyclerView)
@@ -145,8 +152,8 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
                 for (document in documents) {
 
                     // TODO, comprobar los espacios vacios
-                    enterprises.add(itemEnterprise(document.data["profileImg"].toString(), document.data["name"].toString(),
-                        document.data["address"].toString(), document.data["type"].toString()))
+                    enterprises.add(itemEnterprise(document.data["userId"].toString(),document.data["profileImg"].toString(), document.data["name"].toString(),
+                      document.data["location"].toString(), document.getLong("cp")?.toInt().toString(), document.data["category"].toString()))
                 }
                 if(enterprises.isNotEmpty()) {
                     setAdapter(inflater.context, mRecyclerView)
@@ -196,7 +203,6 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
         if (context is SearchFragment.Actualizar) {
             act = context
         }
-
     }
 
     override fun onDetach() {

@@ -13,10 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import es.ucm.fdi.mybooker.fragment.HomeFragment
-import es.ucm.fdi.mybooker.fragment.ProfileFragment
-import es.ucm.fdi.mybooker.fragment.ScheduleFragment
-import es.ucm.fdi.mybooker.fragment.SearchFragment
+import es.ucm.fdi.mybooker.fragment.*
 
 enum class ProviderType {
     MAIL
@@ -187,7 +184,9 @@ class MainActivity : AppCompatActivity(), HomeFragment.Actualizar, SearchFragmen
         if (currentFragment?.isVisible!! && oldFragment?.isHidden!!) {
             transaction.hide(currentFragment).show(oldFragment)
         }
-        if(currentFragment is SearchFragment)
+
+
+        if(currentFragment is SearchFragment || currentFragment is EnterpriseFragment)
             transaction.remove(currentFragment)
         transaction.commit()
 
