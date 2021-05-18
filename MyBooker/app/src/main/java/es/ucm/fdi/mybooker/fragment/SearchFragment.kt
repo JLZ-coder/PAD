@@ -34,9 +34,6 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
 
     private  var currentTag: String = "searchFragment"
 
-    private var type: String? = null
-    private var name: String? = null
-
     private var db = FirebaseFirestore.getInstance()
     private lateinit var enterprises: MutableList<itemEnterprise>
 
@@ -49,12 +46,8 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
         fun actualizarStackProfile(fragment: Fragment, tag: String)
     }
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
-
-        this.type = requireArguments().getString(ARG_PARAM1)
-        this.name = requireArguments().getString(ARG_PARAM2)
 
         val view: View = inflater.inflate(R.layout.fragment_search, container, false)
 
@@ -63,20 +56,35 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
 
         mRecyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
 
-        if (this.type != null || this.type != "") {
-            when(this.type) {
-                "all" -> {
-                    searchAll(inflater)
-                    true
-                }
-                else -> {
-                    searchEnterprisesByCathegory(this.type, inflater)
-                    true
+        try {
+
+            if (requireArguments().getString(ARG_PARAM1) != null) {
+
+                val type = arguments?.getString(ARG_PARAM1)
+                when(type) {
+                    "all" -> {
+                        searchAll(inflater)
+                        true
+                    }
+                    else -> {
+                        searchEnterprisesByCathegory(type, inflater)
+                        true
+                    }
                 }
             }
-        }  else if (this.name != null || this.name != "") {
-            searchEnterprisesByName(this.name, inflater)
+        } catch(e: Exception) {
+            try {
+                if (requireArguments().getString(ARG_PARAM2) != null) {
+
+                    Log.i("ENTRA EN NAME", "SIIIIII")
+                    searchEnterprisesByName(arguments?.getString(ARG_PARAM2), inflater)
+                }
+            } catch (e: Exception){
+
+            }
         }
+
+
 
         return view
     }
@@ -94,6 +102,7 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
     private fun searchEnterprisesByName(name:String?, inflater: LayoutInflater)
     {
 
+        Log.i("ENTRA", "searchEnterprisesByName")
         db.collection("enterprises").whereEqualTo(ARG_PARAM1, name).get()
             .addOnSuccessListener { documents ->
                 enterprises = ArrayList()
