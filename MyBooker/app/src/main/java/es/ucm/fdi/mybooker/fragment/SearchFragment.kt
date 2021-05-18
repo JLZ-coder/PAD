@@ -20,6 +20,7 @@ import es.ucm.fdi.mybooker.objects.itemEnterprise
 import java.lang.Exception
 
 private const val ARG_PARAM1 = "type"
+private const val ARG_PARAM2 = "name"
 
 /**
  * A simple [Fragment] subclass.
@@ -77,11 +78,34 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
 
         return view
     }
+
+    private fun setNotFoundView()
+    {
+        emptyText.visibility = View.VISIBLE
+        emptyText.text = "No se han encontrado empresas con esos parámetros"
+        mRecyclerView.visibility = View.GONE
+    }
+
     /**
      * Busca las empresas por nombre
      */
-    private fun searchEnterprisesByName(name:String, inflater: LayoutInflater){
+    private fun searchEnterprisesByName(name:String, inflater: LayoutInflater)
+    {
 
+        db.collection("enterprises").whereEqualTo(ARG_PARAM1, name).get()
+            .addOnSuccessListener { documents ->
+                enterprises = ArrayList()
+                for (document in documents) {
+                    enterprises.add(itemEnterprise(document.data["profileImg"].toString(), document.data["name"].toString(), document.data["address"].toString(), document.data["type"].toString()))
+                }
+                if(enterprises.isNotEmpty()) {
+                    setAdapter(inflater.context, mRecyclerView)
+                } else {
+                    setNotFoundView()
+                }
+            }.addOnFailureListener { exception ->
+                FirebaseCrashlytics.getInstance().recordException(Exception("ERROR: Error getting documents ${exception.message}"))
+            }
     }
 
     /**
@@ -96,14 +120,11 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
                 enterprises = ArrayList()
                 for (document in documents) {
                     enterprises.add(itemEnterprise(document.data["profileImg"].toString(), document.data["name"].toString(), document.data["address"].toString(), document.data["type"].toString()))
-                    Log.i("AAAAAAA", "${document.id} => ${document.data}")
                 }
                 if(enterprises.isNotEmpty()) {
                     setAdapter(inflater.context, mRecyclerView)
                 } else {
-                    emptyText.visibility = View.VISIBLE
-                    emptyText.text = "No se han encontrado empresas con esos parámetros"
-                    mRecyclerView.visibility = View.GONE
+                    setNotFoundView()
                 }
             }.addOnFailureListener { exception ->
                 FirebaseCrashlytics.getInstance().recordException(Exception("ERROR: Error getting documents ${exception.message}"))
@@ -130,12 +151,10 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
                 if(enterprises.isNotEmpty()) {
                     setAdapter(inflater.context, mRecyclerView)
                 } else {
-                    emptyText.visibility = View.VISIBLE
-                    emptyText.text = "No se han encontrado empresas con esos parámetros"
-                    mRecyclerView.visibility = View.GONE
+                    setNotFoundView()
                 }
             }.addOnFailureListener { exception ->
-                Log.w("ERROROROROR ", "Error getting documents: ", exception)
+                FirebaseCrashlytics.getInstance().recordException(Exception("ERROR: Error getting documents ${exception.message}"))
             }
     }
 
