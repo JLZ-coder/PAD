@@ -62,14 +62,14 @@
                         android:id="@+id/editTextUserName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/name"
+                        android:hint="@string/label_nombre"
                         android:singleLine="true" />
 
                     <EditText
                         android:id="@+id/editTextUserMail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/email"
+                        android:hint="@string/label_email"
                         android:singleLine="true" />
 
                     <EditText

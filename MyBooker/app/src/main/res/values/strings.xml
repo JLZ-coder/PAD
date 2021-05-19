@@ -1,10 +1,9 @@
 <resources>
 
-    <!-- Textos de alicación -->
+    <!-- APP name -->
     <string name="app_name">MyBooker</string>
 
     <!-- Textos comunes -->
-    <string name="email" translatable="false">Correo electrónico</string>
     <string name="already_account">¿Ya tienes cuenta? Inicia sesión</string>
     <string name="login">Inicia sesión</string>
     <string name="password">Contraseña</string>
@@ -13,20 +12,23 @@
     <string name="register" translatable="false">Aceptar</string>
     <string name="register_now_user">Registrarse como usuario</string>
     <string name="register_now_ent">Registrarse como empresa</string>
-    <string name="name">Nombre</string>
     <string name="location">Dirección</string>
     <string name="codePostal">CP</string>
+    <string name="label_nombre">Nombre</string>
 
     <!--- Lista de categorias -->
-
+    <string name="categorias">Categorías</string>
     <string name="sport"> Deportes </string>
     <string name="restaurant">Restaurantes</string>
     <string name="leisure">Ocio</string>
     <string name="beauty">Belleza</string>
     <string name="advisor">Asesoría</string>
     <string name="health">Salud</string>
-    <!-- Array de categorias -->
 
+    <!-- Textos para empresas -->
+    <string name="ent_imgage">Imagen de empresa</string>
+    <string name="ent_category">Categoría</string>
+    <!-- Array de categorias -->
     <string-array name="categorias">
         <item>@string/sport</item>
         <item>@string/restaurant</item>
@@ -36,29 +38,20 @@
         <item>@string/health</item>
     </string-array>
 
-    <!-- Textos para empresas -->
-    <string name="ent_address">Dirección</string>
-    <string name="ent_imgage">Imagen de empresa</string>
-    <string name="ent_category">Categoría</string>
-
     <!-- Textos para usuarios -->
     <string name="user_nickname">Alias</string>
     <string name="user_image">Imagen</string>
     <string name="label_empresas">Empresas</string>
     <string name="title_activity_empresa_main">MainActivity</string>
-    <string name="label_nombre">Nombre</string>
     <string name="label_email">Correo electrónico</string>
     <string name="logout">Logout</string>
     <!--Textos menu-->
     <string name="title_home">Inicio</string>
     <string name="title_dashboard">Agenda</string>
-    <string name="tittle_profile">Perfil</string>
+    <string name="title_profile">Perfil</string>
     <string name="title_notifications">Notificaciones</string>
     <string name="title_enterprise_home">Horario</string>
     <string name="title_enterprise_dashboard">Reservas</string>
-    <string name="tittle_enterprise_profile">Perfil</string>
-    <string name="title_enterprise_notifications">Perfil</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
