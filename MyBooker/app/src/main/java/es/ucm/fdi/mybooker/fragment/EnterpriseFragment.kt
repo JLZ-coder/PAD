@@ -110,9 +110,8 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
 
                 c.set(year,month,day)
 
-                val numberDay = dayOfWeek(c.get(Calendar.DAY_OF_WEEK))
 
-                recycler(selectedDate, numberDay)
+                recycler(selectedDate)
 
             })
         newFragment.show(requireActivity().supportFragmentManager, "datePicker")
@@ -131,22 +130,30 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
         }
     }
 
-    private fun recycler(selectDate:String, numberDay:Int){
+    private fun recycler(selectDate:String){
+
+        val numberDay : Int = dayOfWeek(c.get(Calendar.DAY_OF_WEEK))
+
         c.set(Calendar.HOUR_OF_DAY, 0)
         c.set(Calendar.MINUTE, 0);
         val startOfDay = c.time
         c.add(Calendar.DATE, 1)
         val endOfDay = c.time
+
         //Sacamos los horarios
         db.collection("shifts").whereEqualTo("id_enterprise", enterprise.empresaId).get()
             .addOnSuccessListener { documents ->
-                hours = ArrayList()
+                this.hours = ArrayList()
                 for (document in documents) {
-                    //Toast.makeText(this@EnterpriseFragment.context, "Vuelve a presionar para salir", Toast.LENGTH_SHORT).show();
-                   var aux = arrayOf(document.get("days"))
-                    Toast.makeText(this@EnterpriseFragment.context, aux.size.toString(), Toast.LENGTH_SHORT).show()
-                    if(numberDay in arrayOf(document.get("days"))) {
-                        Toast.makeText(this@EnterpriseFragment.context, numberDay.toString(), Toast.LENGTH_SHORT).show()
+                   val aux : List<Int> = document.get("days") as List<Int>
+                    var ok : Boolean = false
+                    var i = 0
+                    while(i < aux.size && !ok){
+                        if(aux[i] == numberDay) ok = true
+                        i+=1
+                    }
+
+                    if(ok) {
                         hours.add(
                             ItemHours(
                                 document.getString("start").toString(),
@@ -158,29 +165,33 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
                         )
                     }
                 }
+
+
                 //Ordenamos según la hora de start para mostrar en el layout por orden
                 hours.sortBy {
                     itemHours ->  itemHours.start
                 }
 
 
-            }.addOnFailureListener { exception ->
-                FirebaseCrashlytics.getInstance().recordException(Exception("ERROR: Error getting documents ${exception.message}"))
-            }
-        db.collection("reserves").whereGreaterThanOrEqualTo("hora", startOfDay)
-            .whereLessThan("hora", endOfDay).whereEqualTo("id_enterprise", enterprise.empresaId).get()
-            .addOnSuccessListener{ documents->
                 listReserva = ArrayList()
                 hoursAdap = ArrayList()
-                //Buscamos en las reservas si existe alguna otra reserva para ponerla como ocupada
-                for(document in documents){
-                    val reservation = Calendar.getInstance(Locale.ENGLISH)
-                    reservation.timeInMillis = document.get("hour").toString().toLong() * 1000
-                    val date = DateFormat.format("dd-MM-yyyy",reservation).toString()
-                    listReserva.add(date)
-                }
-                //Ordenamos la lista
-                listReserva.sort()
+
+                db.collection("reserves").whereGreaterThanOrEqualTo("hora", startOfDay)
+                    .whereLessThan("hora", endOfDay).whereEqualTo("id_enterprise", enterprise.empresaId).get()
+                    .addOnSuccessListener{ documents->
+                        //Buscamos en las reservas si existe alguna otra reserva para ponerla como ocupada
+                        for(document in documents){
+                            val reservation = Calendar.getInstance(Locale.ENGLISH)
+                            reservation.timeInMillis = document.getTimestamp("hour").toString().toLong() * 1000
+                            val date = DateFormat.format("dd-MM-yyyy",reservation).toString()
+                            listReserva.add(date)
+                        }
+                        //Ordenamos la lista
+                        listReserva.sort()
+
+                    }.addOnFailureListener { exception ->
+                        FirebaseCrashlytics.getInstance().recordException(Exception("ERROR: Error getting documents ${exception.message}"))
+                    }
 
                 //Creamos lista definitiva de horas disponibles
                 lastListHours()
@@ -194,12 +205,13 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
             }.addOnFailureListener { exception ->
                 FirebaseCrashlytics.getInstance().recordException(Exception("ERROR: Error getting documents ${exception.message}"))
             }
+
     }
 
     private fun setNotFoundView()
     {
         emptyText.visibility = View.VISIBLE
-        emptyText.text = "No se han encontrado empresas con esos parámetros"
+        emptyText.text = "No hay horas disponibles"
         mRecycler.visibility = View.GONE
     }
 
@@ -220,8 +232,12 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
         end.set(Calendar.DAY_OF_MONTH, c.get(Calendar.DAY_OF_MONTH))
         end.set(Calendar.MONTH, c.get(Calendar.MONTH))
         end.set(Calendar.YEAR, c.get(Calendar.YEAR))
+        Toast.makeText(this@EnterpriseFragment.context, "Entra1", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@EnterpriseFragment.context, hours.size.toString(), Toast.LENGTH_SHORT).show()
+
         //Trataremos si hay mas de dos turnos
         for(i in hours){
+            Toast.makeText(this@EnterpriseFragment.context, "EntraB", Toast.LENGTH_SHORT).show()
             val splitStart = i.start.split(":")
             val splitEnd = i.end.split(":")
             //Horas

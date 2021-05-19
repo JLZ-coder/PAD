@@ -36,6 +36,9 @@ class HoursAdapter(var hours: List<ItemHours>, var inter: onClickListener): Recy
         private var timeE = view.findViewById<TextView>(R.id.horaE)
         private var state = view.findViewById<TextView>(R.id.status)
         fun render(hour: ItemHours, action: onClickListener) {
+            checkbox.setOnClickListener(){
+
+            }
             timeS.text = hour.start
             timeE.text = hour.end
             state.text = hour.state

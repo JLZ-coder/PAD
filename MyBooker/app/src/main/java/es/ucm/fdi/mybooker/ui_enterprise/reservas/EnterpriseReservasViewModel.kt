@@ -36,8 +36,8 @@ class EnterpriseReservasViewModel : ViewModel() {
     private fun setUp() {
         db.collection("users").document(userId).get()
             .addOnCompleteListener { task ->
-                if (task.isSuccessful()) {
-                    val document: DocumentSnapshot? = task.getResult()
+                if (task.isSuccessful) {
+                    val document: DocumentSnapshot? = task.result
                     if (document != null) {
                         val name = document.getString("name")
 
