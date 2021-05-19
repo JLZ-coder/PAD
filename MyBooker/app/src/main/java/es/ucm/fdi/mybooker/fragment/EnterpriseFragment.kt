@@ -1,17 +1,21 @@
 package es.ucm.fdi.mybooker.fragment
 
 import android.app.DatePickerDialog
+import android.content.ClipData
 import android.os.Bundle
 import android.text.format.DateFormat
+import android.util.ArrayMap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Timestamp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
@@ -49,7 +53,7 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
 
     private lateinit var hours: MutableList<ItemHours>
     private lateinit var hoursAdap: MutableList<ItemHours>
-        private lateinit var listReserva: MutableList<String>
+    private lateinit var listReserva: MutableList<String>
     //Layout
     private lateinit var nameText: TextView
     private lateinit var locationText: TextView
@@ -59,6 +63,11 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
     private lateinit var date: EditText
     private lateinit var mRecycler: RecyclerView
     private lateinit var emptyText: TextView
+
+    private lateinit var reservar: Button
+
+    //Lista de checked
+    private var checkList: MutableMap<Int,ItemHours> = mutableMapOf<Int,ItemHours>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -98,9 +107,30 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
 
         date.setOnClickListener(){
             showDatePiackerDialog()
+        }
+        //Button reservar
+        reservar = view?.findViewById<Button>(R.id.reservar)!!
 
+        reservar.setOnClickListener(){
+            if(checkList.isEmpty()){
+                Toast.makeText(this@EnterpriseFragment.context, "Seleccione al menos una reserva", Toast.LENGTH_SHORT).show()
+            }else{
+                var listaDefinitva = ArrayList<ItemHours>()
+                for((k,o) in checkList){
+                    listaDefinitva.add(o)
+                }
+                listaDefinitva.sortBy {
+                        itemHours ->  itemHours.start
+                }
+                showReservateDialog(listaDefinitva)
+            }
         }
 
+    }
+
+    private fun showReservateDialog(list: ArrayList<ItemHours>){
+        val newFragment = ReservateFragment.newInstance(list)
+        newFragment.show(requireActivity().supportFragmentManager, "completeReserva")
     }
 
     private fun showDatePiackerDialog() {
@@ -109,8 +139,6 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
                 date.setText(selectedDate)
 
                 c.set(year,month,day)
-
-
                 recycler(selectedDate)
 
             })
@@ -144,9 +172,10 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
         db.collection("shifts").whereEqualTo("id_enterprise", enterprise.empresaId).get()
             .addOnSuccessListener { documents ->
                 this.hours = ArrayList()
+
                 for (document in documents) {
                    val aux : List<Int> = document.get("days") as List<Int>
-                    var ok : Boolean = false
+                    var ok = false
                     var i = 0
                     while(i < aux.size && !ok){
                         if(aux[i] == numberDay) ok = true
@@ -173,8 +202,8 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
                 }
 
 
-                listReserva = ArrayList()
-                hoursAdap = ArrayList()
+                this.listReserva = ArrayList()
+                this.hoursAdap = ArrayList()
 
                 db.collection("reserves").whereGreaterThanOrEqualTo("hora", startOfDay)
                     .whereLessThan("hora", endOfDay).whereEqualTo("id_enterprise", enterprise.empresaId).get()
@@ -182,26 +211,32 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
                         //Buscamos en las reservas si existe alguna otra reserva para ponerla como ocupada
                         for(document in documents){
                             val reservation = Calendar.getInstance(Locale.ENGLISH)
-                            reservation.timeInMillis = document.getTimestamp("hour").toString().toLong() * 1000
-                            val date = DateFormat.format("dd-MM-yyyy",reservation).toString()
-                            listReserva.add(date)
+                            val hora : Timestamp = document.getTimestamp("hora") as Timestamp
+
+                            reservation.timeInMillis = hora.seconds * 1000
+                            val date = DateFormat.format("H:m",reservation).toString()
+                            this.listReserva.add(date)
+                            Toast.makeText(this@EnterpriseFragment.context, "Entra",Toast.LENGTH_SHORT).show()
                         }
                         //Ordenamos la lista
-                        listReserva.sort()
+                        Toast.makeText(this@EnterpriseFragment.context, this.listReserva.size.toString(),Toast.LENGTH_SHORT).show()
+                        this.listReserva.sort()
+
+                        //Creamos lista definitiva de horas disponibles
+                        lastListHours()
+
+                        //Llamar a adapter y mostrar por pantalla
+                        if(hoursAdap.isNotEmpty()) {
+                            setAdapter(layoutInflater.context, mRecycler)
+                        } else {
+                            setNotFoundView()
+                        }
 
                     }.addOnFailureListener { exception ->
                         FirebaseCrashlytics.getInstance().recordException(Exception("ERROR: Error getting documents ${exception.message}"))
                     }
 
-                //Creamos lista definitiva de horas disponibles
-                lastListHours()
 
-                //Llamar a adapter y mostrar por pantalla
-                if(hoursAdap.isNotEmpty()) {
-                    setAdapter(layoutInflater.context, mRecycler)
-                } else {
-                    setNotFoundView()
-                }
             }.addOnFailureListener { exception ->
                 FirebaseCrashlytics.getInstance().recordException(Exception("ERROR: Error getting documents ${exception.message}"))
             }
@@ -232,12 +267,10 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
         end.set(Calendar.DAY_OF_MONTH, c.get(Calendar.DAY_OF_MONTH))
         end.set(Calendar.MONTH, c.get(Calendar.MONTH))
         end.set(Calendar.YEAR, c.get(Calendar.YEAR))
-        Toast.makeText(this@EnterpriseFragment.context, "Entra1", Toast.LENGTH_SHORT).show()
-        Toast.makeText(this@EnterpriseFragment.context, hours.size.toString(), Toast.LENGTH_SHORT).show()
 
         //Trataremos si hay mas de dos turnos
+        Toast.makeText(this@EnterpriseFragment.context, this.listReserva.size.toString(),Toast.LENGTH_SHORT).show()
         for(i in hours){
-            Toast.makeText(this@EnterpriseFragment.context, "EntraB", Toast.LENGTH_SHORT).show()
             val splitStart = i.start.split(":")
             val splitEnd = i.end.split(":")
             //Horas
@@ -247,14 +280,23 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
             start.set(Calendar.MINUTE,splitStart[1].toInt())
             end.set(Calendar.MINUTE,splitEnd[1].toInt())
             while(start <= end){
-                val horaS = start.get(Calendar.HOUR_OF_DAY).toString() + ":" + start.get(Calendar.MINUTE).toString()
+                val horaS :String= start.get(Calendar.HOUR_OF_DAY).toString() + ":" + start.get(Calendar.MINUTE).toString()
                 start.add(Calendar.MINUTE,i.period)
-                val horaF = start.get(Calendar.HOUR_OF_DAY).toString() + ":" + start.get(Calendar.MINUTE).toString()
+                val horaF :String= start.get(Calendar.HOUR_OF_DAY).toString() + ":" + start.get(Calendar.MINUTE).toString()
 
                 var state = ""
 
-                state = if(listReserva.contains(horaS))
-                    "ocupada"
+                var ok = false
+                var j = 0
+
+                while(j < this.listReserva.size && !ok){
+
+                    if(listReserva[j] == horaS) ok = true
+                    j+=1
+                }
+
+                state = if(ok)
+                    "ocupado"
                 else
                     "libre"
 
@@ -278,8 +320,12 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
     }
 
 
-    override fun openItemClick(hours: ItemHours, position: Int) {
-        TODO("Not yet implemented")
+    override fun openItemClick(hours: ItemHours, position: Int, checked: Boolean) {
+       if(checked){//Se añade a la lista
+           checkList[position] = hours
+       }else{
+            checkList.remove(position)
+       }
     }
 }
 

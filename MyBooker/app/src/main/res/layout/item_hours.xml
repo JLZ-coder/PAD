@@ -8,9 +8,10 @@
     app:cardMaxElevation="10dp"
     app:cardPreventCornerOverlap="true"
     app:cardCornerRadius="6dp"
-    android:backgroundTint="@color/app_color"
-    app:cardUseCompatPadding="true">
+    app:cardUseCompatPadding="true"
+    android:id="@+id/cardView">
     <LinearLayout
+        android:id="@+id/linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

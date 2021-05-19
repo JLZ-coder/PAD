@@ -92,4 +92,5 @@
     <string name="all">Todas</string>
     <string name="search">Buscar</string>
     <string name="cerrar_sesion">Cerrar sesión</string>
+    <string name="titleReserva">Confirmar reserva</string>
 </resources>
