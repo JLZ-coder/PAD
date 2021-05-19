@@ -4,10 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.CheckBox
-import android.widget.CompoundButton
-import android.widget.TextView
+import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import es.ucm.fdi.mybooker.R
@@ -40,11 +37,13 @@ class HoursAdapter(var hours: List<ItemHours>, var inter: onClickListener): Recy
         private var timeE = view.findViewById<TextView>(R.id.horaE)
         private var state = view.findViewById<TextView>(R.id.status)
         private var card = view.findViewById<CardView>(R.id.cardView)
+        private var linear = view.findViewById<LinearLayout>(R.id.linear)
         @SuppressLint("ResourceAsColor")
         fun render(hour: ItemHours, action: onClickListener, position: Int) {
 
-            if(hour.state == "ocupada"){
-                card.setCardBackgroundColor(R.color.df_red)
+            if(hour.state == "ocupado"){
+                checkbox.isEnabled = false
+                linear.setBackgroundColor(R.color.df_danger)
             }
             timeS.text = hour.start
             timeE.text = hour.end

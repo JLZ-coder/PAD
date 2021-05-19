@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Timestamp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
@@ -52,7 +53,7 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
 
     private lateinit var hours: MutableList<ItemHours>
     private lateinit var hoursAdap: MutableList<ItemHours>
-        private lateinit var listReserva: MutableList<String>
+    private lateinit var listReserva: MutableList<String>
     //Layout
     private lateinit var nameText: TextView
     private lateinit var locationText: TextView
@@ -201,8 +202,8 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
                 }
 
 
-                listReserva = ArrayList()
-                hoursAdap = ArrayList()
+                this.listReserva = ArrayList()
+                this.hoursAdap = ArrayList()
 
                 db.collection("reserves").whereGreaterThanOrEqualTo("hora", startOfDay)
                     .whereLessThan("hora", endOfDay).whereEqualTo("id_enterprise", enterprise.empresaId).get()
@@ -210,26 +211,32 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
                         //Buscamos en las reservas si existe alguna otra reserva para ponerla como ocupada
                         for(document in documents){
                             val reservation = Calendar.getInstance(Locale.ENGLISH)
-                            reservation.timeInMillis = document.getTimestamp("hour").toString().toLong() * 1000
-                            val date = DateFormat.format("dd-MM-yyyy",reservation).toString()
-                            listReserva.add(date)
+                            val hora : Timestamp = document.getTimestamp("hora") as Timestamp
+
+                            reservation.timeInMillis = hora.seconds * 1000
+                            val date = DateFormat.format("H:m",reservation).toString()
+                            this.listReserva.add(date)
+                            Toast.makeText(this@EnterpriseFragment.context, "Entra",Toast.LENGTH_SHORT).show()
                         }
                         //Ordenamos la lista
-                        listReserva.sort()
+                        Toast.makeText(this@EnterpriseFragment.context, this.listReserva.size.toString(),Toast.LENGTH_SHORT).show()
+                        this.listReserva.sort()
+
+                        //Creamos lista definitiva de horas disponibles
+                        lastListHours()
+
+                        //Llamar a adapter y mostrar por pantalla
+                        if(hoursAdap.isNotEmpty()) {
+                            setAdapter(layoutInflater.context, mRecycler)
+                        } else {
+                            setNotFoundView()
+                        }
 
                     }.addOnFailureListener { exception ->
                         FirebaseCrashlytics.getInstance().recordException(Exception("ERROR: Error getting documents ${exception.message}"))
                     }
 
-                //Creamos lista definitiva de horas disponibles
-                lastListHours()
 
-                //Llamar a adapter y mostrar por pantalla
-                if(hoursAdap.isNotEmpty()) {
-                    setAdapter(layoutInflater.context, mRecycler)
-                } else {
-                    setNotFoundView()
-                }
             }.addOnFailureListener { exception ->
                 FirebaseCrashlytics.getInstance().recordException(Exception("ERROR: Error getting documents ${exception.message}"))
             }
@@ -262,6 +269,7 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
         end.set(Calendar.YEAR, c.get(Calendar.YEAR))
 
         //Trataremos si hay mas de dos turnos
+        Toast.makeText(this@EnterpriseFragment.context, this.listReserva.size.toString(),Toast.LENGTH_SHORT).show()
         for(i in hours){
             val splitStart = i.start.split(":")
             val splitEnd = i.end.split(":")
@@ -272,14 +280,23 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
             start.set(Calendar.MINUTE,splitStart[1].toInt())
             end.set(Calendar.MINUTE,splitEnd[1].toInt())
             while(start <= end){
-                val horaS = start.get(Calendar.HOUR_OF_DAY).toString() + ":" + start.get(Calendar.MINUTE).toString()
+                val horaS :String= start.get(Calendar.HOUR_OF_DAY).toString() + ":" + start.get(Calendar.MINUTE).toString()
                 start.add(Calendar.MINUTE,i.period)
-                val horaF = start.get(Calendar.HOUR_OF_DAY).toString() + ":" + start.get(Calendar.MINUTE).toString()
+                val horaF :String= start.get(Calendar.HOUR_OF_DAY).toString() + ":" + start.get(Calendar.MINUTE).toString()
 
                 var state = ""
 
-                state = if(listReserva.contains(horaS))
-                    "ocupada"
+                var ok = false
+                var j = 0
+
+                while(j < this.listReserva.size && !ok){
+
+                    if(listReserva[j] == horaS) ok = true
+                    j+=1
+                }
+
+                state = if(ok)
+                    "ocupado"
                 else
                     "libre"
 
