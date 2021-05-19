@@ -42,12 +42,10 @@
     <string name="user_nickname">Alias</string>
     <string name="user_image">Imagen</string>
     <string name="label_empresas">Empresas</string>
-    <string name="title_activity_empresa_main">MainActivity</string>
     <string name="label_email">Correo electrónico</string>
     <string name="logout">Logout</string>
     <!--Textos menu-->
     <string name="title_home">Inicio</string>
-    <string name="title_dashboard">Agenda</string>
     <string name="title_profile">Perfil</string>
     <string name="title_notifications">Notificaciones</string>
     <string name="title_enterprise_home">Horario</string>
@@ -64,8 +62,7 @@
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
     <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="agenda">Agenda</string>
     <string name="hora">Hora</string>

@@ -2,13 +2,11 @@ package es.ucm.fdi.mybooker.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -19,10 +17,8 @@ import es.ucm.fdi.mybooker.adapters.EnterpriseAdapter
 import es.ucm.fdi.mybooker.objects.itemEnterprise
 import java.lang.Exception
 
-
 private const val ARG_PARAM1 = "category"
 private const val ARG_PARAM2 = "name"
-
 
 /**
  * A simple [Fragment] subclass.
@@ -31,8 +27,6 @@ private const val ARG_PARAM2 = "name"
  */
 class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
 {
-
-    private  var currentTag: String = "searchFragment"
 
     private var db = FirebaseFirestore.getInstance()
     private lateinit var enterprises: MutableList<itemEnterprise>
@@ -77,11 +71,7 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
                 }
             }
         } else if (requireArguments().getString(ARG_PARAM2) != "") {
-
-            Log.i("ENTRA EN NAME", "SIIIIII")
-
             searchEnterprisesByName(arguments?.getString(ARG_PARAM2), inflater)
-
         }
     }
 
@@ -103,7 +93,7 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
             .addOnSuccessListener { documents ->
                 enterprises = ArrayList()
                 for (document in documents) {
-                    enterprises.add(itemEnterprise(document.data["userId"].toString(),document.data["profileImg"].toString(), document.data["name"].toString(),
+                    enterprises.add(itemEnterprise(document.data["userId"].toString(), document.data["profileImg"].toString(), document.data["name"].toString(),
                         document.data["location"].toString(), document["cp"].toString(), document.data["category"].toString()))
                 }
                 if(enterprises.isNotEmpty()) {
@@ -126,7 +116,7 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
             .addOnSuccessListener { documents ->
                 enterprises = ArrayList()
                 for (document in documents) {
-                   enterprises.add(itemEnterprise(document.data["userId"].toString(),document.data["profileImg"].toString(), document.data["name"].toString(),
+                    enterprises.add(itemEnterprise(document.data["userId"].toString(), document.data["profileImg"].toString(), document.data["name"].toString(),
                        document.data["location"].toString(), document.getLong("cp")?.toInt().toString(), document.data["category"].toString()))
                 }
                 if(enterprises.isNotEmpty()) {
@@ -149,8 +139,6 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
             .addOnSuccessListener { documents ->
                 enterprises = ArrayList()
                 for (document in documents) {
-
-                    // TODO, comprobar los espacios vacios
                     enterprises.add(itemEnterprise(document.data["userId"].toString(),document.data["profileImg"].toString(), document.data["name"].toString(),
                       document.data["location"].toString(), document["cp"].toString(), document.data["category"].toString()))
                 }

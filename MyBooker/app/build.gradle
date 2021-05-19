@@ -70,7 +70,8 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.5.2'
 
     // FireBase dependencies
-    implementation platform('com.google.firebase:firebase-bom:26.8.0')
+    // implementation platform('com.google.firebase:firebase-bom:26.8.0')
+    implementation platform('com.google.firebase:firebase-bom:27.1.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-messaging:20.1.7'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
@@ -78,6 +79,7 @@ dependencies {
     implementation "com.firebaseui:firebase-ui-auth:3.0.0"
     implementation "com.firebaseui:firebase-ui-firestore:3.0.0"
     implementation 'com.google.firebase:firebase-storage-ktx'
+    implementation 'com.google.firebase:firebase-messaging-ktx'
 
     //Gson
     implementation 'com.google.code.gson:gson:2.8.5'
