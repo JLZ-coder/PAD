@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".fragment.ProfileFragment">
 
-
  <LinearLayout
      android:layout_width="match_parent"
      android:layout_height="match_parent"
@@ -24,19 +23,7 @@
         android:gravity="center"
         android:src="@drawable/ic_profile"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/labelNombre"
-         />
-
-    <TextView
-        android:id="@+id/labelNombre"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="15dp"
-        android:textColor="@color/black"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/label_nombre"/>
+        app:layout_constraintBottom_toTopOf="@+id/labelNombre" />
 
      <TextView
          android:id="@+id/nombreTextView"
@@ -44,47 +31,35 @@
          android:layout_gravity="center"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:layout_marginBottom="35dp" />
-
-
-     <TextView
-         android:id="@+id/labelEmail"
-         android:textSize="25sp"
-         android:textStyle="bold"
-         android:textColor="@color/black"
-         android:layout_gravity="center"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_marginBottom="15dp"
-         android:text="@string/label_email" />
-
+         android:layout_marginBottom="35dp"
+         android:text="@string/label_nombre" />
      <TextView
          android:id="@+id/emailTextView"
          android:layout_gravity="center"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          android:layout_marginBottom="24dp"
-         />
-
-     <Button
-         android:id="@+id/button_delete_user"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_gravity="center"
-         android:backgroundTint="@color/df_red"
-         android:text="Borrar&#10;usuario" />
+         android:text="@string/label_email" />
 
      <Button
          android:id="@+id/logout"
          android:gravity="center"
-         android:layout_marginTop="30dp"
+         android:layout_marginTop="10dp"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          android:layout_gravity="center"
+         android:text="@string/cerrar_sesion" />
+
+     <Button
+         android:id="@+id/button_delete_user"
+         android:gravity="center"
+         android:layout_marginTop="10dp"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_gravity="center"
+         android:text="Borrar&#10;usuario"
          android:backgroundTint="@color/df_red"
-         android:text="Cerrar sesión"
-         />
+         android:textSize="12sp"/>
 
  </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
