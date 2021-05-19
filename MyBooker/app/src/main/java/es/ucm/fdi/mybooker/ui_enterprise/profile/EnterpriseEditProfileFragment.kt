@@ -27,6 +27,7 @@ class EnterpriseEditProfileFragment : Fragment() {
   private lateinit var new_enterprise: itemEnterprise_2
   private lateinit var mArrayAdapter: ArrayAdapter<CharSequence>
   private lateinit var aux_enterprise: itemEnterprise_2
+  private lateinit var loading: ProgressBar
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -41,6 +42,7 @@ class EnterpriseEditProfileFragment : Fragment() {
     val spinner: Spinner = root.findViewById(R.id.spinner_enterprise_editprofile_category)
     val confirm_btn: Button = root.findViewById(R.id.button_enterprise_editprofile_confirm)
     val delete_btn: Button = root.findViewById(R.id.button_enterprise_editprofile_delete)
+    loading = root.findViewById(R.id.progress_bar_enterprise_editprofile)
 
     // Create an ArrayAdapter using the string array and a default spinner layout
     activity?.baseContext?.let {
@@ -70,6 +72,7 @@ class EnterpriseEditProfileFragment : Fragment() {
     }
 
     confirm_btn.setOnClickListener {view ->
+      setUploading(view)
       var ok = true
       val f_name = name_editText.text.toString()
       val f_cp = cp_editText.text.toString()
@@ -85,6 +88,7 @@ class EnterpriseEditProfileFragment : Fragment() {
         .addOnFailureListener { e->
           Log.w("EnterpriseEditProfileFragment", "Error adding document", e)
           Toast.makeText(activity?.baseContext, "Hubo un problema al guardar los datos", Toast.LENGTH_LONG)
+          setUpdisloading(view)
         }
     }
 
@@ -165,5 +169,15 @@ class EnterpriseEditProfileFragment : Fragment() {
     builder.setMessage(message.toString())
     builder.setPositiveButton("Continuar", null)
     builder.show()
+  }
+
+  private fun setUploading(view: View) {
+    view.isEnabled = false
+    loading.visibility =  View.VISIBLE
+  }
+
+  private fun setUpdisloading(view: View) {
+    view.isEnabled = true
+    loading.visibility =  View.GONE
   }
 }

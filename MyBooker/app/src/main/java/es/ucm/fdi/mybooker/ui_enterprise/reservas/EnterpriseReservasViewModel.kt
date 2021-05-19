@@ -54,7 +54,7 @@ class EnterpriseReservasViewModel : ViewModel() {
         val end_of_day = today.time
 
         val query: Query = db.collection("reserves").whereGreaterThanOrEqualTo("hora", start_of_day)
-            .whereLessThan("hora", end_of_day).whereEqualTo("id_enterprise", userId)
+            .whereLessThan("hora", end_of_day).whereEqualTo("id_enterprise", userId).orderBy("hora")
         options = FirestoreRecyclerOptions.Builder<itemReserve>().setQuery(query, itemReserve::class.java).build()
     }
 }

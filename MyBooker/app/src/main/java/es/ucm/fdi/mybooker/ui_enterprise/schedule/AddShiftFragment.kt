@@ -30,6 +30,7 @@ class AddShiftFragment : Fragment() {
     private lateinit var mArrayAdapter: ArrayAdapter<CharSequence>
     private lateinit var start_input: EditText
     private lateinit var end_input: EditText
+    private lateinit var loading: ProgressBar
 
 
     override fun onCreateView(
@@ -53,6 +54,7 @@ class AddShiftFragment : Fragment() {
         val done_button: Button = root.findViewById(R.id.button_add_shift)
         val del_button: Button = root.findViewById(R.id.button_del_shift)
         val spinner: Spinner = root.findViewById(R.id.Spinner_period)
+        loading = root.findViewById(R.id.progress_bar_addshift)
 
         if (arguments != null) {
             if (requireArguments().containsKey("shift_id") && requireArguments().containsKey("shift")) {
@@ -93,6 +95,7 @@ class AddShiftFragment : Fragment() {
 
         done_button.setOnClickListener {view : View ->
             var ok = true
+            setUploading(done_button)
             val f_start = start_input.text.toString()
             val f_end = end_input.text.toString()
             if (!f_start.matches("^([0-1]?[0-9]|2[0-4]):[0-5][0-9]$".toRegex())) {
@@ -126,6 +129,9 @@ class AddShiftFragment : Fragment() {
                 new_shift = itemShift(userId, f_start, f_end, f_period, f_days)
                 check_overlaps(new_shift, view)
             }
+            else {
+                setUpdisloading(done_button)
+            }
         }
 
         del_button.setOnClickListener {view ->
@@ -141,7 +147,9 @@ class AddShiftFragment : Fragment() {
                                 Log.d("addShiftFragment", "DocumentSnapshot successfully deleted!")
                                 view.findNavController().navigate(R.id.action_navigation_add_shift_to_navigation_home)
                             }
-                            .addOnFailureListener { e -> Log.w("addShiftFragment", "Error deleting document", e) }
+                            .addOnFailureListener { e ->
+                                Log.w("addShiftFragment", "Error deleting document", e)
+                            }
                     }
                 }
             })
@@ -170,6 +178,7 @@ class AddShiftFragment : Fragment() {
                     }
                     .addOnFailureListener { e->
                         Log.w("addShiftFragment", "Error adding document", e)
+                        setUpdisloading(view)
                     }
             }
         }
@@ -181,6 +190,7 @@ class AddShiftFragment : Fragment() {
                 }
                 .addOnFailureListener { e ->
                     Log.w("addShiftFragment", "Error adding document", e)
+                    setUpdisloading(view)
                 }
         }
     }
@@ -195,6 +205,7 @@ class AddShiftFragment : Fragment() {
 
         if (start_time >= end_time) {
             end_input.error = "La hora final debe ser superior al del comienzo"
+            setUpdisloading(view)
             return
         }
 
@@ -233,11 +244,25 @@ class AddShiftFragment : Fragment() {
                         }
                     }
                     if (ok) upload(new_shift, view)
-                    else Toast.makeText(activity, "Las horas solapan con otros horarios", Toast.LENGTH_LONG).show()
+                    else {
+                        Toast.makeText(activity, "Las horas solapan con otros horarios", Toast.LENGTH_LONG).show()
+                        setUpdisloading(view)
+                    }
                 }
                 else {
                     Toast.makeText(activity, "Firebase no respondió", Toast.LENGTH_LONG).show()
+                    setUpdisloading(view)
                 }
             }
+    }
+
+    private fun setUploading(view: View) {
+        view.isEnabled = false
+        loading.visibility =  View.VISIBLE
+    }
+
+    private fun setUpdisloading(view: View) {
+        view.isEnabled = true
+        loading.visibility =  View.GONE
     }
 }
