@@ -87,17 +87,26 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/label_enterprise_location"/>
 
+        <Button
+            android:id="@+id/button_enterprise_editprofile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="Editar Perfil"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/label_enterprise_cp" />
 
         <Button
             android:id="@+id/logout_enterprise"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/df_red"
             android:text="Cerrar Sesión"
+            android:layout_margin="30dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/label_enterprise_cp" />
+            app:layout_constraintTop_toBottomOf="@+id/button_enterprise_editprofile" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

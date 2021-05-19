@@ -95,11 +95,11 @@ class AddShiftFragment : Fragment() {
             var ok = true
             val f_start = start_input.text.toString()
             val f_end = end_input.text.toString()
-            if (!f_start.matches("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$".toRegex())) {
+            if (!f_start.matches("^([0-1]?[0-9]|2[0-4]):[0-5][0-9]$".toRegex())) {
                 start_input.error = "La hora no está en formato correcto"
                 ok = false
             }
-            if (!f_end.matches("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$".toRegex())) {
+            if (!f_end.matches("^([0-1]?[0-9]|2[0-4]):[0-5][0-9]$".toRegex())) {
                 end_input.error = "La hora no está en formato correcto"
                 ok = false
             }

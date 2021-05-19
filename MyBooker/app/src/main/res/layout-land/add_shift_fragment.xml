@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:ems="5"
                     android:inputType="time"
-                    android:hint="12:00"
+                    android:hint="00:00"
                     android:textSize="24dp" />
 
             </LinearLayout>
@@ -73,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:ems="5"
                     android:inputType="time"
-                    android:hint="13:00"
+                    android:hint="24:00"
                     android:textSize="24dp" />
 
             </LinearLayout>

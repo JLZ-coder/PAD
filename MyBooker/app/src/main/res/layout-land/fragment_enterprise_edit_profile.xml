@@ -110,8 +110,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_below="@+id/textView_enterprise_editprofile_category"
                 android:text="Confirmar" />
 
             <Button
@@ -119,7 +119,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
+                android:layout_alignBaseline="@id/button_enterprise_editprofile_confirm"
                 android:backgroundTint="@color/df_red"
                 android:layout_marginBottom="16dp"
                 android:text="Borrar&#10;usuario" />
