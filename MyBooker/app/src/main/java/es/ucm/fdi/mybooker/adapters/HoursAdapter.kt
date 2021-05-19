@@ -1,6 +1,7 @@
 package es.ucm.fdi.mybooker.adapters
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,12 +39,12 @@ class HoursAdapter(var hours: List<ItemHours>, var inter: onClickListener): Recy
         private var state = view.findViewById<TextView>(R.id.status)
         private var card = view.findViewById<CardView>(R.id.cardView)
         private var linear = view.findViewById<LinearLayout>(R.id.linear)
-        @SuppressLint("ResourceAsColor")
+        
         fun render(hour: ItemHours, action: onClickListener, position: Int) {
 
             if(hour.state == "ocupado"){
                 checkbox.isEnabled = false
-                linear.setBackgroundColor(R.color.df_danger)
+                linear.setBackgroundColor(Color.RED)
             }
             timeS.text = hour.start
             timeE.text = hour.end
