@@ -1,11 +1,14 @@
 package es.ucm.fdi.mybooker.fragment
 
 import android.app.DatePickerDialog
+import android.content.ClipData
 import android.os.Bundle
 import android.text.format.DateFormat
+import android.util.ArrayMap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -59,6 +62,11 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
     private lateinit var date: EditText
     private lateinit var mRecycler: RecyclerView
     private lateinit var emptyText: TextView
+
+    private lateinit var reservar: Button
+
+    //Lista de checked
+    private var checkList: MutableMap<Int,ItemHours> = mutableMapOf<Int,ItemHours>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -98,9 +106,30 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
 
         date.setOnClickListener(){
             showDatePiackerDialog()
+        }
+        //Button reservar
+        reservar = view?.findViewById<Button>(R.id.reservar)!!
 
+        reservar.setOnClickListener(){
+            if(checkList.isEmpty()){
+                Toast.makeText(this@EnterpriseFragment.context, "Seleccione al menos una reserva", Toast.LENGTH_SHORT).show()
+            }else{
+                var listaDefinitva = ArrayList<ItemHours>()
+                for((k,o) in checkList){
+                    listaDefinitva.add(o)
+                }
+                listaDefinitva.sortBy {
+                        itemHours ->  itemHours.start
+                }
+                showReservateDialog(listaDefinitva)
+            }
         }
 
+    }
+
+    private fun showReservateDialog(list: ArrayList<ItemHours>){
+        val newFragment = ReservateFragment.newInstance(list)
+        newFragment.show(requireActivity().supportFragmentManager, "completeReserva")
     }
 
     private fun showDatePiackerDialog() {
@@ -109,8 +138,6 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
                 date.setText(selectedDate)
 
                 c.set(year,month,day)
-
-
                 recycler(selectedDate)
 
             })
@@ -144,9 +171,10 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
         db.collection("shifts").whereEqualTo("id_enterprise", enterprise.empresaId).get()
             .addOnSuccessListener { documents ->
                 this.hours = ArrayList()
+
                 for (document in documents) {
                    val aux : List<Int> = document.get("days") as List<Int>
-                    var ok : Boolean = false
+                    var ok = false
                     var i = 0
                     while(i < aux.size && !ok){
                         if(aux[i] == numberDay) ok = true
@@ -232,12 +260,9 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
         end.set(Calendar.DAY_OF_MONTH, c.get(Calendar.DAY_OF_MONTH))
         end.set(Calendar.MONTH, c.get(Calendar.MONTH))
         end.set(Calendar.YEAR, c.get(Calendar.YEAR))
-        Toast.makeText(this@EnterpriseFragment.context, "Entra1", Toast.LENGTH_SHORT).show()
-        Toast.makeText(this@EnterpriseFragment.context, hours.size.toString(), Toast.LENGTH_SHORT).show()
 
         //Trataremos si hay mas de dos turnos
         for(i in hours){
-            Toast.makeText(this@EnterpriseFragment.context, "EntraB", Toast.LENGTH_SHORT).show()
             val splitStart = i.start.split(":")
             val splitEnd = i.end.split(":")
             //Horas
@@ -278,8 +303,12 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
     }
 
 
-    override fun openItemClick(hours: ItemHours, position: Int) {
-        TODO("Not yet implemented")
+    override fun openItemClick(hours: ItemHours, position: Int, checked: Boolean) {
+       if(checked){//Se añade a la lista
+           checkList[position] = hours
+       }else{
+            checkList.remove(position)
+       }
     }
 }
 

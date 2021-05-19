@@ -91,4 +91,8 @@
     <string name="menu_notifications">Mi Perfil</string>
     <string name="all">Todas</string>
     <string name="search">Buscar</string>
+
+    <!--Reservas-->
+    <string name="titleReserva">Confirmar reserva</string>
+
 </resources>
