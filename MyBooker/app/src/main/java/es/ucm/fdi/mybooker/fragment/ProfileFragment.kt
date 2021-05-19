@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -33,6 +32,7 @@ class ProfileFragment : Fragment() {
     //Firebase
     private var db = FirebaseFirestore.getInstance()
     private var mAuth = FirebaseAuth.getInstance()
+    private val userId = mAuth.currentUser.uid
     //Boton Eliminar usuario
     private lateinit var mdeletebtn : Button
 
@@ -71,21 +71,35 @@ class ProfileFragment : Fragment() {
             alert.setMessage("¿Estas seguro?")
             alert.setPositiveButton("SI, estoy seguro", object: DialogInterface.OnClickListener {
                 override fun onClick(dialog: DialogInterface?, which: Int) {
-                    db.collection("users").document(mAuth.currentUser.uid).delete()
+                    db.collection("users").document(userId).delete()
                         .addOnSuccessListener {
-                            FirebaseAuth.getInstance().currentUser!!.delete().addOnCompleteListener {task->
-                                if(task.isSuccessful) {
-                                    val i = Intent(activity, ActivityLogin::class.java)
-                                    startActivity(i)
+                            FirebaseAuth.getInstance().currentUser!!.delete()
+                                .addOnSuccessListener {
+                                    db.collection("reserves").whereEqualTo("id_cliente", userId).get()
+                                        .addOnSuccessListener {
+                                            db.collection("usersSchedule").whereEqualTo("id_cliente", userId).get()
+                                                .addOnSuccessListener {
+                                                    val i = Intent(activity, ActivityLogin::class.java)
+                                                    startActivity(i)
+                                                }
+                                                .addOnFailureListener {
+                                                    showAlert("Hubo un problema al eliminar al usuario")
+                                                }
+                                        }
+                                        .addOnFailureListener {
+                                            showAlert("Hubo un problema al eliminar al usuario")
+                                        }
                                 }
-                                else {
-                                    Toast.makeText(activity?.baseContext, "Hubo un problema al eliminar al usuario", Toast.LENGTH_LONG)
-                                    if (dialog != null) {
-                                        dialog.dismiss()
-                                    }
+                                .addOnFailureListener {
+                                    showAlert("Hubo un problema al eliminar al usuario")
                                 }
-                            }
                         }
+                        .addOnFailureListener {
+                            showAlert("Hubo un problema al eliminar al usuario")
+                        }
+                    if (dialog != null) {
+                        dialog.dismiss()
+                    }
                 }
             })
             alert.setNegativeButton("Cancelar", object: DialogInterface.OnClickListener {
@@ -98,6 +112,15 @@ class ProfileFragment : Fragment() {
 
             alert.show()
         }
+    }
+
+    private fun showAlert(message: String?)
+    {
+        val builder = AlertDialog.Builder(activity)
+        builder.setTitle("ERROR")
+        builder.setMessage(message.toString())
+        builder.setPositiveButton("Continuar", null)
+        builder.show()
     }
 
 

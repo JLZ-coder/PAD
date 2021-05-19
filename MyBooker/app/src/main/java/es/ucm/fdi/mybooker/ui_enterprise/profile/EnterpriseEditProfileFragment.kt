@@ -121,39 +121,27 @@ class EnterpriseEditProfileFragment : Fragment() {
                                 }
                               } else {
                                 showAlert("Hubo un problema al eliminar al usuario")
-                                if (dialog != null) {
-                                  dialog.dismiss()
-                                }
                               }
                             }
                         }
                         .addOnFailureListener {
                           showAlert("Hubo un problema al eliminar al usuario")
-                          if (dialog != null) {
-                            dialog.dismiss()
-                          }
                         }
                     }
                     .addOnFailureListener {
                       showAlert("Hubo un problema al eliminar al usuario")
-                      if (dialog != null) {
-                        dialog.dismiss()
-                      }
                     }
                 }
                 .addOnFailureListener {
                   showAlert("Hubo un problema al eliminar al usuario")
-                  if (dialog != null) {
-                    dialog.dismiss()
-                  }
                 }
             }
             .addOnFailureListener {
               showAlert("Hubo un problema al eliminar al usuario")
-              if (dialog != null) {
-                dialog.dismiss()
-              }
             }
+          if (dialog != null) {
+            dialog.dismiss()
+          }
         }
       })
       alert.setNegativeButton("Cancelar", object: DialogInterface.OnClickListener {
