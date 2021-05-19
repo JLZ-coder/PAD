@@ -19,7 +19,11 @@
 
         <activity android:name=".EnterpriseMainActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".ActivityRegister" />
+        <activity android:name=".ActivityRegister">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ActivityLogin" />
+        </activity>
         <activity android:name=".ActivityLogin">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
