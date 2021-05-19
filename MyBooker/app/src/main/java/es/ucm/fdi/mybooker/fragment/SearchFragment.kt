@@ -40,53 +40,49 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
     private lateinit var mRecyclerView : RecyclerView
     private lateinit var emptyText: TextView
 
+    private lateinit var inflater: LayoutInflater
+
     var act: Actualizar? = null
 
-    interface Actualizar{
+    interface Actualizar {
         fun actualizarStackProfile(fragment: Fragment, tag: String)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
 
-        val view: View = inflater.inflate(R.layout.fragment_search, container, false)
+        this.inflater = inflater
+        return inflater.inflate(R.layout.fragment_search, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+    {
+
+        super.onViewCreated(view, savedInstanceState)
 
         emptyText = view.findViewById(R.id.empty_view)
         emptyText.visibility = View.GONE
 
         mRecyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
 
-        try {
-
-            if (requireArguments().getString(ARG_PARAM1) != null) {
-
-                val type = arguments?.getString(ARG_PARAM1)
-                when(type) {
-                    "all" -> {
-                        searchAll(inflater)
-                        true
-                    }
-                    else -> {
-                        searchEnterprisesByCathegory(type, inflater)
-                        true
-                    }
+        if (requireArguments().getString(ARG_PARAM1) != "") {
+            when(val type = arguments?.getString(ARG_PARAM1)) {
+                "all" -> {
+                    searchAll(inflater)
+                    true
+                }
+                else -> {
+                    searchEnterprisesByCathegory(type, inflater)
+                    true
                 }
             }
-        } catch(e: Exception) {
-            try {
-                if (requireArguments().getString(ARG_PARAM2) != null) {
+        } else if (requireArguments().getString(ARG_PARAM2) != "") {
 
-                    Log.i("ENTRA EN NAME", "SIIIIII")
-                    searchEnterprisesByName(arguments?.getString(ARG_PARAM2), inflater)
-                }
-            } catch (e: Exception){
+            Log.i("ENTRA EN NAME", "SIIIIII")
 
-            }
+            searchEnterprisesByName(arguments?.getString(ARG_PARAM2), inflater)
+
         }
-
-
-
-        return view
     }
 
     private fun setNotFoundView()
@@ -102,13 +98,13 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
     private fun searchEnterprisesByName(name:String?, inflater: LayoutInflater)
     {
 
-        Log.i("ENTRA", "searchEnterprisesByName")
-        db.collection("enterprises").whereEqualTo(ARG_PARAM1, name).get()
+        // Para poder hacer búsquedas por un tozo de nombre
+        db.collection("enterprises").orderBy("name").startAt(name).endAt(name+'\uf8ff').get()
             .addOnSuccessListener { documents ->
                 enterprises = ArrayList()
                 for (document in documents) {
                     enterprises.add(itemEnterprise(document.data["userId"].toString(),document.data["profileImg"].toString(), document.data["name"].toString(),
-                        document.data["location"].toString(), document.getLong("cp")?.toInt().toString(), document.data["category"].toString()))
+                        document.data["location"].toString(), document["cp"].toString(), document.data["category"].toString()))
                 }
                 if(enterprises.isNotEmpty()) {
                     setAdapter(inflater.context, mRecyclerView)
@@ -126,7 +122,6 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
     private fun searchEnterprisesByCathegory(category: String?, inflater: LayoutInflater)
     {
 
-        Log.i("category", category.toString())
         db.collection("enterprises").whereEqualTo(ARG_PARAM1, category).get()
             .addOnSuccessListener { documents ->
                 enterprises = ArrayList()
@@ -150,8 +145,6 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
     private fun searchAll(inflater: LayoutInflater)
     {
 
-        Log.i("entra en all", "entramos bor")
-
         db.collection("enterprises").get()
             .addOnSuccessListener { documents ->
                 enterprises = ArrayList()
@@ -159,7 +152,7 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
 
                     // TODO, comprobar los espacios vacios
                     enterprises.add(itemEnterprise(document.data["userId"].toString(),document.data["profileImg"].toString(), document.data["name"].toString(),
-                      document.data["location"].toString(), document.getLong("cp")?.toInt().toString(), document.data["category"].toString()))
+                      document.data["location"].toString(), document["cp"].toString(), document.data["category"].toString()))
                 }
                 if(enterprises.isNotEmpty()) {
                     setAdapter(inflater.context, mRecyclerView)
@@ -215,7 +208,4 @@ class SearchFragment : Fragment(), EnterpriseAdapter.onClickListener
         super.onDetach()
         act = null
     }
-
-
-
 }

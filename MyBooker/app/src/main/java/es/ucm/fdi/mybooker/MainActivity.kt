@@ -1,8 +1,6 @@
 package es.ucm.fdi.mybooker
 
-import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -112,8 +110,9 @@ class MainActivity : AppCompatActivity(), HomeFragment.Actualizar, SearchFragmen
 
     }
 
+    private fun changeFragment(fragment: Fragment, tag:String)
+    {
 
-    private fun changeFragment(fragment: Fragment, tag:String) {
         if(currentTag != tag) {
             val transaction = supportFragmentManager.beginTransaction()
 
@@ -124,13 +123,13 @@ class MainActivity : AppCompatActivity(), HomeFragment.Actualizar, SearchFragmen
             oldTag = currentTag
             currentTag = tag
 
+
             if (fragmentToReplaceByTag != null) {
                 currentFragment?.let { transaction.hide(it).show(fragmentToReplaceByTag) }
             } else {
                 currentFragment?.let { transaction.hide(it).add(R.id.container, fragment, tag) }
             }
             transaction.commit()
-
 
             //Añadimos a la pila
             stack.add(StateFragment(currentTag, oldTag))
@@ -150,14 +149,12 @@ class MainActivity : AppCompatActivity(), HomeFragment.Actualizar, SearchFragmen
 
             override fun onQueryTextSubmit(query: String): Boolean {
 
-                val search = SearchFragment.newInstance()
+                val fragment = SearchFragment.newInstance()
                 val bundle: Bundle = Bundle()
-                bundle.putString("query", query)
-                Log.i("VAMOS", "vamos")
-                Log.i("NAME", query)
-                search.arguments = bundle
-
-                changeFragment(SearchFragment.newInstance(), "name")
+                bundle.putString("category", "")
+                bundle.putString("name", query)
+                fragment.arguments = bundle
+                changeFragment(fragment, "searchFragment")
                 return false
             }
 
