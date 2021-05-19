@@ -69,7 +69,7 @@ class EnterpriseCalendarFragment : Fragment() {
         val end_of_day = today.time
 
         val query: Query = db.collection("reserves").whereGreaterThanOrEqualTo("hora", start_of_day)
-            .whereLessThan("hora", end_of_day)
+            .whereLessThan("hora", end_of_day).whereEqualTo("id_enterprise", userId)
         val options = FirestoreRecyclerOptions.Builder<itemReserve>().setQuery(query, itemReserve::class.java).build()
         reservas.layoutManager = LinearLayoutManager(activity)
         mAdapter = ReserveFirestoreAdapter(options)

@@ -96,17 +96,62 @@ class EnterpriseEditProfileFragment : Fragment() {
         override fun onClick(dialog: DialogInterface?, which: Int) {
           db.collection("users").document(userId).delete()
             .addOnSuccessListener {
-              FirebaseAuth.getInstance().currentUser!!.delete().addOnCompleteListener {task->
-                if(task.isSuccessful) {
-                  val i = Intent(activity, ActivityLogin::class.java)
-                  startActivity(i)
+              FirebaseAuth.getInstance().currentUser!!.delete()
+                .addOnSuccessListener {
+                  db.collection("enterprises").whereEqualTo("userId", userId).limit(1).get()
+                    .addOnSuccessListener {documents->
+                      for (document in documents) {
+                        document.reference.delete()
+                      }
+                      db.collection("shifts").whereEqualTo("id_enterprise", userId).get()
+                        .addOnSuccessListener {documents->
+                          for (document in documents) {
+                            document.reference.delete()
+                          }
+                          db.collection("reserves").whereEqualTo("id_enterprise", userId).get()
+                            .addOnCompleteListener { task ->
+                              if (task.isSuccessful) {
+                                val documents = task.result
+                                if (documents != null) {
+                                  for (document in documents) {
+                                    document.reference.delete()
+                                  }
+                                  val i = Intent(activity, ActivityLogin::class.java)
+                                  startActivity(i)
+                                }
+                              } else {
+                                showAlert("Hubo un problema al eliminar al usuario")
+                                if (dialog != null) {
+                                  dialog.dismiss()
+                                }
+                              }
+                            }
+                        }
+                        .addOnFailureListener {
+                          showAlert("Hubo un problema al eliminar al usuario")
+                          if (dialog != null) {
+                            dialog.dismiss()
+                          }
+                        }
+                    }
+                    .addOnFailureListener {
+                      showAlert("Hubo un problema al eliminar al usuario")
+                      if (dialog != null) {
+                        dialog.dismiss()
+                      }
+                    }
                 }
-                else {
-                  Toast.makeText(activity?.baseContext, "Hubo un problema al eliminar al usuario", Toast.LENGTH_LONG)
+                .addOnFailureListener {
+                  showAlert("Hubo un problema al eliminar al usuario")
                   if (dialog != null) {
                     dialog.dismiss()
                   }
                 }
+            }
+            .addOnFailureListener {
+              showAlert("Hubo un problema al eliminar al usuario")
+              if (dialog != null) {
+                dialog.dismiss()
               }
             }
         }
@@ -123,5 +168,14 @@ class EnterpriseEditProfileFragment : Fragment() {
     }
 
     return root
+  }
+
+  private fun showAlert(message: String?)
+  {
+    val builder = AlertDialog.Builder(activity)
+    builder.setTitle("ERROR")
+    builder.setMessage(message.toString())
+    builder.setPositiveButton("Continuar", null)
+    builder.show()
   }
 }
