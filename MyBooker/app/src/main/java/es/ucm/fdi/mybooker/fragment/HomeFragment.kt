@@ -78,9 +78,12 @@ class HomeFragment : Fragment()
         }
     }
 
-    private fun changeFragment(fragment: Fragment, category: String){
+    private fun changeFragment(fragment: Fragment, category: String)
+    {
+
         val bn: Bundle = Bundle()
         bn.putString("category", category)
+        bn.putString("name", "")
         fragment.arguments = bn
         callback?.actualizarStack(fragment, "searchFragment")
     }
