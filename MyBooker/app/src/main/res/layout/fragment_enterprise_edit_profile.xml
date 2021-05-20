@@ -50,6 +50,7 @@
                 android:layout_height="wrap_content"
                 android:text="Añadir Imagen"
                 android:layout_margin="16dp"
+                android:backgroundTint="#1CDA52"
                 android:layout_below="@id/imageView_enterprise_editprofile"
                 android:layout_centerHorizontal="true"/>
 
@@ -157,7 +158,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:backgroundTint="@color/df_red"
+                android:backgroundTint="@color/white"
+                android:textColor="@color/black"
                 android:layout_margin="8dp"
                 android:layout_below="@id/textView_enterprise_editprofile_category"
                 android:text="Borrar&#10;usuario" />

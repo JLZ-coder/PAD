@@ -178,6 +178,7 @@ open class ActivityRegister : AppCompatActivity()
             putExtra("email", email)
             putExtra("name", userName)
         }
+        homeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
 
         startActivity(homeIntent);
     }
@@ -188,6 +189,7 @@ open class ActivityRegister : AppCompatActivity()
             putExtra("email", email)
             putExtra("name", userName)
         }
+        homeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
 
         startActivity(homeIntent);
     }

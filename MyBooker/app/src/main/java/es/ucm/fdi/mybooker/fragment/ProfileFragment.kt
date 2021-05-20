@@ -92,6 +92,7 @@ class ProfileFragment : Fragment() {
         mLogoutbtn.setOnClickListener {
             mAuth.signOut()
             val i = Intent(this@ProfileFragment.context, ActivityLogin::class.java)
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(i)
 
         }

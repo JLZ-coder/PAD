@@ -65,6 +65,7 @@ class EnterpriseProfileFragment : Fragment() {
     logout_btn.setOnClickListener {
       notificationsViewModel.mAuth.signOut()
       val i = Intent(activity, ActivityLogin::class.java)
+      i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
       startActivity(i)
     }
     return root

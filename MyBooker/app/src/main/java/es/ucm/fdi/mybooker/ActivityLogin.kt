@@ -2,7 +2,6 @@ package es.ucm.fdi.mybooker
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -13,8 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
-import java.lang.Exception
-import java.lang.IllegalArgumentException
 
 class ActivityLogin : AppCompatActivity()
 {
@@ -144,6 +141,7 @@ class ActivityLogin : AppCompatActivity()
         homeIntent.putExtra("userName", name)
         homeIntent.putExtra("email", email)
         homeIntent.putExtra("profileImg", image)
+        homeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
 
         startActivity(homeIntent);
     }
@@ -167,6 +165,7 @@ class ActivityLogin : AppCompatActivity()
             putExtra("userName", name)
             putExtra("email", email)
         }
+        homeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(homeIntent);
     }
 }
