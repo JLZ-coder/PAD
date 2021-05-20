@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.Actualizar, SearchFragmen
                         return@OnNavigationItemSelectedListener true
                     }
                     R.id.navigation_dashboard -> {
-                        changeFragment(ScheduleFragment.newInstance(email)!!, "scheduleFragment")
+                        changeFragment(ScheduleFragment.newInstance(mAuth.currentUser.uid)!!, "scheduleFragment")
                         return@OnNavigationItemSelectedListener true
                     }
                     R.id.navigation_profile -> {

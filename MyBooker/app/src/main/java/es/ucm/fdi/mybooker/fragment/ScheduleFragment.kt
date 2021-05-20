@@ -13,13 +13,15 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
 import es.ucm.fdi.mybooker.R
 import es.ucm.fdi.mybooker.adapters.ClientScheduleAdapter
-import es.ucm.fdi.mybooker.objects.itemClientSchedule
+import es.ucm.fdi.mybooker.objects.ItemClientSchedule
+import es.ucm.fdi.mybooker.objects.itemEnterprise
+import java.sql.Timestamp
 import java.util.*
 import kotlin.collections.ArrayList
 
 
 // Lo utilizaremos para recuperar, de la base de datos, las citas que tenga el usuario
-private const val ARG_PARAM1 = "email"
+private const val ARG_PARAM1 = "uid"
 
 /**
  * A simple [Fragment] subclass.
@@ -29,8 +31,8 @@ private const val ARG_PARAM1 = "email"
 class ScheduleFragment() : Fragment()
 {
 
-    private var email: String? = ""
-    private lateinit var agenda: MutableList<itemClientSchedule>
+    private var uid: String? = ""
+    private lateinit var agenda: MutableList<ItemClientSchedule>
 
     private var db = FirebaseFirestore.getInstance()
 
@@ -39,7 +41,7 @@ class ScheduleFragment() : Fragment()
 
         super.onCreate(savedInstanceState)
         arguments?.let {
-            this.email = it.getString(ARG_PARAM1)
+            this.uid = it.getString(ARG_PARAM1)
         }
     }
 
@@ -54,11 +56,11 @@ class ScheduleFragment() : Fragment()
 
         val mRecyclerView : RecyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
 
-        if (email == "") {
+        if (uid == "") {
             FirebaseCrashlytics.getInstance().recordException(Exception("EL MAIL HA LLEGADO VACÍO"))
         }
 
-        email?.let {
+        uid?.let {
             db.collection("usersSchedule").document(it).collection("appointmentDetails")
                 .orderBy("date")
                 .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
@@ -74,7 +76,7 @@ class ScheduleFragment() : Fragment()
                         val location: String = it.data?.get("location").toString()
 
                         // HE añadido el mail pq lo necesito para borrar la cita
-                        agenda.add(itemClientSchedule("Fecha: $date", "Cita con: $entName", "Dirección: $location", it.id, email!!))
+                        agenda.add(ItemClientSchedule("Fecha: $date", "Cita con: $entName", "Dirección: $location", it.id, uid!!))
                     }
 
                     if(agenda.isNotEmpty()) {
@@ -85,6 +87,7 @@ class ScheduleFragment() : Fragment()
                     }
                 }
         }
+
         return view
     }
 
@@ -99,10 +102,10 @@ class ScheduleFragment() : Fragment()
 
     companion object {
         @JvmStatic
-        fun newInstance(email: String?): ScheduleFragment? {
+        fun newInstance(uid: String?): ScheduleFragment? {
             val myFragment = ScheduleFragment()
             val args = Bundle()
-            args.putString(ARG_PARAM1, email)
+            args.putString(ARG_PARAM1, uid)
             myFragment.arguments = args
             return myFragment
         }

@@ -12,9 +12,9 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
 import es.ucm.fdi.mybooker.R
 import es.ucm.fdi.mybooker.fragment.ScheduleFragment
-import es.ucm.fdi.mybooker.objects.itemClientSchedule
+import es.ucm.fdi.mybooker.objects.ItemClientSchedule
 
-class ClientScheduleAdapter(private val element: List<itemClientSchedule>) : RecyclerView.Adapter<ClientScheduleAdapter.ScheduleHolder>()
+class ClientScheduleAdapter(private val element: List<ItemClientSchedule>) : RecyclerView.Adapter<ClientScheduleAdapter.ScheduleHolder>()
 {
 
     private var db = FirebaseFirestore.getInstance()
@@ -68,7 +68,7 @@ class ClientScheduleAdapter(private val element: List<itemClientSchedule>) : Rec
         private val appointmentDate = view.findViewById(R.id.scheduleTime) as TextView
         private val entAddress = view.findViewById(R.id.location) as TextView
 
-        fun render(enterprise: itemClientSchedule) {
+        fun render(enterprise: ItemClientSchedule) {
             entName.text = enterprise.enterprise_name
             appointmentDate.text = enterprise.date.toString()
             entAddress.text = enterprise.address
