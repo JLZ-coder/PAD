@@ -27,6 +27,7 @@ open class ActivityRegister : AppCompatActivity()
     private lateinit var cp: EditText
     private lateinit var spinner: Spinner
     private lateinit var categoryEmpresas: TextView
+    private lateinit var loading: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +41,7 @@ open class ActivityRegister : AppCompatActivity()
         userName = findViewById<EditText>(R.id.editTextUserName)
         labelEmpresas = findViewById<TextView>(R.id.label_empresas)
         btnRegister = findViewById<Button>(R.id.btnRegisterUser)
+        loading = findViewById(R.id.progress_bar_register)
 
         //Empresa
         location = findViewById<EditText>(R.id.editTextLocation)
@@ -121,7 +123,8 @@ open class ActivityRegister : AppCompatActivity()
         cp.visibility = View.VISIBLE
         spinner.visibility = View.VISIBLE
         categoryEmpresas.visibility = View.VISIBLE
-        btnRegister.setOnClickListener {
+        btnRegister.setOnClickListener {view->
+            setUploading(view)
             if (userName.text.isNotEmpty() && userPass.text.isNotEmpty() && userConfirmPass.text.isNotEmpty()
                 && userMail.text.isNotEmpty() && userConfirmPass.text.toString() == userPass.text.toString()) {
 
@@ -153,10 +156,12 @@ open class ActivityRegister : AppCompatActivity()
                         showEmpresaInfo(it.result?.user?.email ?: "", ProviderType.MAIL, userName.text.toString())
                     } else {
                         showAlert(it.exception!!);
+                        setUpdisloading(view)
                     }
                 }
             }else{
                 showErrorsCommon()
+                setUpdisloading(view)
             }
         }
     }
@@ -192,5 +197,15 @@ open class ActivityRegister : AppCompatActivity()
         homeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
 
         startActivity(homeIntent);
+    }
+
+    private fun setUploading(view: View) {
+        view.isEnabled = false
+        loading.visibility =  View.VISIBLE
+    }
+
+    private fun setUpdisloading(view: View) {
+        view.isEnabled = true
+        loading.visibility =  View.GONE
     }
 }

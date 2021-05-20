@@ -221,6 +221,7 @@ class EnterpriseEditProfileFragment : Fragment() {
                 "profileImg" to it.toString()
               )
             )
+            image_src = it.toString()
 
             Picasso.with(view?.context).load(it.toString()).placeholder(R.drawable.ic_profile).error(R.drawable.ic_profile).into(profile_pic)
           }.addOnFailureListener {
