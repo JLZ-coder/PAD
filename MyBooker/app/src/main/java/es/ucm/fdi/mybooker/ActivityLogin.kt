@@ -94,8 +94,9 @@ class ActivityLogin : AppCompatActivity()
                                     val tipo = document["tipoUsuario"].toString()
                                     val name = document["name"].toString()
                                     val email = document["email"].toString()
+                                    val image = document["profileImg"].toString()
                                     when (tipo) {
-                                        "usuario" -> showUserInfo(user_uid,name,email)
+                                        "usuario" -> showUserInfo(user_uid,name,email, image)
                                         "empresa" -> showEmpresaInfo(user_uid)
                                         else -> FirebaseCrashlytics.getInstance().recordException(Exception("login_getType, No such type $tipo"))
                                     }
@@ -136,12 +137,13 @@ class ActivityLogin : AppCompatActivity()
         dialog.show()
     }
 
-    private fun showUserInfo(userId : String, name:String, email:String)
+    private fun showUserInfo(userId : String, name: String, email: String, image: String)
     {
 
         val homeIntent = Intent(this, MainActivity::class.java)
         homeIntent.putExtra("userName", name)
         homeIntent.putExtra("email", email)
+        homeIntent.putExtra("profileImg", image)
 
         startActivity(homeIntent);
     }

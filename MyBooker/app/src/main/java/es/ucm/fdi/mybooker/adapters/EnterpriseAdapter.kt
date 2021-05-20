@@ -12,6 +12,8 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
 import es.ucm.fdi.mybooker.R
@@ -46,23 +48,11 @@ class EnterpriseAdapter(val enterprises: List<itemEnterprise>, var inter:onClick
         fun render(enterprise: itemEnterprise, action: onClickListener) {
 
 
-            // TODO: Hacer que esto funcione bien
-            if (enterprise.enterpriseImg != "" || enterprise.enterpriseImg != null) {
-
-                val storage = Firebase.storage
-                val imgUrl: String = enterprise.enterpriseImg
-                imgUrl.replace("gs://mybooker-6c774.appspot.com", "", false)
-                val storageReference = storage.getReferenceFromUrl("gs://mybooker-6c774.appspot.com").child(imgUrl)
-                storageReference.downloadUrl.addOnSuccessListener {
-                        uri -> Picasso.with(view.context).load(uri.toString()).into(entImg)
-                }.addOnFailureListener {
-
-                }
-            }
-
             entName.text = enterprise.enterpriseName
             entCategory.text = enterprise.enterpriseCategory
             entAddress.text = enterprise.enterpriseAddress
+
+            Picasso.with(view?.context).load(enterprise.enterpriseImg).placeholder(R.drawable.ic_enterprise).error(R.drawable.ic_enterprise).into(entImg)
 
             itemView.setOnClickListener(){
                 action.openItemClick(enterprise, adapterPosition)

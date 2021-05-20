@@ -1,6 +1,7 @@
 package es.ucm.fdi.mybooker
 
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -32,8 +33,10 @@ class MainActivity : AppCompatActivity(), HomeFragment.Actualizar, SearchFragmen
     private lateinit var mBottonNavigation : BottomNavigationView
 
     //Parameters
-    private lateinit var name:String
-    private lateinit var email:String
+    private lateinit var name: String
+    private lateinit var email: String
+    private lateinit var image: String
+
     //Cuenta atras
     private var presionado:Long = 0
     //Menu
@@ -56,6 +59,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.Actualizar, SearchFragmen
         val bundle:Bundle? = intent.extras
         email = bundle?.getString("email").toString()
         name = bundle?.getString("userName").toString()
+        image = bundle?.getString("profileImg").toString()
 
         if (savedInstanceState == null){
             loadFirstFragment()
@@ -96,6 +100,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.Actualizar, SearchFragmen
                         val bundle: Bundle = Bundle()
                         bundle.putString("name", name)
                         bundle.putString("email", email)
+                        bundle.putString("profileImg", image)
                         profile.arguments = bundle
                         changeFragment(profile, "profileFragment")
                         return@OnNavigationItemSelectedListener true

@@ -56,6 +56,15 @@
                                     android:text="@string/label_email" />
 
                                 <Button
+                                    android:id="@+id/btn_add_user_img"
+                                    android:gravity="center"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="@string/add_img"
+                                    android:backgroundTint="#1CDA52" />
+                                <Button
                                     android:id="@+id/logout"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -65,13 +74,14 @@
                                     android:text="@string/cerrar_sesion" />
                                 <Button
                                     android:id="@+id/button_delete_user"
+                                    android:gravity="center"
+                                    android:layout_marginTop="10dp"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:layout_marginTop="10dp"
-                                    android:backgroundTint="@color/df_red"
-                                    android:gravity="center"
+                                    android:textColor="@color/black"
                                     android:text="Borrar&#10;usuario"
+                                    android:backgroundTint="@color/white"
                                     android:textSize="12sp"/>
                         </LinearLayout>
                 </ScrollView>
