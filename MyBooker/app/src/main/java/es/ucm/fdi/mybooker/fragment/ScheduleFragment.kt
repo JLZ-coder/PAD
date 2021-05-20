@@ -60,25 +60,22 @@ class ScheduleFragment() : Fragment()
             FirebaseCrashlytics.getInstance().recordException(Exception("EL MAIL HA LLEGADO VACÍO"))
         }
 
-        uid?.let {
-            db.collection("usersSchedule").document(it).collection("appointmentDetails")
-                .orderBy("date")
+        uid.let {
+            db.collection("reserves").whereEqualTo("id_cliente", uid)
                 .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+
                     if (firebaseFirestoreException != null) {
                         FirebaseCrashlytics.getInstance().recordException(Exception("firebaseFirestoreException $firebaseFirestoreException"))
                         return@addSnapshotListener
                     }
                     agenda = ArrayList()
                     querySnapshot!!.documents.forEach {
+                        val date: com.google.firebase.Timestamp = it.data?.get("hora") as com.google.firebase.Timestamp
+                        val name: String = it.data?.get("ent_name").toString()
+                        val location: String  = it.data?.get("ent_address").toString()
 
-                        val date: String = it.data?.get("date").toString()
-                        val entName: String = it.data?.get("ent_name").toString()
-                        val location: String = it.data?.get("location").toString()
-
-                        // HE añadido el mail pq lo necesito para borrar la cita
-                        agenda.add(ItemClientSchedule("Fecha: $date", "Cita con: $entName", "Dirección: $location", it.id, uid!!))
+                        agenda.add(ItemClientSchedule("Fecha: ${date.toDate()}", "Cita con: $name", "Dirección: $location", it.id, uid!!))
                     }
-
                     if(agenda.isNotEmpty()) {
                         setAdapter(inflater.context, mRecyclerView)
                     } else {

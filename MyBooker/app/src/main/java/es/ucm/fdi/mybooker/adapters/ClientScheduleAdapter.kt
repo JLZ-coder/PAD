@@ -52,8 +52,7 @@ class ClientScheduleAdapter(private val element: List<ItemClientSchedule>) : Rec
     private fun borrarCita(id: String, userMail: String, c: Context)
     {
 
-        db.collection("usersSchedule").document(userMail).collection("appointmentDetails")
-            .document(id).delete().addOnSuccessListener {
+        db.collection("reserves").document(id).delete().addOnSuccessListener {
                 Toast.makeText(c, "Cita eliminada con exito", Toast.LENGTH_SHORT).show()
             }.addOnFailureListener {
                 Toast.makeText(c, "Error eliminando cita", Toast.LENGTH_SHORT).show()
