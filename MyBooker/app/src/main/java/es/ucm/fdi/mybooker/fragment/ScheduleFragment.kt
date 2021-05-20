@@ -11,14 +11,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import es.ucm.fdi.mybooker.R
 import es.ucm.fdi.mybooker.adapters.ClientScheduleAdapter
 import es.ucm.fdi.mybooker.objects.ItemClientSchedule
-import es.ucm.fdi.mybooker.objects.itemEnterprise
-import java.sql.Timestamp
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-
 
 // Lo utilizaremos para recuperar, de la base de datos, las citas que tenga el usuario
 private const val ARG_PARAM1 = "uid"
@@ -45,7 +45,7 @@ class ScheduleFragment() : Fragment()
         }
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "SimpleDateFormat")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
         activity?.title = "Agenda"
@@ -62,6 +62,7 @@ class ScheduleFragment() : Fragment()
 
         uid.let {
             db.collection("reserves").whereEqualTo("id_cliente", uid)
+                .orderBy("hora", Query.Direction.ASCENDING)
                 .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
 
                     if (firebaseFirestoreException != null) {
@@ -74,7 +75,8 @@ class ScheduleFragment() : Fragment()
                         val name: String = it.data?.get("ent_name").toString()
                         val location: String  = it.data?.get("ent_address").toString()
 
-                        agenda.add(ItemClientSchedule("Fecha: ${date.toDate()}", "Cita con: $name", "Dirección: $location", it.id, uid!!))
+                        val f: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
+                        agenda.add(ItemClientSchedule("Fecha: ${f.format(date.toDate())}", "Cita con: $name", "Dirección: $location", it.id, uid!!))
                     }
                     if(agenda.isNotEmpty()) {
                         setAdapter(inflater.context, mRecyclerView)
