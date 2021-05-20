@@ -39,7 +39,7 @@ class HoursAdapter(var hours: List<ItemHours>, var inter: onClickListener): Recy
         private var state = view.findViewById<TextView>(R.id.status)
         private var card = view.findViewById<CardView>(R.id.cardView)
         private var linear = view.findViewById<LinearLayout>(R.id.linear)
-        
+
         fun render(hour: ItemHours, action: onClickListener, position: Int) {
 
             if(hour.state == "ocupado"){
