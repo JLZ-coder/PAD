@@ -48,6 +48,9 @@ class MainActivity : AppCompatActivity(), HomeFragment.Actualizar, SearchFragmen
     private var stack = mutableListOf<StateFragment>()
     private var currentMenuItemId: Int = R.id.navigation_home
 
+    //Tag title
+    private lateinit var titulo : String
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
 
@@ -67,6 +70,8 @@ class MainActivity : AppCompatActivity(), HomeFragment.Actualizar, SearchFragmen
         }else{
             currentTag = savedInstanceState?.getString("fragment").toString()
             currentMenuItemId = savedInstanceState?.getInt("idItem")
+            titulo = savedInstanceState?.getString("title").toString()
+            title = titulo
         }
 
         analytics();
@@ -80,6 +85,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.Actualizar, SearchFragmen
 
         outState.putString("fragment", currentTag)
         outState.putInt("idItem", currentMenuItemId)
+        outState.putString("title", titulo)
     }
     private fun setUp(){
 
@@ -89,17 +95,20 @@ class MainActivity : AppCompatActivity(), HomeFragment.Actualizar, SearchFragmen
 
                 when (item.itemId) {
                     R.id.navigation_home -> {
-                        title = "Inicio"
+                        titulo = "Inicio"
+                        title = titulo
                         changeFragment(HomeFragment.newInstance(), "homeFragment")
                         return@OnNavigationItemSelectedListener true
                     }
                     R.id.navigation_dashboard -> {
-                        title = "Agenda"
+                        titulo = "Agenda"
+                        title = titulo
                         changeFragment(ScheduleFragment.newInstance(mAuth.currentUser.uid)!!, "scheduleFragment")
                         return@OnNavigationItemSelectedListener true
                     }
                     R.id.navigation_profile -> {
-                        title = "Perfil"
+                        titulo = "Perfil"
+                        title = titulo
                         var profile = ProfileFragment.newInstance()
                         val bundle: Bundle = Bundle()
                         bundle.putString("name", name)
@@ -157,7 +166,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.Actualizar, SearchFragmen
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextSubmit(query: String): Boolean {
-
+                currentMenuItemId = R.id.search
                 val fragment = SearchFragment.newInstance()
                 val bundle: Bundle = Bundle()
                 bundle.putString("category", "")
@@ -181,6 +190,8 @@ class MainActivity : AppCompatActivity(), HomeFragment.Actualizar, SearchFragmen
 
     private fun loadFirstFragment() {
         val transaction = supportFragmentManager.beginTransaction()
+        titulo = "Inicio"
+        title = titulo
         transaction.add(
             R.id.container,
             HomeFragment.newInstance(),
@@ -248,6 +259,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.Actualizar, SearchFragmen
     }
 
     override fun actualizarStack(fragment: Fragment, tag:String) {
+        currentMenuItemId = R.id.search
         changeFragment(fragment,tag)
     }
 
