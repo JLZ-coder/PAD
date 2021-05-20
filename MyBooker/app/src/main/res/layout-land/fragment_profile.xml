@@ -18,13 +18,12 @@
                     tools:ignore="RtlHardcoded">
 
                         <ImageView
-                            android:id="@+id/imageView"
+                            android:id="@+id/userImage"
                             android:layout_width="match_parent"
                             android:layout_height="200dp"
                             android:layout_gravity="center"
                             android:layout_marginLeft="70dp"
                             android:layout_marginRight="20dp"
-                            android:contentDescription="@string/advisor"
                             android:src="@drawable/ic_profile"
                             app:layout_constraintBottom_toTopOf="@+id/labelNombre" />
                 </LinearLayout>
