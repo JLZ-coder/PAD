@@ -69,5 +69,3 @@ class EnterpriseAdapter(val enterprises: List<itemEnterprise>, var inter:onClick
         fun openItemClick(enterprise: itemEnterprise, position: Int)
     }
 }
-
-

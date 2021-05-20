@@ -253,8 +253,6 @@ class MainActivity : AppCompatActivity(), HomeFragment.Actualizar, SearchFragmen
 
     override fun actualizarStackProfile(fragment: Fragment, tag: String) {
         changeFragment(fragment,tag)
-
-        Toast.makeText(this, "entra", Toast.LENGTH_SHORT).show()
     }
 
     override fun onDialogPositiveClick(dialog: DialogFragment) {
