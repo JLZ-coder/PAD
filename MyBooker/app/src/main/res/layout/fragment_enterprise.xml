@@ -44,17 +44,31 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:orientation="vertical">
         <EditText
-        android:id="@+id/date"
-        android:hint="Seleccione fecha"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:inputType="date"
-        android:focusable="false"
-        android:clickable="true"
-        android:maxLines="1" />
+            android:id="@+id/date"
+            android:hint="Seleccione fecha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:inputType="date"
+            android:focusable="false"
+            android:clickable="true"
+            android:maxLines="1" />
+
+        <EditText
+            android:id="@+id/person"
+            android:hint="Nº de personas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:inputType="number"
+            android:clickable="true"
+            android:maxLines="1">
+
+
+        </EditText>
     </LinearLayout>
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

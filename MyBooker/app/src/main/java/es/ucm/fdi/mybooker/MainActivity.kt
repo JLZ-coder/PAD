@@ -9,6 +9,7 @@ import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -22,7 +23,7 @@ enum class ProviderType {
 }
 data class StateFragment(val currentTag: String, var oldTag: String)
 
-class MainActivity : AppCompatActivity(), HomeFragment.Actualizar, SearchFragment.Actualizar
+class MainActivity : AppCompatActivity(), HomeFragment.Actualizar, SearchFragment.Actualizar, ReservateFragment.reservateDb
 {
     private var db = FirebaseFirestore.getInstance()
     private var mAuth = FirebaseAuth.getInstance()
@@ -197,7 +198,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.Actualizar, SearchFragmen
         }
 
 
-        if(currentFragment is SearchFragment || currentFragment is EnterpriseFragment)
+        if(currentFragment is SearchFragment || currentFragment is EnterpriseFragment )
             transaction.remove(currentFragment)
         transaction.commit()
 
@@ -251,5 +252,10 @@ class MainActivity : AppCompatActivity(), HomeFragment.Actualizar, SearchFragmen
         changeFragment(fragment,tag)
 
         Toast.makeText(this, "entra", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDialogPositiveClick(dialog: DialogFragment) {
+        var fr : EnterpriseFragment = supportFragmentManager.findFragmentByTag("enterpriseFragment") as EnterpriseFragment
+        fr.onDialogPositiveClick(dialog)
     }
 }

@@ -1,10 +1,10 @@
 package es.ucm.fdi.mybooker.fragment
 
 import android.app.DatePickerDialog
-import android.content.ClipData
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateFormat
-import android.util.ArrayMap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,15 +12,17 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
+import es.ucm.fdi.mybooker.MainActivity
 import es.ucm.fdi.mybooker.R
-import es.ucm.fdi.mybooker.adapters.EnterpriseAdapter
 import es.ucm.fdi.mybooker.adapters.HoursAdapter
 import es.ucm.fdi.mybooker.objects.ItemHours
 import es.ucm.fdi.mybooker.objects.itemEnterprise
@@ -40,11 +42,14 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
-    private var db = FirebaseFirestore.getInstance()
-
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    //Firebase
+    private var db = FirebaseFirestore.getInstance()
+    private var mAuth = FirebaseAuth.getInstance()
+    private val userId = mAuth.currentUser.uid
 
     private lateinit var objeto: String
     lateinit var enterprise: itemEnterprise
@@ -65,9 +70,12 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
     private lateinit var emptyText: TextView
 
     private lateinit var reservar: Button
+    private lateinit var numberPer: EditText
 
     //Lista de checked
     private var checkList: MutableMap<Int,ItemHours> = mutableMapOf<Int,ItemHours>()
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -110,11 +118,18 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
         }
         //Button reservar
         reservar = view?.findViewById<Button>(R.id.reservar)!!
+        //Numero personas
+        numberPer = view?.findViewById<EditText>(R.id.person)!!
 
         reservar.setOnClickListener(){
             if(checkList.isEmpty()){
-                Toast.makeText(this@EnterpriseFragment.context, "Seleccione al menos una reserva", Toast.LENGTH_SHORT).show()
-            }else{
+                Toast.makeText(this@EnterpriseFragment.context, "Seleccione al menos una hora", Toast.LENGTH_SHORT).show()
+            }else if(numberPer.text.isEmpty()){
+                Toast.makeText(this@EnterpriseFragment.context, "Debe especificar el número de personas", Toast.LENGTH_SHORT).show()
+            }else if(c < Calendar.getInstance()){
+                Toast.makeText(this@EnterpriseFragment.context, "Día incorrecto", Toast.LENGTH_SHORT).show()
+            }
+            else{
                 var listaDefinitva = ArrayList<ItemHours>()
                 for((k,o) in checkList){
                     listaDefinitva.add(o)
@@ -216,10 +231,9 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
                             reservation.timeInMillis = hora.seconds * 1000
                             val date = DateFormat.format("H:m",reservation).toString()
                             this.listReserva.add(date)
-                            Toast.makeText(this@EnterpriseFragment.context, "Entra",Toast.LENGTH_SHORT).show()
+
                         }
                         //Ordenamos la lista
-                        Toast.makeText(this@EnterpriseFragment.context, this.listReserva.size.toString(),Toast.LENGTH_SHORT).show()
                         this.listReserva.sort()
 
                         //Creamos lista definitiva de horas disponibles
@@ -250,7 +264,7 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
         mRecycler.visibility = View.GONE
     }
 
-    private fun setAdapter(context: android.content.Context, mRecyclerView: RecyclerView)
+    private fun setAdapter(context: Context, mRecyclerView: RecyclerView)
     {
         val mAdapter = HoursAdapter(hoursAdap, this)
         mRecyclerView.setHasFixedSize(true)
@@ -269,7 +283,6 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
         end.set(Calendar.YEAR, c.get(Calendar.YEAR))
 
         //Trataremos si hay mas de dos turnos
-        Toast.makeText(this@EnterpriseFragment.context, this.listReserva.size.toString(),Toast.LENGTH_SHORT).show()
         for(i in hours){
             val splitStart = i.start.split(":")
             val splitEnd = i.end.split(":")
@@ -326,6 +339,51 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
        }else{
             checkList.remove(position)
        }
+    }
+
+
+
+     fun onDialogPositiveClick(dialog: DialogFragment) {
+        var name = ""
+         db.collection("users").document(userId).get()
+             .addOnSuccessListener {document ->
+                     name = document.getString("name").toString()
+             }
+        for((k,v) in checkList){
+            /*
+            * Hora -> Date
+            * idCliente -> String
+            * idEmpres -> String
+            * Nombre -> String
+            * Nº personas -> Int
+            * */
+
+            var horaCalendar = c
+            var horaSplit = v.start.split(":")
+            horaCalendar.set(Calendar.HOUR_OF_DAY, horaSplit[0].toInt())
+            horaCalendar.set(Calendar.MINUTE, horaSplit[1].toInt())
+
+            //Formato timestamp
+            val cal = horaCalendar.timeInMillis
+            val timestampStart = Timestamp(Date(cal))
+            db.collection("reserves").add(
+                mapOf(
+                    "hora" to timestampStart,
+                    "id_cliente" to userId,
+                    "id_enterprise" to enterprise.empresaId,
+                    "nombre_cliente" to name,
+                    "personas" to numberPer.text.toString()
+
+                )
+            )
+        }
+
+         Toast.makeText(this@EnterpriseFragment.context, "Reserva completada", Toast.LENGTH_SHORT).show()
+        val homeIntent = Intent(this@EnterpriseFragment.context, MainActivity::class.java)
+        homeIntent.putExtra("userName", name)
+        homeIntent.putExtra("email", mAuth.currentUser.email)
+
+        startActivity(homeIntent);
     }
 }
 
