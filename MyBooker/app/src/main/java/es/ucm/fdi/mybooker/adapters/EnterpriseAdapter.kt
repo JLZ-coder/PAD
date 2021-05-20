@@ -52,7 +52,11 @@ class EnterpriseAdapter(val enterprises: List<itemEnterprise>, var inter:onClick
             entCategory.text = enterprise.enterpriseCategory
             entAddress.text = enterprise.enterpriseAddress
 
-            Picasso.with(view?.context).load(enterprise.enterpriseImg).placeholder(R.drawable.ic_enterprise).error(R.drawable.ic_enterprise).into(entImg)
+            var imgPath: String = enterprise.enterpriseImg
+            if(imgPath.isEmpty()) {
+                imgPath = "notfound"
+            }
+            Picasso.with(view?.context).load(imgPath).placeholder(R.drawable.ic_enterprise).error(R.drawable.ic_enterprise).into(entImg)
 
             itemView.setOnClickListener(){
                 action.openItemClick(enterprise, adapterPosition)
