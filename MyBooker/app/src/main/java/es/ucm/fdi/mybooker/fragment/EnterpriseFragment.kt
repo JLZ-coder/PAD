@@ -409,7 +409,7 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
                     "id_cliente" to userId,
                     "id_enterprise" to enterprise.empresaId,
                     "nombre_cliente" to name,
-                    "personas" to numberPer.text.toString(),
+                    "personas" to numberPer.text.toString().toInt(),
                     "ent_name" to enterprise.enterpriseName,
                     "ent_address" to enterprise.enterpriseAddress
                 )
