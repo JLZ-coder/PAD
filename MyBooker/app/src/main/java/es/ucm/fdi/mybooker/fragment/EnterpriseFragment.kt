@@ -54,7 +54,7 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
     private lateinit var objeto: String
     lateinit var enterprise: itemEnterprise
 
-    private var c = Calendar.getInstance()
+    private var c = Calendar.getInstance(TimeZone.getTimeZone("UTC+2"))
 
     private lateinit var hours: MutableList<ItemHours>
     private lateinit var hoursAdap: MutableList<ItemHours>
@@ -76,7 +76,7 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
     private var checkList: MutableMap<Int,ItemHours> = mutableMapOf<Int,ItemHours>()
 
     //Dia seleccionado
-    private lateinit var selectedDate :String
+    private  var selectedDate :String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -105,14 +105,20 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
         if(savedInstanceState != null){
 
             var recoverDay: String = savedInstanceState?.get("dia") as String
-            var splitDay = recoverDay.split("-")
-            selectedDate = recoverDay
-            c = Calendar.getInstance()
 
-            this.c.set(splitDay[2].toInt(),splitDay[1].toInt()-1,splitDay[0].toInt())
+            if(recoverDay != ""){
+                var splitDay = recoverDay.split("-")
+                selectedDate = recoverDay
+                c = Calendar.getInstance(TimeZone.getTimeZone("UTC+2"))
+
+                this.c.set(splitDay[2].toInt(),splitDay[1].toInt()-1,splitDay[0].toInt())
+
+                recycler(recoverDay)
+            }
 
 
-            recycler(recoverDay)
+
+
         }
 
 
@@ -304,7 +310,7 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
             //Minutos
             start.set(Calendar.MINUTE,splitStart[1].toInt())
             end.set(Calendar.MINUTE,splitEnd[1].toInt())
-            while(start <= end){
+            while(start < end){
                 val horaS :String= start.get(Calendar.HOUR_OF_DAY).toString() + ":" + start.get(Calendar.MINUTE).toString()
                 start.add(Calendar.MINUTE,i.period)
                 val horaF :String= start.get(Calendar.HOUR_OF_DAY).toString() + ":" + start.get(Calendar.MINUTE).toString()
@@ -383,11 +389,16 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
             * Nº personas -> Int
             * */
 
-            var horaCalendar = c
+            var horaCalendar = Calendar.getInstance()
+
+            var splitDay = selectedDate.split("-")
+            horaCalendar.set(splitDay[2].toInt(),splitDay[1].toInt()-1,splitDay[0].toInt())
+
             var horaSplit = v.start.split(":")
             horaCalendar.set(Calendar.HOUR_OF_DAY, horaSplit[0].toInt())
             horaCalendar.set(Calendar.MINUTE, horaSplit[1].toInt())
-
+            horaCalendar.set(Calendar.SECOND, 0)
+            horaCalendar.set(Calendar.MILLISECOND,0)
             //Formato timestamp
             val cal = horaCalendar.timeInMillis
             Toast.makeText(this@EnterpriseFragment.context, "Reserva completada", Toast.LENGTH_SHORT).show()
