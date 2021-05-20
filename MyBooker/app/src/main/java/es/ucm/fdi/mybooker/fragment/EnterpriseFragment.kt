@@ -54,7 +54,7 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
     private lateinit var objeto: String
     lateinit var enterprise: itemEnterprise
 
-    private var c = Calendar.getInstance()
+    private var c = Calendar.getInstance(TimeZone.getTimeZone("UTC+2"))
 
     private lateinit var hours: MutableList<ItemHours>
     private lateinit var hoursAdap: MutableList<ItemHours>
@@ -107,9 +107,12 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
             var recoverDay: String = savedInstanceState?.get("dia") as String
             var splitDay = recoverDay.split("-")
             selectedDate = recoverDay
-            c = Calendar.getInstance()
-            Toast.makeText(this@EnterpriseFragment.context, selectedDate, Toast.LENGTH_SHORT).show()
-            c.set(splitDay[2].toInt(),splitDay[1].toInt(),splitDay[0].toInt())
+            c = Calendar.getInstance(Locale.ENGLISH)
+
+            this.c.set(splitDay[2].toInt(),splitDay[1].toInt(),splitDay[0].toInt())
+            this.c.set(Calendar.DAY_OF_MONTH, splitDay[0].toInt())
+
+            Toast.makeText(this@EnterpriseFragment.context, c.get(Calendar.DAY_OF_MONTH).toString(), Toast.LENGTH_SHORT).show()
 
             recycler(recoverDay)
         }
@@ -173,7 +176,7 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
                selectedDate = day.toString() + "-" + (month + 1) + "-" + year
                 date.setText(selectedDate)
 
-                c.set(year,month,day)
+                c.set(year,month+1,day)
                 recycler(selectedDate)
 
             })
@@ -195,17 +198,19 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
 
     private fun recycler(selectDate:String){
 
-        val numberDay : Int = dayOfWeek(c.get(Calendar.DAY_OF_WEEK))
-        Toast.makeText(this@EnterpriseFragment.context, numberDay.toString(), Toast.LENGTH_SHORT).show()
-        c.set(Calendar.HOUR_OF_DAY, 0)
-        c.set(Calendar.MINUTE, 0);
-        val startOfDay = c.time
-        c.add(Calendar.DATE, 1)
-        val endOfDay = c.time
 
         //Sacamos los horarios
         db.collection("shifts").whereEqualTo("id_enterprise", enterprise.empresaId).get()
             .addOnSuccessListener { documents ->
+                val numberDay : Int = dayOfWeek(c.get(Calendar.DAY_OF_WEEK))
+                Toast.makeText(this@EnterpriseFragment.context, numberDay.toString(), Toast.LENGTH_SHORT).show()
+                c.set(Calendar.HOUR_OF_DAY, 0)
+                c.set(Calendar.MINUTE, 0);
+                val startOfDay = c.time
+                val aux = c
+                aux.add(Calendar.DATE, 1)
+                val endOfDay = c.time
+
                 this.hours = ArrayList()
 
                 for (document in documents) {
@@ -368,9 +373,22 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
      fun onDialogPositiveClick(dialog: DialogFragment) {
         var name = ""
          db.collection("users").document(userId).get()
-             .addOnSuccessListener {document ->
-                     name = document.getString("name").toString()
+             .addOnCompleteListener() {
+                 if(it.isSuccessful){
+                     val document = it.getResult()
+                     if (document != null) {
+                         name = document.getString("name").toString()
+                         addReserve(name)
+
+                     }
+
+
+                 }
              }
+
+    }
+
+    private fun addReserve(name:String){
         for((k,v) in checkList){
             /*
             * Hora -> Date
@@ -387,20 +405,22 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
 
             //Formato timestamp
             val cal = horaCalendar.timeInMillis
+            Toast.makeText(this@EnterpriseFragment.context, "Reserva completada", Toast.LENGTH_SHORT).show()
             val timestampStart = Timestamp(Date(cal))
-            db.collection("reserves").add(
+            /*db.collection("reserves").add(
                 mapOf(
                     "hora" to timestampStart,
                     "id_cliente" to userId,
                     "id_enterprise" to enterprise.empresaId,
                     "nombre_cliente" to name,
-                    "personas" to numberPer.text.toString()
-
+                    "personas" to numberPer.text.toString(),
+                    "ent_name" to enterprise.enterpriseName,
+                    "ent_address" to enterprise.enterpriseAddress
                 )
-            )
+            )*/
         }
-
-         Toast.makeText(this@EnterpriseFragment.context, "Reserva completada", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@EnterpriseFragment.context, name, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@EnterpriseFragment.context, "Reserva completada", Toast.LENGTH_SHORT).show()
         val homeIntent = Intent(this@EnterpriseFragment.context, MainActivity::class.java)
         homeIntent.putExtra("userName", name)
         homeIntent.putExtra("email", mAuth.currentUser.email)
