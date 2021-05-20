@@ -53,7 +53,7 @@ class HomeFragment : Fragment()
         }
         val searchAsesoria: CardView = view.findViewById(R.id.asesoria)
         searchAsesoria.setOnClickListener {
-            changeFragment(SearchFragment.newInstance(), "Asesoria")
+            changeFragment(SearchFragment.newInstance(), "Asesoría")
             return@setOnClickListener
         }
         val searchBelleza: CardView = view.findViewById(R.id.belleza)
