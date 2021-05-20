@@ -54,7 +54,7 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
     private lateinit var objeto: String
     lateinit var enterprise: itemEnterprise
 
-    private var c = Calendar.getInstance(TimeZone.getTimeZone("UTC+2"))
+    private var c = Calendar.getInstance()
 
     private lateinit var hours: MutableList<ItemHours>
     private lateinit var hoursAdap: MutableList<ItemHours>
@@ -107,12 +107,10 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
             var recoverDay: String = savedInstanceState?.get("dia") as String
             var splitDay = recoverDay.split("-")
             selectedDate = recoverDay
-            c = Calendar.getInstance(Locale.ENGLISH)
+            c = Calendar.getInstance()
 
-            this.c.set(splitDay[2].toInt(),splitDay[1].toInt(),splitDay[0].toInt())
-            this.c.set(Calendar.DAY_OF_MONTH, splitDay[0].toInt())
+            this.c.set(splitDay[2].toInt(),splitDay[1].toInt()-1,splitDay[0].toInt())
 
-            Toast.makeText(this@EnterpriseFragment.context, c.get(Calendar.DAY_OF_MONTH).toString(), Toast.LENGTH_SHORT).show()
 
             recycler(recoverDay)
         }
@@ -176,25 +174,13 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
                selectedDate = day.toString() + "-" + (month + 1) + "-" + year
                 date.setText(selectedDate)
 
-                c.set(year,month+1,day)
+                c.set(year,month,day)
                 recycler(selectedDate)
 
             })
         newFragment.show(requireActivity().supportFragmentManager, "datePicker")
     }
 
-    private fun dayOfWeek(dayWeek:Int): Int{
-        return when(dayWeek){
-            1 -> 6
-            2 -> 0
-            3 -> 1
-            4 -> 2
-            5 -> 3
-            6 -> 4
-            7 -> 5
-            else -> -1
-        }
-    }
 
     private fun recycler(selectDate:String){
 
@@ -202,8 +188,7 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
         //Sacamos los horarios
         db.collection("shifts").whereEqualTo("id_enterprise", enterprise.empresaId).get()
             .addOnSuccessListener { documents ->
-                val numberDay : Int = dayOfWeek(c.get(Calendar.DAY_OF_WEEK))
-                Toast.makeText(this@EnterpriseFragment.context, numberDay.toString(), Toast.LENGTH_SHORT).show()
+                val numberDay : Int = (c.get(Calendar.DAY_OF_WEEK) + 7 - c.firstDayOfWeek) % 7
                 c.set(Calendar.HOUR_OF_DAY, 0)
                 c.set(Calendar.MINUTE, 0);
                 val startOfDay = c.time
@@ -407,7 +392,7 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
             val cal = horaCalendar.timeInMillis
             Toast.makeText(this@EnterpriseFragment.context, "Reserva completada", Toast.LENGTH_SHORT).show()
             val timestampStart = Timestamp(Date(cal))
-            /*db.collection("reserves").add(
+            db.collection("reserves").add(
                 mapOf(
                     "hora" to timestampStart,
                     "id_cliente" to userId,
@@ -417,7 +402,7 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
                     "ent_name" to enterprise.enterpriseName,
                     "ent_address" to enterprise.enterpriseAddress
                 )
-            )*/
+            )
         }
         Toast.makeText(this@EnterpriseFragment.context, name, Toast.LENGTH_SHORT).show()
         Toast.makeText(this@EnterpriseFragment.context, "Reserva completada", Toast.LENGTH_SHORT).show()
