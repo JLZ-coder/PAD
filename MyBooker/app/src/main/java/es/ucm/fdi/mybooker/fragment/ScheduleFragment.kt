@@ -48,7 +48,7 @@ class ScheduleFragment() : Fragment()
     @SuppressLint("SetTextI18n")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
-
+        activity?.title = "Agenda"
         val view: View = inflater.inflate(R.layout.fragment_schedule, container, false)
 
         val emptyText: TextView = view.findViewById(R.id.empty_view)

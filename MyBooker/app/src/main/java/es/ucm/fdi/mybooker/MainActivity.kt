@@ -89,14 +89,17 @@ class MainActivity : AppCompatActivity(), HomeFragment.Actualizar, SearchFragmen
 
                 when (item.itemId) {
                     R.id.navigation_home -> {
+                        title = "Inicio"
                         changeFragment(HomeFragment.newInstance(), "homeFragment")
                         return@OnNavigationItemSelectedListener true
                     }
                     R.id.navigation_dashboard -> {
+                        title = "Agenda"
                         changeFragment(ScheduleFragment.newInstance(mAuth.currentUser.uid)!!, "scheduleFragment")
                         return@OnNavigationItemSelectedListener true
                     }
                     R.id.navigation_profile -> {
+                        title = "Perfil"
                         var profile = ProfileFragment.newInstance()
                         val bundle: Bundle = Bundle()
                         bundle.putString("name", name)

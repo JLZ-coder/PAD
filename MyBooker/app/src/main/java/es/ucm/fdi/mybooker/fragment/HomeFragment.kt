@@ -32,7 +32,7 @@ class HomeFragment : Fragment()
     {
 
         val view: View = inflater.inflate(R.layout.fragment_home, container, false)
-
+        activity?.title = "Inicio"
         setButtonsListeners(view)
 
         return view

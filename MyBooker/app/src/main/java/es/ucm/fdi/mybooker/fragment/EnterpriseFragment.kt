@@ -54,7 +54,7 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
     private lateinit var objeto: String
     lateinit var enterprise: itemEnterprise
 
-    private val c = Calendar.getInstance()
+    private var c = Calendar.getInstance()
 
     private lateinit var hours: MutableList<ItemHours>
     private lateinit var hoursAdap: MutableList<ItemHours>
@@ -75,15 +75,24 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
     //Lista de checked
     private var checkList: MutableMap<Int,ItemHours> = mutableMapOf<Int,ItemHours>()
 
+    //Dia seleccionado
+    private lateinit var selectedDate :String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        activity?.title = "Reserva"
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_enterprise, container, false)
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        var day = selectedDate
+        outState.putString("dia",day)
+
+    }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -91,9 +100,20 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
             objeto = it.getString("objectEnterprise").toString()
 
         }
-       var gson = Gson()
-
+        var gson = Gson()
         enterprise = gson.fromJson(objeto, itemEnterprise::class.java)
+        if(savedInstanceState != null){
+
+            var recoverDay: String = savedInstanceState?.get("dia") as String
+            var splitDay = recoverDay.split("-")
+            selectedDate = recoverDay
+            c = Calendar.getInstance()
+            Toast.makeText(this@EnterpriseFragment.context, selectedDate, Toast.LENGTH_SHORT).show()
+            c.set(splitDay[2].toInt(),splitDay[1].toInt(),splitDay[0].toInt())
+
+            recycler(recoverDay)
+        }
+
 
         //Rellenamos cabecera
         nameText = view?.findViewById<TextView>(R.id.nameEmpress)!!
@@ -150,7 +170,7 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
 
     private fun showDatePiackerDialog() {
             val newFragment = DatePickerFragment.newInstance(DatePickerDialog.OnDateSetListener { _, year, month, day ->
-                val selectedDate = day.toString() + " - " + (month + 1) + " - " + year
+               selectedDate = day.toString() + "-" + (month + 1) + "-" + year
                 date.setText(selectedDate)
 
                 c.set(year,month,day)
@@ -176,7 +196,7 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
     private fun recycler(selectDate:String){
 
         val numberDay : Int = dayOfWeek(c.get(Calendar.DAY_OF_WEEK))
-
+        Toast.makeText(this@EnterpriseFragment.context, numberDay.toString(), Toast.LENGTH_SHORT).show()
         c.set(Calendar.HOUR_OF_DAY, 0)
         c.set(Calendar.MINUTE, 0);
         val startOfDay = c.time
@@ -270,6 +290,8 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = LinearLayoutManager(context)
         mRecyclerView.adapter = mAdapter
+        emptyText.visibility = View.GONE
+        mRecycler.visibility = View.VISIBLE
     }
 
     private fun lastListHours(){
