@@ -91,9 +91,10 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
         super.onSaveInstanceState(outState)
         var day = selectedDate
         outState.putString("dia",day)
-
     }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
+
         super.onActivityCreated(savedInstanceState)
 
         arguments?.let {
@@ -115,12 +116,7 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
 
                 recycler(recoverDay)
             }
-
-
-
-
         }
-
 
         //Rellenamos cabecera
         nameText = view?.findViewById<TextView>(R.id.nameEmpress)!!
@@ -167,7 +163,6 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
                 showReservateDialog(listaDefinitva)
             }
         }
-
     }
 
     private fun showReservateDialog(list: ArrayList<ItemHours>){
@@ -187,9 +182,7 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
         newFragment.show(requireActivity().supportFragmentManager, "datePicker")
     }
 
-
     private fun recycler(selectDate:String){
-
 
         //Sacamos los horarios
         db.collection("shifts").whereEqualTo("id_enterprise", enterprise.empresaId).get()
@@ -220,18 +213,15 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
                                 document.getString("end").toString(),
                                 "libre",
                                 document.getLong("period")?.toInt()!!
-
                             )
                         )
                     }
                 }
 
-
                 //Ordenamos según la hora de start para mostrar en el layout por orden
                 hours.sortBy {
                     itemHours ->  itemHours.start
                 }
-
 
                 this.listReserva = ArrayList()
                 this.hoursAdap = ArrayList()
@@ -265,12 +255,9 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
                     }.addOnFailureListener { exception ->
                         FirebaseCrashlytics.getInstance().recordException(Exception("ERROR: Error getting documents ${exception.message}"))
                     }
-
-
             }.addOnFailureListener { exception ->
                 FirebaseCrashlytics.getInstance().recordException(Exception("ERROR: Error getting documents ${exception.message}"))
             }
-
     }
 
     private fun setNotFoundView()
@@ -359,8 +346,6 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
        }
     }
 
-
-
      fun onDialogPositiveClick(dialog: DialogFragment) {
         var name = ""
          db.collection("users").document(userId).get()
@@ -370,13 +355,9 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
                      if (document != null) {
                          name = document.getString("name").toString()
                          addReserve(name)
-
                      }
-
-
                  }
              }
-
     }
 
     private fun addReserve(name:String){
@@ -415,11 +396,11 @@ class EnterpriseFragment : Fragment(), HoursAdapter.onClickListener {
                 )
             )
         }
-        Toast.makeText(this@EnterpriseFragment.context, name, Toast.LENGTH_SHORT).show()
         Toast.makeText(this@EnterpriseFragment.context, "Reserva completada", Toast.LENGTH_SHORT).show()
         val homeIntent = Intent(this@EnterpriseFragment.context, MainActivity::class.java)
         homeIntent.putExtra("userName", name)
         homeIntent.putExtra("email", mAuth.currentUser.email)
+        homeIntent.putExtra("profileImg", mAuth.currentUser.photoUrl)
 
         startActivity(homeIntent);
     }

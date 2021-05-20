@@ -77,7 +77,7 @@ class ProfileFragment : Fragment() {
         nameText.text = name
         emailText.text = email
 
-        imageView = view?.findViewById<ImageView>(R.id.imageView)!!
+        imageView = view?.findViewById<ImageView>(R.id.userImage)!!
         Picasso.with(view?.context).load(image).placeholder(R.drawable.ic_profile).error(R.drawable.ic_profile).into(imageView)
 
         mChangeImgBtn = view?.findViewById<Button>(R.id.btn_add_user_img)!!
@@ -154,7 +154,6 @@ class ProfileFragment : Fragment() {
         builder.setPositiveButton("Continuar", null)
         builder.show()
     }
-
 
     companion object {
         /**
