@@ -42,6 +42,11 @@ class EnterpriseProfileViewModel : ViewModel() {
     }
     val cp: LiveData<String> = _cp
 
+    private val _image = MutableLiveData<String>().apply {
+        value = ""
+    }
+    val image: LiveData<String> = _image
+
     init {
         setUp()
     }
@@ -60,6 +65,7 @@ class EnterpriseProfileViewModel : ViewModel() {
                             _category.value = "Categoría: " + enterprise?.category
                             _location.value = "Ubicación: " + enterprise?.location
                             _cp.value = "CP: " + enterprise?.cp.toString()
+                            _image.value = enterprise?.profileImg
                         }
                     }
                 }

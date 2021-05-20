@@ -146,7 +146,8 @@ open class ActivityRegister : AppCompatActivity()
                                 "email" to userMail.text.toString(),
                                 "category" to spinner.getSelectedItem().toString() ,
                                 "location" to location.text.toString(),
-                                "cp" to cp.text.toString().toInt()
+                                "cp" to cp.text.toString().toInt(),
+                                "profileImg" to ""
                             )
                         )
                         showEmpresaInfo(it.result?.user?.email ?: "", ProviderType.MAIL, userName.text.toString())

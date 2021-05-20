@@ -32,6 +32,27 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.5" />
 
+            <ImageView
+                android:id="@+id/imageView_enterprise_editprofile"
+                android:layout_width="match_parent"
+                android:layout_height="221dp"
+                android:contentDescription="@string/advisor"
+                android:gravity="center"
+                android:layout_marginTop="40dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginLeft="50dp"
+                android:src="@drawable/ic_profile"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/button_enterprise_editprofile_changeimg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Añadir Imagen"
+                android:layout_margin="16dp"
+                android:layout_below="@id/imageView_enterprise_editprofile"
+                android:layout_centerHorizontal="true"/>
+
             <TextView
                 android:id="@+id/textView_enterprise_editprofile_name"
                 android:layout_width="wrap_content"
@@ -40,6 +61,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
+                android:layout_below="@+id/button_enterprise_editprofile_changeimg"
                 android:text="@string/label_nombre"
                 android:textSize="18sp" />
 
@@ -126,8 +148,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="16dp"
+                android:layout_margin="16dp"
+                android:layout_below="@id/textView_enterprise_editprofile_category"
                 android:text="Confirmar" />
 
             <Button
@@ -135,9 +157,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
                 android:backgroundTint="@color/df_red"
-                android:layout_marginBottom="16dp"
+                android:layout_margin="8dp"
+                android:layout_below="@id/textView_enterprise_editprofile_category"
                 android:text="Borrar&#10;usuario" />
 
 

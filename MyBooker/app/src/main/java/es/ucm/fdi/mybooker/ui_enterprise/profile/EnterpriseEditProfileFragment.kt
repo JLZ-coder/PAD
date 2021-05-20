@@ -1,8 +1,10 @@
 package es.ucm.fdi.mybooker.ui_enterprise.profile
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +15,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.squareup.picasso.Picasso
 import es.ucm.fdi.mybooker.ActivityLogin
 import es.ucm.fdi.mybooker.R
 import es.ucm.fdi.mybooker.objects.itemEnterprise_2
@@ -28,6 +33,11 @@ class EnterpriseEditProfileFragment : Fragment() {
   private lateinit var mArrayAdapter: ArrayAdapter<CharSequence>
   private lateinit var aux_enterprise: itemEnterprise_2
   private lateinit var loading: ProgressBar
+  private lateinit var profile_pic: ImageView
+  private lateinit var change_profilepic_btn: Button
+  private val mStorage: StorageReference = FirebaseStorage.getInstance().reference
+  private var image_src: String? = null
+  private val GALLERY_INTENT = 1
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -43,6 +53,8 @@ class EnterpriseEditProfileFragment : Fragment() {
     val confirm_btn: Button = root.findViewById(R.id.button_enterprise_editprofile_confirm)
     val delete_btn: Button = root.findViewById(R.id.button_enterprise_editprofile_delete)
     loading = root.findViewById(R.id.progress_bar_enterprise_editprofile)
+    profile_pic = root.findViewById(R.id.imageView_enterprise_editprofile)
+    change_profilepic_btn = root.findViewById(R.id.button_enterprise_editprofile_changeimg)
 
     // Create an ArrayAdapter using the string array and a default spinner layout
     activity?.baseContext?.let {
@@ -62,12 +74,14 @@ class EnterpriseEditProfileFragment : Fragment() {
     if (arguments != null) {
       if (requireArguments().containsKey("enterprise")) {
         aux_enterprise = requireArguments().getSerializable("enterprise") as itemEnterprise_2
+        image_src = aux_enterprise.profileImg
         name_editText.setText(aux_enterprise.name)
         cp_editText.setText(aux_enterprise.cp.toString())
         location_editText.setText(aux_enterprise.location)
         var spinnerPosition = mArrayAdapter.getPosition(aux_enterprise.category)
         if (spinnerPosition == -1) spinnerPosition = 1
         spinner.setSelection(spinnerPosition)
+        if (image_src != "") Picasso.with(view?.context).load(image_src).placeholder(R.drawable.ic_profile).error(R.drawable.ic_profile).into(profile_pic)
       }
     }
 
@@ -78,8 +92,9 @@ class EnterpriseEditProfileFragment : Fragment() {
       val f_cp = cp_editText.text.toString()
       val f_location = location_editText.text.toString()
       val f_category = spinner.selectedItem.toString()
+      val f_image = image_src
 
-      new_enterprise = itemEnterprise_2(userId, f_name, f_name.toLowerCase(), aux_enterprise.email, f_category, f_location, f_cp.toInt())
+      new_enterprise = itemEnterprise_2(userId, f_image, f_name, f_name.toLowerCase(), aux_enterprise.email, f_category, f_location, f_cp.toInt())
       db.collection("enterprises").document(userId).set(new_enterprise)
         .addOnSuccessListener {
           Log.d("EnterpriseEditProfileFragment", "DocumentSnapshot written with ID: $userId")
@@ -159,6 +174,12 @@ class EnterpriseEditProfileFragment : Fragment() {
       alert.show()
     }
 
+    change_profilepic_btn.setOnClickListener { view->
+      val i: Intent = Intent(Intent.ACTION_PICK)
+      i.type = "image/*"
+      startActivityForResult(i, GALLERY_INTENT)
+    }
+
     return root
   }
 
@@ -179,5 +200,36 @@ class EnterpriseEditProfileFragment : Fragment() {
   private fun setUpdisloading(view: View) {
     view.isEnabled = true
     loading.visibility =  View.GONE
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
+  {
+
+    super.onActivityResult(requestCode, resultCode, data)
+
+    if (resultCode == Activity.RESULT_OK && requestCode == GALLERY_INTENT){
+
+      val uri: Uri? = data?.data
+      if (uri != null) {
+        val filePath: StorageReference = mStorage.child("user_images").child(uri?.lastPathSegment.toString())
+
+        filePath.putFile(uri).addOnSuccessListener {
+
+          mStorage.child(filePath.path).downloadUrl.addOnSuccessListener {
+            db.collection("users").document(userId).update(
+              mapOf(
+                "profileImg" to it.toString()
+              )
+            )
+
+            Picasso.with(view?.context).load(it.toString()).placeholder(R.drawable.ic_profile).error(R.drawable.ic_profile).into(profile_pic)
+          }.addOnFailureListener {
+            showAlert(it.message)
+          }
+        }.addOnFailureListener{
+          showAlert(it.message)
+        }
+      }
+    }
   }
 }

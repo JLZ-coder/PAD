@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import com.squareup.picasso.Picasso
 import es.ucm.fdi.mybooker.ActivityLogin
 import es.ucm.fdi.mybooker.R
 
@@ -46,6 +48,11 @@ class EnterpriseProfileFragment : Fragment() {
     val cp: TextView = root.findViewById(R.id.label_enterprise_cp)
     notificationsViewModel.cp.observe(viewLifecycleOwner, Observer {
       cp.text = it
+    })
+
+    val profile_pic: ImageView = root.findViewById(R.id.imageView_profile_enterprise)
+    notificationsViewModel.image.observe(viewLifecycleOwner, Observer {
+      if (it != "") Picasso.with(view?.context).load(it).placeholder(R.drawable.ic_profile).error(R.drawable.ic_profile).into(profile_pic)
     })
 
     val editprofile_btn: Button = root.findViewById(R.id.button_enterprise_editprofile)
